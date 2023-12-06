@@ -3,10 +3,9 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
     {
-        name: String,
+        username: String,
         googleId: {
             type: String,
-            required: true,
         },
         email: String,
         avatar: String,
@@ -14,6 +13,12 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        worksoutsFollowing: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Workout',
+            },
+        ],
     },
     {
         timestamps: true,
