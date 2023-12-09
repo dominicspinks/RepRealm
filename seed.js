@@ -14,15 +14,25 @@ const User = require('./models/user');
 
     let results = await Promise.all([d1, d2, d3]);
     console.log(results);
-    // // Create admin user (for default exercises)
-    // const dataUser = [
-    //     {
-    //         username: 'admin',
-    //     },
-    // ];
 
-    // createdUsers = await User.create(dataUser);
-    // console.log('Users created:', createdUsers);
+    // Remove all users
+    results = await User.deleteMany({});
+    console.log(results);
+
+    // Remove admin user (if recreating)
+    // results = await User.deleteOne({ username: 'admin' });
+    // console.log(results);
+
+    // Create admin user (for default exercises)
+    const dataUser = [
+        {
+            username: 'admin',
+            isNew: false,
+        },
+    ];
+
+    createdUsers = await User.create(dataUser);
+    console.log('Users created:', createdUsers);
 
     const adminUser = await User.findOne({ username: 'admin' });
 
@@ -232,11 +242,11 @@ const User = require('./models/user');
     // Import Workouts
     const dataWorkouts = [
         {
-            name: 'Sample Workout',
+            name: 'Sample Workout 1',
             isPublic: true,
             exerciseDetails: [
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Barbell Row'
                     )._id,
                     sets: [
@@ -256,7 +266,7 @@ const User = require('./models/user');
                     rest: 90,
                 },
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Pushups'
                     )._id,
                     sets: [
@@ -279,11 +289,11 @@ const User = require('./models/user');
             createdBy: adminUser._id,
         },
         {
-            name: 'Sample Workout',
+            name: 'Sample Workout 2',
             isPublic: true,
             exerciseDetails: [
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Barbell Row'
                     )._id,
                     sets: [
@@ -303,7 +313,7 @@ const User = require('./models/user');
                     rest: 90,
                 },
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Pushups'
                     )._id,
                     sets: [
@@ -326,11 +336,11 @@ const User = require('./models/user');
             createdBy: adminUser._id,
         },
         {
-            name: 'Sample Workout',
+            name: 'Sample Workout 3',
             isPublic: true,
             exerciseDetails: [
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Barbell Row'
                     )._id,
                     sets: [
@@ -350,7 +360,7 @@ const User = require('./models/user');
                     rest: 90,
                 },
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Pushups'
                     )._id,
                     sets: [
@@ -373,11 +383,11 @@ const User = require('./models/user');
             createdBy: adminUser._id,
         },
         {
-            name: 'Sample Workout',
+            name: 'Sample Workout 4',
             isPublic: true,
             exerciseDetails: [
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Barbell Row'
                     )._id,
                     sets: [
@@ -397,7 +407,7 @@ const User = require('./models/user');
                     rest: 90,
                 },
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Pushups'
                     )._id,
                     sets: [
@@ -420,11 +430,11 @@ const User = require('./models/user');
             createdBy: adminUser._id,
         },
         {
-            name: 'Sample Workout',
+            name: 'Sample Workout 5',
             isPublic: true,
             exerciseDetails: [
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Barbell Row'
                     )._id,
                     sets: [
@@ -444,7 +454,7 @@ const User = require('./models/user');
                     rest: 90,
                 },
                 {
-                    exerciseId: createdExercises.find(
+                    exercise: createdExercises.find(
                         (exercise) => exercise.name === 'Pushups'
                     )._id,
                     sets: [

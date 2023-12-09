@@ -1,8 +1,90 @@
 <%- include('../partials/header') %>
 
 <div>
-  <a class="button" href="/workouts/new">Create New Workout</a>
+  <div id="workouts-grid">
+    <div id="workouts-actions">
+      <form id="workouts-filter" action="/workouts/search" method="GET">
+        <div class="label-container">
+          <label for="workoutName">Workout Name</label>
+          <input type="text" name="workoutName" id="workoutName">
+        </div>
+        <div class="label-container">
+          <label for="category">Category</label>
+          <select name="category" id="category">
+            <!-- List of categories from input -->
+            <% categories.forEach((category) => { %>
+            <option value="<%= category._id %>"><%= category.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="label-container">
+          <label for="username">User Name</label>
+          <input type="text" name="username" id="username">
+        </div>
+        <div id="workouts-filter-buttons">
+          <div class="button-container">
+            <button class="button">Clear</button>
+          </div>
+          <div class="button-container">
+            <input class="button" type="submit" value="Search">
+          </div>
+        </div>
+      </form>
+      <div id="workouts-button-create">
+        <a class="button" href="/workouts/new">Create New Workout</a>
+      </div>
+    </div>
+    <div class="workouts-list">
+      <% workouts.forEach((workout) => { %>
+      <a class="workout-list-container" href="/workouts/<%= workout._id %>">
+        <div class="workout-list-header">
+          <div class="workout-list-header-name">
+            <%= workout.name %>
+          </div>
+          <div class="workout-list-header-user">
+            <%= workout.createdBy.username %>
+          </div>
+        </div>
+        <div class="workout-list-categories">
+          <% workout.categories.forEach((category) => { %>
+          <div class="workout-list-category">
+            <div class="workout-list-category-name">
+              <%= category.name %>
+            </div>
+            <div class="workout-list-category-exercise-list">
+              <% category.exercises.forEach((exercise) => { %>
+              <div class="workout-list-category-exercise">
+                <%= exercise %>
+              </div>
+              <% }) %>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+    <div style="display: none" id="worksouts-pagination">
+      <div>
+        <a class="button button-pagination" id="workouts-pagination-first" href="">
+          &lt;&lt; First &lt;&lt;</a>
+      </div>
+      <div>
+        <a class="button button-pagination" id="workouts-pagination-previous" href="">
+          &lt; Previous &lt;</a>
+      </div>
+      <div>
+        <a class="button button-pagination" id="workouts-pagination-next" href="">
+          &gt; Next &gt;</a>
+      </div>
+      <div>
+        <a class="button button-pagination" id="workouts-pagination-last" href="">
+          &gt;&gt; Last &gt;&gt;</a>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 

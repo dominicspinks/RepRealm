@@ -13,6 +13,10 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        isNew: {
+            type: Boolean,
+            default: true,
+        },
         worksoutsFollowing: [
             {
                 type: Schema.Types.ObjectId,

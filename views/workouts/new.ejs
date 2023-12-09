@@ -1,7 +1,29 @@
 <%- include('../partials/header') %>
 
-<div>
-  <a class="button" href="/workouts">Back</a>
-</div>
+<form id="workout-new-container">
+  <div id="workout-new-details">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name">
+    </div>
+    <div>
+      <label for="isPublic">Share</label>
+      <input type="checkbox" name="isPublic" id="isPublic">
+    </div>
+  </div>
+  <div id="workout-new-exercises">
+
+  </div>
+  <div id="workout-new-buttons">
+    <div>
+      <a class="button" href="/workouts">Cancel</a>
+    </div>
+    <div>
+      <input class="button" type="submit" value="Save">
+    </div>
+  </div>
+</form>
+
+
 
 <%- include('../partials/footer') %>

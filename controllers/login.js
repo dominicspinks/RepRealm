@@ -17,7 +17,6 @@ function login(req, res, next) {
 
 // Google OAuth callback route
 function callback(req, res, next) {
-    console.log('login passport callback');
     passport.authenticate('google', {
         successRedirect: '/',
         failureRedirect: '/',

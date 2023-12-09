@@ -17,7 +17,7 @@ const setSchema = new Schema({
 });
 
 const exerciseDetailSchema = new Schema({
-    exerciseId: {
+    exercise: {
         type: Schema.Types.ObjectId,
         ref: 'Exercise',
     },
