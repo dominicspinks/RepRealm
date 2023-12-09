@@ -1,3 +1,7 @@
+require('dotenv').config();
+require('./config/database');
+require('./config/passport');
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -7,14 +11,11 @@ const session = require('express-session');
 const passport = require('passport');
 const methodOverride = require('method-override');
 
-require('dotenv').config();
-
-require('./config/database');
-
-require('./config/passport');
-
 // Define Routers
 const indexRouter = require('./routes/index');
+const workoutsRouter = require('./routes/workouts');
+const exercisesRouter = require('./routes/exercises');
+const profilesRouter = require('./routes/profiles');
 
 const port = process.env.PORT || 3002;
 const app = express();
@@ -46,8 +47,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-// app.use routes
 app.use('/', indexRouter);
+app.use('/workouts', workoutsRouter);
+app.use('/exercises', exercisesRouter);
+app.use('/profiles', profilesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

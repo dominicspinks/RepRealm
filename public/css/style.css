@@ -1,3 +1,65 @@
 * {
     box-sizing: border-box;
 }
+
+:root {
+    --colour-button: grey;
+    --colour-button-hover: rgb(194, 194, 194);
+    --colour-nav-background: grey;
+    --colour-nav-text: white;
+    --colour-nav-button-hover: rgb(82, 82, 82);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: var(--colour-nav-background);
+}
+
+nav > div {
+    display: flex;
+    flex-direction: row;
+}
+
+nav > div > div {
+    padding: 6px 0;
+}
+
+nav > div > div:hover {
+    background: var(--colour-nav-button-hover);
+}
+
+nav a {
+    padding: 10px 10px;
+    color: var(--colour-nav-text);
+    text-decoration: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 30px;
+    background: var(--colour-button);
+    border: 1px solid rgb(75, 75, 75);
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: var(--colour-button-hover);
+}

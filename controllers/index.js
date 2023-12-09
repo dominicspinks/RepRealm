@@ -1,7 +1,8 @@
 module.exports = {
-    show,
+    index,
 };
 
-function show(req, res) {
-    res.render('index', { title: 'Index' });
+// Redirect to workouts list page for now, add a home page later
+function index(req, res) {
+    res.redirect('/workouts');
 }

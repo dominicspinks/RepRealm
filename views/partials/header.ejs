@@ -6,17 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel='stylesheet' href='/css/style.css' />
-  <title><%= title %></title>
+  <title><%= title %> | RepRealm</title>
 </head>
 
 <body>
   <nav>
-    <a href="/" <%- title === 'All Movies' ? 'class="active"' : '' %>>Home</a>
-    <% if (user) { %>
-    <a href="/logout">LOG OUT</a>
-    <% } else { %>
-    <a href="/auth/google" class="login">LOG IN</a>
-    <% } %>
+    <div>
+      <div>
+        <a href="/">Home</a>
+      </div>
+      <div>
+        <a href="/workouts" <%- isActive === 'workouts' ? 'class="active"' : '' %>>Workouts</a>
+      </div>
+      <div>
+        <a href="/exercises" <%- isActive === 'exercises' ? 'class="active"' : '' %>>Exercises</a>
+      </div>
+    </div>
+    <div>
+      <% if (user) { %>
+      <div>
+        <a href="/profiles" <%- isActive === 'profiles' ? 'class="active"' : '' %>>My Profile</a>
+      </div>
+      <div>
+        <a href="/logout">Log Out</a>
+      </div>
+      <% } else { %>
+      <div>
+        <a href="/auth/google" class="login">Log In</a>
+      </div>
+      <% } %>
+    </div>
   </nav>
   <main>
     <h1><%= title %></h1>
