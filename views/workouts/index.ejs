@@ -11,6 +11,7 @@
         <div class="label-container">
           <label for="category">Category</label>
           <select name="category" id="category">
+            <option value=""></option>
             <!-- List of categories from input -->
             <% categories.forEach((category) => { %>
             <option value="<%= category._id %>"><%= category.name %></option>

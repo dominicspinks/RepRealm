@@ -38,7 +38,7 @@ async function update(req, res) {
     editUser.email = req.body.email;
     editUser.avatar = req.body.avatar;
     editUser.isPublic = req.body.visibility === 'Public';
-    editUser.isNew = false;
+    editUser.isNewUser = false;
 
     // Update details
     await editUser.save();
