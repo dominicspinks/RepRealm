@@ -13,7 +13,7 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        isNew: {
+        isNewUser: {
             type: Boolean,
             default: true,
         },

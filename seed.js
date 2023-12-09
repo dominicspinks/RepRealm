@@ -27,7 +27,7 @@ const User = require('./models/user');
     const dataUser = [
         {
             username: 'admin',
-            isNew: false,
+            isNewUser: false,
         },
     ];
 

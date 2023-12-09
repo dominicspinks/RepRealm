@@ -23,7 +23,7 @@ async function index(req, res) {
     } else {
         searchFilter['isPublic'] = true;
     }
-    console.log(searchFilter);
+    // console.log(searchFilter);
 
     // Get workouts list
     const workouts = await Workout.find(searchFilter)
@@ -74,9 +74,9 @@ async function index(req, res) {
         });
     });
 
-    console.log(workouts);
+    // console.log(workouts);
     // console.log(workouts[0].exerciseDetails);
-    console.log(workouts[0].categories);
+    // console.log(workouts[0].categories);
     // console.log(workouts[0].exerciseDetails[0].exercise);
 
     res.render('workouts/index', {
