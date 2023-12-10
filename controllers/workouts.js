@@ -1,5 +1,6 @@
 const Workout = require('../models/workout');
 const Category = require('../models/category');
+const Exercise = require('../models/exercise');
 
 module.exports = {
     index,
@@ -88,10 +89,27 @@ async function index(req, res) {
 }
 
 // Page to create new workout
-function newWorkout(req, res) {
+async function newWorkout(req, res) {
+    // get categories for add exercise
+    const categories = await Category.find({}).lean();
+    categories.sort((a, b) => {
+        return a.name < b.name ? -1 : 1;
+    });
+    console.log(categories);
+    // Get all exercises
+    const exercises = await Exercise.find({});
+    // console.log(exercises);
+    // get exercises for each category
+    categories.forEach((category) => {
+        category.exercises = '';
+    });
+
+    console.log(categories);
     res.render('workouts/new', {
         title: 'Create Workout',
         isActive: 'workouts-new',
+        categories,
+        exercises,
     });
 }
 

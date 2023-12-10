@@ -12,7 +12,80 @@
     </div>
   </div>
   <div id="workout-new-exercises">
-
+    <div id="workout-new-exercises-title">
+      <div>Exercises:</div>
+      <div class="button button-small" id="button-workout-new-exercise-add">Add</div>
+    </div>
+    <div id="workout-new-exercises-add-container">
+      <div id="workout-new-exercises-add-details">
+        <div>
+          <label for="categoryInput">Category</label>
+          <select name="categoryInput" id="categoryInput">
+            <option value=""></option>
+            <!-- List of categories from input -->
+            <% categories.forEach((category) => { %>
+            <option value="<%= category.exercises %>"><%= category.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label for="exerciseInput">Exercise</label>
+          <select name="exerciseInput" id="exerciseInput">
+            <option value=""></option>
+            <!-- List of categories from input -->
+            <% exercises.forEach((exercise) => { %>
+            <option value="<%= exercise._id %>"><%= exercise.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label for="restInput">Rest</label>
+          <input name="restInput" id="restInput" type="number" min="0">
+        </div>
+      </div>
+      <div id="workout-new-exercises-add-sets">
+        <div id="workout-new-exercises-add-sets-header">
+          <div>Sets:</div>
+          <div>Primary</div>
+          <div>Secondary</div>
+          <div class="button button-small" id="button-new-set-add">Add</div>
+        </div>
+        <div id="workout-new-exercises-add-sets-details">
+          <!-- lines added with js, sample provided for design -->
+          <div>
+            <label>1</label>
+            <input name="primary1" type="number" min="0" step="0.01">
+            <input name="secondary1" type="number" min="0" step="0.01">
+            <div class="button button-small" id="button-workout-new-set-delete">Delete</div>
+          </div>
+        </div>
+      </div>
+      <div id="workout-new-exercises-add-buttons">
+        <div class="button button-small" id="button-new-exercises-cancel">Cancel</div>
+        <div class="button button-small" id="button-new-exercises-add">Add</div>
+      </div>
+    </div>
+    <table id="workout-new-exercises-details">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Rest</th>
+          <th>Sets</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Exercise name</td>
+          <td>60</td>
+          <td>5</td>
+          <td>
+            <div class="button button-small" id="button-workout-new-exercise-edit">Edit</div>
+            <div class="button button-small" id="button-workout-new-exercise-delete">Delete</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div id="workout-new-buttons">
     <div>
