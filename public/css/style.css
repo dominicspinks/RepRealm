@@ -300,10 +300,10 @@ main {
     cursor: pointer;
 }
 
-#workout-new-exercises-add-container {
+.workout-new-exercises-add-container {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 15px;
     border: 1px solid black;
     width: 95%;
     padding: 5px;

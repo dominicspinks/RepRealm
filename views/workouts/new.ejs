@@ -16,7 +16,7 @@
       <div>Exercises:</div>
       <div class="button button-small" id="button-workout-new-exercise-add">Add</div>
     </div>
-    <div id="workout-new-exercises-add-container">
+    <div class="workout-new-exercises-add-container container-hide">
       <div id="workout-new-exercises-add-details">
         <div>
           <label for="categoryInput">Category</label>
@@ -40,24 +40,17 @@
         </div>
         <div>
           <label for="restInput">Rest</label>
-          <input name="restInput" id="restInput" type="number" min="0">
+          <input name="restInput" id="restInput" type="number" min="0" value="60">
         </div>
       </div>
       <div id="workout-new-exercises-add-sets">
         <div id="workout-new-exercises-add-sets-header">
           <div>Sets:</div>
-          <div>Primary</div>
-          <div>Secondary</div>
+          <div class="primary"></div>
+          <div class="secondary"></div>
           <div class="button button-small" id="button-new-set-add">Add</div>
         </div>
         <div id="workout-new-exercises-add-sets-details">
-          <!-- lines added with js, sample provided for design -->
-          <div>
-            <label>1</label>
-            <input name="primary1" type="number" min="0" step="0.01">
-            <input name="secondary1" type="number" min="0" step="0.01">
-            <div class="button button-small" id="button-workout-new-set-delete">Delete</div>
-          </div>
         </div>
       </div>
       <div id="workout-new-exercises-add-buttons">
@@ -68,14 +61,18 @@
     <table id="workout-new-exercises-details">
       <thead>
         <tr>
+          <th style="display:none"></th>
           <th>Name</th>
           <th>Rest</th>
           <th>Sets</th>
           <th></th>
+          <th style="display: none"></th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td style="display: none"><input type="hidden" name="exerciseDetails1" value=""></td>
+          <td style="display: none">order number</td>
           <td>Exercise name</td>
           <td>60</td>
           <td>5</td>
@@ -92,11 +89,74 @@
       <a class="button" href="/workouts">Cancel</a>
     </div>
     <div>
-      <input class="button" type="submit" value="Save">
+      <input id="button-workout-new-save" class="button" type="submit" value="Save">
     </div>
   </div>
 </form>
 
+<script>
+  const addExerciseContainerElement = document.querySelector('.workout-new-exercises-add-container');
+  const addExerciseButtonElement = document.querySelector('#button-workout-new-exercise-add');
+  const addExerciseCancelButtonElement = document.querySelector('#button-new-exercises-cancel');
+  const addExerciseCategoryElement = document.querySelector('#categoryInput');
+  const addExerciseExerciseElement = document.querySelector('#exerciseInput');
+  const addExerciseRestElement = document.querySelector('#restInput');
+  const addExerciseSetListElement = document.querySelector('#workout-new-exercises-add-sets-details');
 
+  const addSetButtonElement = document.querySelector('#button-new-set-add');
+  const deleteSetButtonElement = document.querySelector('.button-workout-new-set-delete');
+
+  const addExerciseSaveButtonElement = document.querySelector('#button-new-exercises-add')
+  const saveExerciseButton = document.querySelector('#button-workout-new-save');
+
+  addExerciseButtonElement.addEventListener('click', (event) => {
+    addExerciseContainerElement.classList.remove('container-hide')
+  })
+
+  addExerciseCancelButtonElement.addEventListener('click', (event) => {
+    addExerciseContainerElement.classList.add('container-hide');
+    addExerciseCategoryElement.value = '';
+    addExerciseExerciseElement.value = '';
+    addExerciseRestElement.value = '60';
+    addExerciseSetListElement.innerHTML = '';
+  })
+
+  addSetButtonElement.addEventListener('click', (event) => {
+    // Get next set number
+    const rowNum = addExerciseSetListElement.childElementCount + 1;
+    const newSetElement = document.createElement('div');
+    newSetElement.innerHTML = `<label>${rowNum}</label>
+    <input name="primary${rowNum}" type="number" min="0" step="0.01">
+    <input name="secondary${rowNum}" type="number" min="0" step="0.01">
+    <div class="button button-small button-workout-new-set-delete" id="button-workout-new-set-delete-${rowNum}">Delete</div>`
+    addExerciseSetListElement.appendChild(newSetElement);
+  })
+
+  addExerciseSetListElement.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!target.classList.contains('button-workout-new-set-delete')) return;
+    const targetLine = target.parentNode;
+    const targetRowNum = targetLine.querySelector('label').innerText
+    addExerciseSetListElement.removeChild(targetLine)
+    // Update row nums
+    const setList = addExerciseSetListElement.children;
+
+    for (let i = targetRowNum - 1; i < setList.length; i++) {
+      setList[i].querySelector('label').innerText--
+      console.log(setList[i])
+      const [primaryElement, secondaryElement] = setList[i].querySelectorAll('input');
+      const deleteElement = setList[i].querySelector('.button-workout-new-set-delete');
+      console.log(primaryElement, secondaryElement, deleteElement)
+      primaryElement.name = `primary${i+1}`;
+      secondaryElement.name = `secondary${i+1}`;
+      deleteElement.id = `button-workout-new-set-delete-${i+1}`
+    }
+
+  })
+
+  addExerciseSaveButtonElement.addEventListener('click', (event) => {
+    // validate details are correct
+  })
+</script>
 
 <%- include('../partials/footer') %>
