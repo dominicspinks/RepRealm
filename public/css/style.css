@@ -12,6 +12,7 @@
     --colour-workout-container-background: rgb(219, 219, 219);
     --colour-workout-container-border: rgb(146, 146, 146);
     --colour-workout-exercise-background: rgb(161, 189, 211);
+    --colour-input-error: red;
 }
 
 body {
@@ -61,9 +62,12 @@ main {
 .title {
     width: 100%;
     border-bottom: 2px solid grey;
+    display: flex;
+    justify-content: space-between;
 }
 
-.title > h1 {
+.title > h1,
+.title > h2 {
     margin-top: 20px;
     margin-bottom: 2px;
 }
@@ -162,10 +166,10 @@ main {
     border: 1px solid var(--colour-workout-container-border);
     margin: 0 10px;
     padding: 5px;
+    width: 350px;
 }
 
 .workout-list-header {
-    width: 300px;
     display: flex;
     justify-content: space-between;
     background: white;
@@ -195,6 +199,7 @@ main {
 
 .workout-list-category {
     display: flex;
+    width: 100%;
 }
 
 .workout-list-category-name {
@@ -208,6 +213,7 @@ main {
 .workout-list-category-exercise-list {
     display: flex;
     gap: 5px;
+    flex-wrap: wrap;
 }
 
 .workout-list-category-exercise {
@@ -369,7 +375,7 @@ main {
     justify-content: space-between;
 }
 
-#workout-new-exercises-add-sets-details input {
+#workout-new-exercises-add-sets-details .input {
     width: 70px;
 }
 
@@ -413,4 +419,8 @@ main {
 #workout-new-buttons .button {
     width: 70px;
     height: 30;
+}
+
+.input-error {
+    border-color: var(--colour-input-error);
 }

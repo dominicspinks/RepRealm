@@ -7,6 +7,7 @@ module.exports = {
     new: newWorkout,
     search,
     show,
+    create,
 };
 
 // Page to display list of workouts
@@ -95,7 +96,7 @@ async function newWorkout(req, res) {
     categories.sort((a, b) => {
         return a.name < b.name ? -1 : 1;
     });
-    console.log(categories);
+
     // Get all exercises
     const exercises = await Exercise.find({});
     // console.log(exercises);
@@ -104,7 +105,6 @@ async function newWorkout(req, res) {
         category.exercises = '';
     });
 
-    console.log(categories);
     res.render('workouts/new', {
         title: 'Create Workout',
         isActive: 'workouts-new',
@@ -133,4 +133,40 @@ async function show(req, res) {
         isActive: 'workouts-show',
         workout,
     });
+}
+
+async function create(req, res) {
+    console.log(req.body);
+    const reqBody = req.body;
+    // sample body for testing
+    // const reqBody = {
+    //     name: 'Domasaurus',
+    //     isPublic: 'on',
+    //     restInput: '60',
+    //     exerciseDetails1:
+    //         '{"id":"657411db15817932e0b3a864","sets":[{"time":"3","reps":"2"},{"time":"3","reps":"2"}],"rest":"60"}',
+    //     exerciseDetails2:
+    //         '{"id":"657411db15817932e0b3a86e","sets":[{"weight":"34","reps":"2"},{"weight":"2","reps":"2"}],"rest":"60"}',
+    // };
+
+    const newWorkout = {
+        name: reqBody.name.trim(),
+        isPublic: reqBody.isPublic === 'on' ? true : false,
+        exerciseDetails: [],
+        createdBy: req.user._id,
+    };
+
+    Object.keys(reqBody).forEach((key) => {
+        if (!key.match(/^exerciseDetails\d+$/i)) return;
+
+        const exerciseDetail = JSON.parse(reqBody[key]);
+        newWorkout.exerciseDetails.push(exerciseDetail);
+    });
+    try {
+        const workout = await Workout.create(newWorkout);
+        res.redirect(`/workouts/${workout._id}`);
+    } catch (error) {
+        console.log(error);
+        res.render('workouts/new');
+    }
 }
