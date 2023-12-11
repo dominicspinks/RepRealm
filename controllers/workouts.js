@@ -1,6 +1,7 @@
 const Workout = require('../models/workout');
 const Category = require('../models/category');
 const Exercise = require('../models/exercise');
+const User = require('../models/user');
 
 module.exports = {
     index,
@@ -8,6 +9,7 @@ module.exports = {
     search,
     show,
     create,
+    delete: deleteWorkout,
 };
 
 // Page to display list of workouts
@@ -46,20 +48,9 @@ async function index(req, res) {
     workouts.sort((a, b) => {
         return a.createdAt > b.createdAt ? -1 : 1;
     });
-    // console.log(workouts);
-    // console.log(workouts[0].exerciseDetails);
-    // console.log(workouts[0].exerciseDetails[0].exercise);
 
-    // categories = [
-    //     {
-    //         name: 'back',
-    //         exercises: ['pullups', 'rows'],
-    //     },
-    // ];
-
+    // Add exercise name to each category in each workout
     workouts.forEach((workout) => {
-        // Add category to each exercise in each workout
-        // Add exercise name to each category in each workout
         workout.categories = [];
         workout.exerciseDetails.forEach((exercise) => {
             const categories = workout.categories.find(
@@ -75,11 +66,6 @@ async function index(req, res) {
             }
         });
     });
-
-    // console.log(workouts);
-    // console.log(workouts[0].exerciseDetails);
-    // console.log(workouts[0].categories);
-    // console.log(workouts[0].exerciseDetails[0].exercise);
 
     res.render('workouts/index', {
         title: 'Workouts',
@@ -126,28 +112,30 @@ function search(req, res) {
 }
 
 async function show(req, res) {
-    const workout = await Workout.findById(req.params.workoutId);
-
+    const workout = await Workout.findById(req.params.workoutId)
+        .populate({
+            path: 'createdBy',
+            select: 'username',
+        })
+        .populate({
+            path: 'exerciseDetails.exercise',
+            select: 'name category measurementPrimary measurementSecondary',
+            populate: {
+                path: 'category',
+                select: 'name',
+            },
+        });
+    console.log(workout);
     res.render('workouts/show', {
         title: workout.name,
+        subtitle: `Created by ${workout.createdBy.username}`,
         isActive: 'workouts-show',
         workout,
     });
 }
 
 async function create(req, res) {
-    console.log(req.body);
     const reqBody = req.body;
-    // sample body for testing
-    // const reqBody = {
-    //     name: 'Domasaurus',
-    //     isPublic: 'on',
-    //     restInput: '60',
-    //     exerciseDetails1:
-    //         '{"id":"657411db15817932e0b3a864","sets":[{"time":"3","reps":"2"},{"time":"3","reps":"2"}],"rest":"60"}',
-    //     exerciseDetails2:
-    //         '{"id":"657411db15817932e0b3a86e","sets":[{"weight":"34","reps":"2"},{"weight":"2","reps":"2"}],"rest":"60"}',
-    // };
 
     const newWorkout = {
         name: reqBody.name.trim(),
@@ -169,4 +157,16 @@ async function create(req, res) {
         console.log(error);
         res.render('workouts/new');
     }
+}
+
+async function deleteWorkout(req, res) {
+    const workoutId = req.params.workoutId;
+    const workout = await Workout.findById(workoutId);
+    const userId = await User.findById(req.user._id);
+
+    if (!userId || !userId.equals(workout.createdBy))
+        res.redirect(`/workouts/${workoutId}`);
+
+    await Workout.findByIdAndDelete(workoutId);
+    res.redirect(`/workouts`);
 }

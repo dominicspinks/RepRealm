@@ -14,6 +14,14 @@ router.get('/new', isNewUser, ensureLoggedIn, workoutsController.new);
 // POST route to create the new workout
 router.post('/new', isNewUser, ensureLoggedIn, workoutsController.create);
 
+// DELETE route to remove a workout
+router.delete(
+    '/:workoutId',
+    isNewUser,
+    ensureLoggedIn,
+    workoutsController.delete
+);
+
 // View route, display details page for selected workout
 router.get('/:workoutId', isNewUser, workoutsController.show);
 

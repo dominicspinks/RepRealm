@@ -67,7 +67,9 @@ main {
 }
 
 .title > h1,
-.title > h2 {
+.title > h3 {
+    display: flex;
+    align-items: end;
     margin-top: 20px;
     margin-bottom: 2px;
 }
@@ -83,6 +85,7 @@ main {
     border-radius: 3px;
     color: white;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -303,7 +306,6 @@ main {
     width: 50px;
     height: 20px;
     font-size: 0.7em;
-    cursor: pointer;
 }
 
 .workout-new-exercises-add-container {
@@ -313,10 +315,6 @@ main {
     border: 1px solid black;
     width: 95%;
     padding: 5px;
-}
-
-.container-hide {
-    display: none;
 }
 
 #workout-new-exercises-add-details {
@@ -423,4 +421,117 @@ main {
 
 .input-error {
     border-color: var(--colour-input-error);
+}
+
+#workouts-show-exercises-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    gap: 5px;
+}
+
+.workouts-show-exercise-container {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 3px;
+    background: var(--colour-workout-container-background);
+    border: 1px solid var(--colour-workout-container-border);
+}
+
+.workouts-show-exercise-name,
+.workouts-show-exercise-rest,
+.workouts-show-exercise-sets-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 3px 5px;
+}
+
+.workouts-show-exercise-name {
+    justify-content: flex-start;
+}
+
+.workouts-show-exercise-rest {
+    justify-content: flex-start;
+    font-size: 0.8em;
+}
+.workouts-show-exercise-sets-container {
+    flex-direction: column;
+    align-items: center;
+}
+
+.workouts-show-exercise-sets-header {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    align-items: center;
+}
+
+.button-set-arrow {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.button-set-arrow:hover {
+    background: rgb(219, 219, 219);
+}
+
+.workouts-show-exercise-sets-details {
+    width: 95%;
+}
+
+.workouts-show-exercise-sets-details th,
+.workouts-show-exercise-sets-details tr {
+    display: flex;
+    justify-content: space-between;
+}
+
+#workouts-show-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+#workouts-show-buttons .button {
+    width: 70px;
+    height: 25px;
+    font-size: 0.9em;
+}
+
+.workouts-show-delete-confirm-container {
+    border: 1px solid black;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin: 10px;
+}
+
+.workouts-show-delete-confirm-container > div {
+    display: flex;
+    text-align: center;
+    margin: 5px auto;
+}
+
+.workouts-show-delete-confirm-container > form {
+    display: flex;
+    margin: 5px auto;
+    gap: 10px;
+}
+
+.workouts-show-delete-confirm-container .button {
+    width: 70px;
+    height: 25px;
+    font-size: 0.9em;
+}
+
+.container-hide {
+    display: none;
 }

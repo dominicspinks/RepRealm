@@ -1,9 +1,87 @@
 <%- include('../partials/header') %>
 
 
-
-<div>
-  <a class="button" href="/workouts">Back</a>
+<div id="workouts-show-exercises-container">
+  <!-- Loop over workout exercises to create each div  -->
+  <% workout.exerciseDetails.forEach((exerciseDetail) => { %>
+  <div class="workouts-show-exercise-container">
+    <div class="workouts-show-exercise-name">
+      <%= exerciseDetail.exercise.name %>
+    </div>
+    <div class="workouts-show-exercise-rest">
+      Rest: <%= exerciseDetail.rest %> sec
+    </div>
+    <div class="workouts-show-exercise-sets-container">
+      <div class="workouts-show-exercise-sets-header">
+        <div>Sets #3</div>
+        <div class="button-set-arrow-container"><img class="button-set-arrow button-set-arrow-down" src="/images/arrow-triangle-down.png" alt="Down Arrow"></div>
+      </div>
+      <table class="workouts-show-exercise-sets-details container-hide">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><%= exerciseDetail.exercise.measurementPrimary %></th>
+            <th><%= exerciseDetail.exercise.measurementSecondary %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% exerciseDetail.sets.forEach((set, index) => { %>
+          <tr>
+            <td><%= index+1 %></td>
+            <td><%= set[exerciseDetail.exercise.measurementPrimary.toLowerCase()] %></td>
+            <td><%= set[exerciseDetail.exercise.measurementSecondary?.toLowerCase()] %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% }) %>
 </div>
+<div id="workouts-show-buttons">
+  <div id="button-delete-workout" <% if (workout.createdBy._id.toString() !== user?._id.toString()  || typeof user === 'undefined') { %> class="button container-hide" <% } else { %> class="button" <% } %>>Delete</div>
+  <div <% if (workout.createdBy._id.toString() !== user?._id.toString() || typeof user === 'undefined') { %> class="container-hide" <% } %>>
+    <a class="button" href="/workouts/<%= workout._id %>">Edit</a>
+  </div>
+  <div>
+    <a class="button" href="/workouts">Back</a>
+  </div>
+</div>
+<div class="container-hide workouts-show-delete-confirm-container">
+  <div>Are you sure you want to delete this workout?</div>
+  <form action="/workouts/<%= workout._id %>?_method=delete" method="POST">
+    <div id="button-delete-workout-cancel" class="button">Cancel</div>
+    <input class="button" type="submit" value="Delete">
+  </form>
+</div>
+
+<script>
+  const deleteWorkoutButtonElement = document.querySelector('#button-delete-workout');
+  const deleteWorkoutButtonCancelElement = document.querySelector('#button-delete-workout-cancel');
+  const deleteWorkoutConfirmElement = document.querySelector('.workouts-show-delete-confirm-container');
+
+  const exerciseContainerElement = document.querySelector('#workouts-show-exercises-container');
+
+  deleteWorkoutButtonElement.addEventListener('click', (event) => {
+    deleteWorkoutConfirmElement.classList.remove('container-hide')
+  });
+
+  deleteWorkoutButtonCancelElement.addEventListener('click', (event) => {
+    deleteWorkoutConfirmElement.classList.add('container-hide')
+  });
+
+  exerciseContainerElement.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!target.classList.contains('button-set-arrow')) return;
+
+    if (target.classList.contains('button-set-arrow-down')) {
+      target.closest('.workouts-show-exercise-sets-container').querySelector('table').classList.remove('container-hide');
+      target.parentNode.innerHTML = '<img class="button-set-arrow button-set-arrow-up" src="/images/arrow-triangle-up.png" alt="Up Arrow">';
+    } else {
+      target.closest('.workouts-show-exercise-sets-container').querySelector('table').classList.add('container-hide');
+      target.parentNode.innerHTML = '<img class="button-set-arrow button-set-arrow-down" src="/images/arrow-triangle-down.png" alt="Down Arrow">';
+    }
+  })
+</script>
 
 <%- include('../partials/footer') %>
