@@ -6,7 +6,7 @@ const User = require('../models/user');
 module.exports = {
     index,
     new: newWorkout,
-    search,
+    // search,
     show,
     create,
     delete: deleteWorkout,
@@ -14,6 +14,7 @@ module.exports = {
 
 // Page to display list of workouts
 async function index(req, res) {
+    console.log(req.query);
     // get categories for search filter
     const categories = await Category.find({});
     categories.sort((a, b) => {
@@ -99,18 +100,6 @@ async function newWorkout(req, res) {
     });
 }
 
-// Process search filters on workouts list page
-function search(req, res) {
-    // Process each value to avoid errors with url
-    const workout = req.body.workoutName;
-    const category = req.body.category;
-    const user = req.body.username;
-
-    res.redirect(
-        `/workouts?workout=${workout}&category=${category}&user=${user}`
-    );
-}
-
 async function show(req, res) {
     const workout = await Workout.findById(req.params.workoutId)
         .populate({
@@ -125,7 +114,7 @@ async function show(req, res) {
                 select: 'name',
             },
         });
-    console.log(workout);
+
     res.render('workouts/show', {
         title: workout.name,
         subtitle: `Created by ${workout.createdBy.username}`,

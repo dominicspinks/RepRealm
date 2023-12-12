@@ -25,7 +25,4 @@ router.delete(
 // View route, display details page for selected workout
 router.get('/:workoutId', isNewUser, workoutsController.show);
 
-// Search router
-router.get('/search', isNewUser, workoutsController.search);
-
 module.exports = router;

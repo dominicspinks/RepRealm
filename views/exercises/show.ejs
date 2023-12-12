@@ -1,7 +1,45 @@
 <%- include('../partials/header') %>
 
-<div>
-  <a class="button" href="/exercises">Back</a>
+
+<div id="exercise-details-info">
+  <div>
+    <div class="label">Exercise:</div>
+    <div class="value"><%= exercise.name %></div>
+  </div>
+  <div>
+    <div class="label">Category:</div>
+    <div class="value"><%= exercise.category.name %></div>
+  </div>
+  <div>
+    <div class="label">Primary Measurement:</div>
+    <div class="value"><%= exercise.measurementPrimary %></div>
+  </div>
+  <div>
+    <div class="label">Secondary Measurement:</div>
+    <div class="value"><%= exercise.measurementSecondary %></div>
+  </div>
+</div>
+<div id="exercise-show-buttons">
+  <div id="button-delete-exercise" <% if (exercise.createdBy._id.toString() !== user?._id.toString()  || typeof user === 'undefined') { %> class="button container-hide" <% } else { %> class="button" <% } %>>Delete</div>
+  <div <% if (exercise.createdBy._id.toString() !== user?._id.toString() || typeof user === 'undefined') { %> class="container-hide" <% } %>>
+    <a class="button" href="/exercises/<%= exercise._id %>">Edit</a>
+  </div>
+  <div>
+    <a class="button" href="/exercises">Back</a>
+  </div>
 </div>
 
+<script>
+  const deleteExerciseButtonElement = document.querySelector('#button-delete-exercise');
+  const deleteExerciseButtonCancelElement = document.querySelector('#button-delete-exercise-cancel');
+  const deleteExerciseConfirmElement = document.querySelector('.exercise-show-delete-confirm-container');
+
+  deleteExerciseButtonElement.addEventListener('click', (event) => {
+    deleteExerciseConfirmElement.classList.remove('container-hide')
+  });
+
+  deleteExerciseButtonCancelElement.addEventListener('click', (event) => {
+    deleteExerciseConfirmElement.classList.add('container-hide')
+  });
+</script>
 <%- include('../partials/footer') %>

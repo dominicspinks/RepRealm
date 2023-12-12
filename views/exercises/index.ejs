@@ -1,8 +1,81 @@
 <%- include('../partials/header') %>
 
 <div>
-  <a class="button" href="/exercises/new">Create New Exercise</a>
+  <div id="exercises-grid">
+    <div id="exercises-actions">
+      <form id="exercises-filter" action="/exercises" method="GET">
+        <div class="label-container">
+          <label for="exerciseName">Exercise Name</label>
+          <input type="text" name="exerciseName" id="exerciseName">
+        </div>
+        <div class="label-container">
+          <label for="category">Category</label>
+          <select name="category" id="category">
+            <option value=""></option>
+            <!-- List of categories from input -->
+            <% categories.forEach((category) => { %>
+            <option value="<%= category._id %>"><%= category.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div id="exercises-filter-buttons">
+          <div class="button-container">
+            <button class="button">Clear</button>
+          </div>
+          <div class="button-container">
+            <input class="button" type="submit" value="Search">
+          </div>
+        </div>
+      </form>
+      <div id="exercises-button-create">
+        <a class="button" href="/exercises/new">Create New Exercise</a>
+      </div>
+    </div>
+    <div class="exercises-list">
+      <% exercises.forEach((exercise) => { %>
+      <a class="exercise-list-container" href="/exercises/<%= exercise._id %>">
+        <div class="exercise-list-details-container">
+          <div class="exercise-list-name">
+            <%= exercise.name %>
+          </div>
+          <div class="exercise-list-category">
+            <%= exercise.category.name %>
+          </div>
+        </div>
+        <div class="exercise-list-measurements-container">
+          <div class="exercise-list-measurement xercise-list-primary">
+            <%= exercise.measurementPrimary %>
+          </div>
+          <% if (exercise.measurementSecondary !== '') { %>
+          <div class="exercise-list-measurement exercise-list-secondary">
+            <%= exercise.measurementSecondary %>
+          </div>
+          <% } %>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+    <div style="display: none" id="worksouts-pagination">
+      <div>
+        <a class="button button-pagination" id="exercises-pagination-first" href="">
+          &lt;&lt; First &lt;&lt;</a>
+      </div>
+      <div>
+        <a class="button button-pagination" id="exercises-pagination-previous" href="">
+          &lt; Previous &lt;</a>
+      </div>
+      <div>
+        <a class="button button-pagination" id="exercises-pagination-next" href="">
+          &gt; Next &gt;</a>
+      </div>
+      <div>
+        <a class="button button-pagination" id="exercises-pagination-last" href="">
+          &gt;&gt; Last &gt;&gt;</a>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 
