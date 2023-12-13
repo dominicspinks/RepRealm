@@ -55,21 +55,42 @@ async function index(req, res) {
     // Add exercise name to each category in each workout
     workouts.forEach((workout) => {
         workout.categories = [];
+        console.log(`workout`, workout);
         workout.exerciseDetails.forEach((exercise) => {
-            const categories = workout.categories.find(
-                (category) => (category.name = exercise.exercise.category.name)
+            console.log('start of loop');
+            console.log('exercise', exercise);
+            console.log(
+                'exercise category name',
+                exercise.exercise.category.name
             );
-            if (categories === undefined) {
+            console.log('workout categories', workout.categories);
+            const categories = workout.categories.find(
+                (category) => category.name === exercise.exercise.category.name
+            );
+            console.log('categories', categories);
+            if (typeof categories === 'undefined') {
+                console.log('add categories object');
                 workout.categories.push({
                     name: exercise.exercise.category.name,
                     exercises: [exercise.exercise.name],
                 });
-            } else {
+            } else if (
+                typeof categories.exercises.find(
+                    (value) => value === exercise.exercise.name
+                ) === 'undefined'
+            ) {
+                console.log(
+                    categories.exercises.find((value) => {
+                        value === exercise.exercise.name;
+                    })
+                );
+                console.log('add exercise', exercise.exercise.name);
                 categories.exercises.push(exercise.exercise.name);
             }
         });
     });
-
+    console.log(workouts);
+    console.log(workouts[0].categories);
     res.render('workouts/index', {
         title: 'Workouts',
         isActive: 'workouts',
@@ -111,6 +132,7 @@ async function newWorkout(req, res) {
     });
 }
 
+// Page to show the details of a workout
 async function show(req, res) {
     const workout = await Workout.findById(req.params.workoutId)
         .populate({

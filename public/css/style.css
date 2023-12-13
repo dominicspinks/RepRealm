@@ -215,14 +215,14 @@ h3 {
 .workout-list-categories {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
     align-items: left;
-    background: white;
 }
 
 .workout-list-category {
     display: flex;
     width: 100%;
+    background: white;
 }
 
 .workout-list-category-name {
@@ -235,15 +235,15 @@ h3 {
 
 .workout-list-category-exercise-list {
     display: flex;
-    gap: 5px;
     flex-wrap: wrap;
+    padding: 4px;
 }
 
 .workout-list-category-exercise {
     font-size: 0.7em;
     background: var(--colour-workout-exercise-background);
     border-radius: 3px;
-    margin: 4px;
+    margin: 1px 4px;
     padding: 1px 8px;
     text-align: center;
     display: flex;
@@ -270,6 +270,59 @@ h3 {
 #profile-details-info .label {
     width: 90px;
     font-weight: bold;
+}
+
+#profile-edit-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#profile-edit-message {
+    width: 80%;
+}
+
+#profile-edit-user-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#profile-edit-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+#profile-edit-user-info > div {
+    display: flex;
+    gap: 5px;
+}
+
+#profile-edit-user-info label {
+    width: 150px;
+    font-weight: bold;
+}
+
+#profile-edit-user-info .input {
+    width: 250px;
+}
+
+#profile-edit-user-info #visibility {
+    width: 100px;
+}
+
+#profile-edit-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#profile-edit-buttons .button {
+    width: 80px;
 }
 
 #workout-container {

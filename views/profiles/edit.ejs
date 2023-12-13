@@ -1,46 +1,44 @@
 <%- include('../partials/header') %>
 
 
-<div>
+<div id="profile-edit-container">
   <div id="profile-edit-message">
     <% if (user?.isNew) { %>
     Welcome to RepRealm<br>
     Please enter a unique username to complete your registration
     <% } %>
   </div>
-  <div id="profile-edit-user-details">
-    <form action="/profiles/edit?_method=put" method="POST">
-      <div id="profile-edit-user-info">
-        <div>
-          <label for="username">User Name</label>
-          <input type="text" name="username" id="username" required value="<%= user.username %>">
-        </div>
-        <div>
-          <label for="email">Email Address</label>
-          <input type="text" name="email" id="email" required value="<%= user.email %>">
-        </div>
-        <div>
-          <label for="visibility">Visibility</label>
-          <select name="visibility" id="visibility">
-            <option value="private">Private</option>
-            <option value="public">Public</option>
-          </select>
-        </div>
+  <form id="profile-edit-user-form" action="/profiles/edit?_method=put" method="POST">
+    <div id="profile-edit-user-info">
+      <div>
+        <label for="username">User Name</label>
+        <input class="input" type="text" name="username" id="username" required value="<%= user.username %>">
       </div>
-      <div id="profile-user-avatar">
-        <div>
-          <img src="<%= user.avatar %>" alt="User avatar" max-width="300" max-height="300">
-          <input type="hidden" name="avatar" value="<%= user.avatar %>">
-        </div>
+      <div>
+        <label for="email">Email Address</label>
+        <input class="input" type="text" name="email" id="email" required value="<%= user.email %>">
       </div>
+      <div>
+        <label for="visibility">Visibility</label>
+        <select class="input" name="visibility" id="visibility">
+          <option value="private">Private</option>
+          <option value="public">Public</option>
+        </select>
+      </div>
+      <div>
+        <label for="avatar">Avatar Image URL</label>
+        <input class="input" type="url" name="avatar" id="avatar" value="<%= user.avatar %>">
+      </div>
+    </div>
+    <div id="profile-edit-buttons">
       <div>
         <a class="button" href="/profiles">Cancel</a>
       </div>
       <div>
         <input class="button" type="submit" value="Save">
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
 
 
