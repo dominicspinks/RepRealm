@@ -1,8 +1,7 @@
 <%- include('../partials/header') %>
 
-<div>
-  <a class="button" href="/workouts">Back</a>
-</div>
-
+<form id="exercise-new-form" action="/exercises/<%= exercise?._id %>/edit?_method=put" method="POST">
+  <%- include('../partials/exercise-add-edit-form') %>
+</form>
 
 <%- include('../partials/footer') %>

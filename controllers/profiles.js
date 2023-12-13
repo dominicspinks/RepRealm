@@ -22,6 +22,8 @@ function show(req, res) {
 
 // Display page to Edit a user's profile
 function edit(req, res) {
+    // Add check to make sure profile is legit and belongs to the user
+
     res.render('profiles/edit', {
         title: 'Edit Profile',
         isActive: 'profiles',

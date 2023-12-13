@@ -43,14 +43,16 @@
           </div>
         </div>
         <div class="exercise-list-measurements-container">
-          <div class="exercise-list-measurement xercise-list-primary">
-            <%= exercise.measurementPrimary %>
+          <div>
+            <div class="exercise-list-measurement exercise-list-primary">
+              <%= exercise.measurementPrimary %>
+            </div>
           </div>
-          <% if (exercise.measurementSecondary !== '') { %>
-          <div class="exercise-list-measurement exercise-list-secondary">
-            <%= exercise.measurementSecondary %>
+          <div>
+            <% if (exercise.measurementSecondary !== '' && typeof exercise.measurementSecondary !== 'undefined' ) { %>
+            <div class="exercise-list-measurement exercise-list-secondary"><%= exercise.measurementSecondary %></div>
+            <% } %>
           </div>
-          <% } %>
         </div>
       </a>
       <% }) %>

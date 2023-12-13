@@ -10,6 +10,8 @@ module.exports = {
     show,
     create,
     delete: deleteWorkout,
+    edit,
+    update,
 };
 
 // Page to display list of workouts
@@ -84,12 +86,21 @@ async function newWorkout(req, res) {
         return a.name < b.name ? -1 : 1;
     });
 
-    // Get all exercises
-    const exercises = await Exercise.find({});
+    // Get all exercises that are public or belong to the current user
+    const exercises = await Exercise.find({
+        $or: [{ isPublic: true }, { createdBy: req.user._id }],
+    });
     // console.log(exercises);
     // get exercises for each category
+    console.log(exercises);
     categories.forEach((category) => {
-        category.exercises = '';
+        category.exercises = Array.from(exercises)
+            .filter(
+                (exercise) =>
+                    exercise.category.toString() === category._id.toString()
+            )
+            .map((exercise) => exercise.name)
+            .join('||');
     });
 
     res.render('workouts/new', {
@@ -123,6 +134,7 @@ async function show(req, res) {
     });
 }
 
+// Add a new workout to the database
 async function create(req, res) {
     const reqBody = req.body;
 
@@ -144,10 +156,11 @@ async function create(req, res) {
         res.redirect(`/workouts/${workout._id}`);
     } catch (error) {
         console.log(error);
-        res.render('workouts/new');
+        res.redirect('/workouts/new');
     }
 }
 
+// Remove a workout from the database
 async function deleteWorkout(req, res) {
     const workoutId = req.params.workoutId;
     const workout = await Workout.findById(workoutId);
@@ -158,4 +171,95 @@ async function deleteWorkout(req, res) {
 
     await Workout.findByIdAndDelete(workoutId);
     res.redirect(`/workouts`);
+}
+
+// Display page to modify workout details
+async function edit(req, res) {
+    const workout = await Workout.findById(req.params.workoutId)
+        .populate({
+            path: 'exerciseDetails.exercise',
+            select: 'name',
+        })
+        .lean();
+
+    // get categories for search filter
+    const categories = await Category.find({});
+    categories.sort((a, b) => {
+        return a.name < b.name ? -1 : 1;
+    });
+
+    // Get all exercises that are public or belong to the current user
+    const exercises = await Exercise.find({
+        $or: [{ isPublic: true }, { createdBy: req.user._id }],
+    });
+    // console.log(exercises);
+    // get exercises for each category
+    categories.forEach((category) => {
+        category.exercises = Array.from(exercises)
+            .filter(
+                (exercise) =>
+                    exercise.category.toString() === category._id.toString()
+            )
+            .map((exercise) => exercise.name)
+            .join('||');
+    });
+
+    // // create exerciseDetails value to be used on the page
+    const exerciseDetailsValue = [];
+    workout.exerciseDetails.forEach((exercise) => {
+        const exerciseDetail = {
+            exercise: exercise.exercise._id.toString(),
+            exerciseName: exercise.exercise?.name,
+            rest: exercise.rest.toString(),
+            sets: [],
+        };
+        exercise.sets.forEach((set) => {
+            const setValue = {};
+            Object.keys(set).forEach((key) => {
+                if (key !== '_id') setValue[key] = set[key].toString();
+            });
+
+            exerciseDetail.sets.push(setValue);
+        });
+        exerciseDetailsValue.push(exerciseDetail);
+    });
+    workout.exerciseDetails = exerciseDetailsValue;
+
+    res.render('workouts/edit', {
+        title: 'Edit Workout',
+        isActive: 'workouts-edit',
+        workout,
+        categories,
+        exercises,
+    });
+}
+
+// Submit modified workout details to the database
+async function update(req, res) {
+    const workoutId = req.params.workoutId;
+    const updatedWorkout = req.body;
+    const workout = await Workout.findById(workoutId);
+    // verify the workout is found
+    console.log(req.body);
+    const category = await Category.findById(req.body.category);
+
+    workout.name = updatedWorkout.name.trim();
+    workout.isPublic = updatedWorkout.isPublic === 'on';
+    workout.rest = +updatedWorkout.restInput;
+    workout.exerciseDetails = [];
+
+    Object.keys(updatedWorkout).forEach((key) => {
+        if (!key.match(/^exerciseDetails\d+$/i)) return;
+
+        const exerciseDetail = JSON.parse(updatedWorkout[key]);
+        workout.exerciseDetails.push(exerciseDetail);
+    });
+
+    try {
+        await workout.save();
+        res.redirect(`/workouts/${workout._id}`);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/workouts/${workout._id}/edit');
+    }
 }

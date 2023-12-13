@@ -272,7 +272,7 @@ h3 {
     font-weight: bold;
 }
 
-#workout-new-container {
+#workout-container {
     width: 500px;
     display: flex;
     flex-direction: column;
@@ -283,42 +283,42 @@ h3 {
     margin-top: 20px;
 }
 
-#workout-new-details {
+#workout-details {
     display: flex;
     flex-direction: column;
     align-items: left;
     gap: 5px;
 }
 
-#workout-new-details > div {
+#workout-details > div {
     display: flex;
     gap: 5px;
 }
 
-#workout-new-details label {
+#workout-details label {
     width: 80px;
     font-weight: bold;
 }
 
-#workout-new-exercises {
+#workout-exercises {
     display: flex;
     flex-direction: column;
     gap: 5px;
     align-items: center;
 }
 
-#workout-new-exercises-title {
+#workout-exercises-title {
     display: flex;
     justify-content: space-between;
     width: 100%;
     border-bottom: 1px solid black;
 }
 
-#workout-new-exercises-title > div:first-child {
+#workout-exercises-title > div:first-child {
     font-weight: bold;
 }
 
-#workout-new-exercises-title > div:last-child {
+#workout-exercises-title > div:last-child {
     margin: 2px;
 }
 
@@ -328,7 +328,7 @@ h3 {
     font-size: 0.7em;
 }
 
-.workout-new-exercises-add-container {
+.workout-exercises-add-container {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -337,104 +337,104 @@ h3 {
     padding: 5px;
 }
 
-#workout-new-exercises-add-details {
+#workout-exercises-add-details {
     display: flex;
     flex-direction: column;
     align-items: left;
     gap: 5px;
 }
 
-#workout-new-exercises-add-details > div {
+#workout-exercises-add-details > div {
     display: flex;
     gap: 5px;
 }
 
-#workout-new-exercises-add-details label {
+#workout-exercises-add-details label {
     width: 80px;
     font-weight: bold;
 }
 
-#workout-new-exercises-add-details select {
+#workout-exercises-add-details select {
     width: 180px;
 }
 
-#workout-new-exercises-add-details #restInput {
+#workout-exercises-add-details #restInput {
     width: 60px;
 }
 
-#workout-new-exercises-add-sets {
+#workout-exercises-add-sets {
     display: flex;
     flex-direction: column;
     gap: 5px;
     align-items: left;
 }
 
-#workout-new-exercises-add-sets-header {
+#workout-exercises-add-sets-header {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid black;
 }
 
-#workout-new-exercises-add-sets-header > div {
+#workout-exercises-add-sets-header > div {
     font-weight: bold;
 }
-#workout-new-exercises-add-sets-header > div:last-child {
+#workout-exercises-add-sets-header > div:last-child {
     margin: 2px;
 }
 
-#workout-new-exercises-add-sets-details {
+#workout-exercises-add-sets-details {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-#workout-new-exercises-add-sets-details > div {
+#workout-exercises-add-sets-details > div {
     display: flex;
     justify-content: space-between;
 }
 
-#workout-new-exercises-add-sets-details .input {
+#workout-exercises-add-sets-details .input {
     width: 70px;
 }
 
-#workout-new-exercises-add-buttons {
+#workout-exercises-add-buttons {
     display: flex;
     gap: 5px;
     justify-content: flex-end;
 }
 
-#workout-new-exercises-details {
+#workout-exercises-details {
     width: 100%;
 }
 
-#workout-new-exercises-details > thead {
+#workout-exercises-details > thead {
     font-weight: bold;
 }
 
-#workout-new-exercises-details th {
+#workout-exercises-details th {
     text-align: left;
 }
 
-#workout-new-exercises-details td:last-child {
+#workout-exercises-details td:last-child {
     display: flex;
     gap: 3px;
 }
 
-.button-workout-new-exercise-edit,
-.button-workout-new-exercise-delete {
+.button-workout-exercise-edit,
+.button-workout-exercise-delete {
     width: 50px;
     height: 20px;
     font-size: 0.7em;
 }
 
-#workout-new-buttons {
+#workout-buttons {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
     margin-top: 10px;
 }
 
-#workout-new-buttons .button {
+#workout-buttons .button {
     width: 70px;
     height: 30;
 }
@@ -520,7 +520,7 @@ h3 {
     font-size: 0.9em;
 }
 
-.workouts-show-delete-confirm-container {
+.show-delete-confirm-container {
     border: 1px solid black;
     width: 200px;
     display: flex;
@@ -530,19 +530,19 @@ h3 {
     margin: 10px;
 }
 
-.workouts-show-delete-confirm-container > div {
+.show-delete-confirm-container > div {
     display: flex;
     text-align: center;
     margin: 5px auto;
 }
 
-.workouts-show-delete-confirm-container > form {
+.show-delete-confirm-container > form {
     display: flex;
     margin: 5px auto;
     gap: 10px;
 }
 
-.workouts-show-delete-confirm-container .button {
+.show-delete-confirm-container .button {
     width: 70px;
     height: 25px;
     font-size: 0.9em;
@@ -619,6 +619,52 @@ h3 {
     width: 200px;
     display: flex;
     justify-content: flex-start;
+}
+
+#exercise-new-form {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+#exercise-new-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#exercise-new-details > div {
+    display: flex;
+    gap: 10px;
+}
+
+#exercise-new-details label {
+    width: 200px;
+    font-weight: bold;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#exercise-new-details .input {
+    width: 200px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#exercise-show-buttons,
+#exercise-new-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#exercise-show-buttons .button,
+#exercise-new-buttons .button {
+    width: 70px;
 }
 
 /* Leave at the end */

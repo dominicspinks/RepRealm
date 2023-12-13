@@ -1,0 +1,98 @@
+  <div id="workout-details">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" <% if (typeof workout !== 'undefined') { %> value="<%= workout?.name %>" <% } %>>
+    </div>
+    <div>
+      <label for="isPublic">Share</label>
+      <input type="checkbox" name="isPublic" id="isPublic" <% if (typeof workout !== 'undefined' && workout?.isPublic ) { %> checked <% } %>>
+    </div>
+  </div>
+  <div id="workout-exercises">
+    <div id="workout-exercises-title">
+      <div>Exercises:</div>
+      <div class="button button-small" id="button-workout-exercise-add">Add</div>
+    </div>
+    <div class="workout-exercises-add-container container-hide">
+      <div id="workout-exercises-add-details">
+        <div style="display:none">
+          <input id="temp-exercise-number" type="hidden" value="0">
+        </div>
+        <div>
+          <label for="categoryInput">Category</label>
+          <select id="categoryInput">
+            <option value=""></option>
+            <!-- List of categories from input -->
+            <% categories.forEach((category) => { %>
+            <option value="<%= category.exercises %>"><%= category.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label for="exerciseInput">Exercise</label>
+          <select id="exerciseInput">
+            <option value=""></option>
+            <!-- List of categories from input -->
+            <% exercises.forEach((exercise) => { %>
+            <option value="<%= JSON.stringify({"id":exercise._id, "name":exercise.name,"primary":exercise.measurementPrimary,"secondary":exercise.measurementSecondary}) %>"><%= exercise.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label for="restInput">Rest</label>
+          <input name="restInput" id="restInput" type="number" min="0" value="60">
+        </div>
+      </div>
+      <div id="workout-exercises-add-sets">
+        <div id="workout-exercises-add-sets-header">
+          <div>Sets:</div>
+          <div class="primary"></div>
+          <div class="secondary"></div>
+          <div class="button button-small" id="button-new-set-add">Add</div>
+        </div>
+        <div id="workout-exercises-add-sets-details">
+        </div>
+      </div>
+      <div id="workout-exercises-add-buttons">
+        <div class="button button-small" id="button-new-exercises-cancel">Cancel</div>
+        <div class="button button-small" id="button-new-exercises-add">Save</div>
+      </div>
+    </div>
+    <table id="workout-exercises-details">
+      <thead>
+        <tr>
+          <th style="display:none"></th>
+          <th style="display:none"></th>
+          <th>Name</th>
+          <th>Rest</th>
+          <th>Sets</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (typeof workout !== 'undefined') { %>
+        <% workout.exerciseDetails.forEach((exercise, index) => { %>
+        <tr>
+          <td style="display: none"><input type="hidden" name="exerciseDetails<%= index+1 %>" class="exercise-details" value="<%= JSON.stringify(exercise) %>"></td>
+          <td style="display: none"><input type="hidden" class="exercise-number" value=<%= index+1 %>></td>
+          <td><%= exercise.exerciseName %></td>
+          <td><%= exercise.rest %></td>
+          <td><%= exercise.sets.length %></td>
+          <td>
+            <div class="button button-small button-workout-exercise-edit" id="button-workout-exercise-edit">Edit</div>
+            <div class="button button-small button-workout-exercise-delete" id="button-workout-exercise-delete">Delete</div>
+          </td>
+        </tr>
+        <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <div id="workout-buttons">
+    <div>
+      <a class="button" href="/workouts">Cancel</a>
+    </div>
+    <div>
+      <input id="button-workout-save" class="button" type="submit" value="Save">
+    </div>
+  </div>

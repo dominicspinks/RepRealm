@@ -13,7 +13,7 @@
     </div>
     <div class="workouts-show-exercise-sets-container">
       <div class="workouts-show-exercise-sets-header">
-        <div>Sets #3</div>
+        <div>Sets #<%= exerciseDetail.sets.length %></div>
         <div class="button-set-arrow-container"><img class="button-set-arrow button-set-arrow-down" src="/images/arrow-triangle-down.png" alt="Down Arrow"></div>
       </div>
       <table class="workouts-show-exercise-sets-details container-hide">
@@ -41,13 +41,13 @@
 <div id="workouts-show-buttons">
   <div id="button-delete-workout" <% if (workout.createdBy._id.toString() !== user?._id.toString()  || typeof user === 'undefined') { %> class="button container-hide" <% } else { %> class="button" <% } %>>Delete</div>
   <div <% if (workout.createdBy._id.toString() !== user?._id.toString() || typeof user === 'undefined') { %> class="container-hide" <% } %>>
-    <a class="button" href="/workouts/<%= workout._id %>">Edit</a>
+    <a class="button" href="/workouts/<%= workout._id %>/edit">Edit</a>
   </div>
   <div>
     <a class="button" href="/workouts">Back</a>
   </div>
 </div>
-<div class="container-hide workouts-show-delete-confirm-container">
+<div class="container-hide show-delete-confirm-container">
   <div>Are you sure you want to delete this workout?</div>
   <form action="/workouts/<%= workout._id %>?_method=delete" method="POST">
     <div id="button-delete-workout-cancel" class="button">Cancel</div>
@@ -58,7 +58,7 @@
 <script>
   const deleteWorkoutButtonElement = document.querySelector('#button-delete-workout');
   const deleteWorkoutButtonCancelElement = document.querySelector('#button-delete-workout-cancel');
-  const deleteWorkoutConfirmElement = document.querySelector('.workouts-show-delete-confirm-container');
+  const deleteWorkoutConfirmElement = document.querySelector('.show-delete-confirm-container');
 
   const exerciseContainerElement = document.querySelector('#workouts-show-exercises-container');
 

@@ -1,0 +1,45 @@
+ <div id="exercise-new-details">
+   <div>
+     <label for="category">Category:</label>
+     <select class="input" name="category" id="category" required>
+       <option hidden disabled selected value> -- select an option -- </option>
+       <!-- List of categories from input -->
+       <% categories.forEach((category) => { %>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.category.toString() === category._id.toString()) { %> selected <% } %> value="<%= category._id %>"><%= category.name %></option>
+       <% }) %>
+     </select>
+   </div>
+   <div>
+     <label for="name">Exercise Name:</label>
+     <input class="input" type="text" name="name" id="name" required <% if (typeof exercise !== 'undefined') { %> value="<%= exercise?.name %>" <% } %>>
+   </div>
+   <div>
+     <label for="primary">Primary Measurement:</label>
+     <select class="input" name="primary" id="primary" required>
+       <option hidden disabled selected value> -- select an option -- </option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementPrimary === 'DISTANCE') { %> selected <% } %> value="DISTANCE">Distance</option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementPrimary === 'REPS') { %> selected <% } %> value="REPS">Reps</option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementPrimary === 'TIME') { %> selected <% } %> value="TIME">Time</option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementPrimary === 'WEIGHT') { %> selected <% } %> value="WEIGHT">Weight</option>
+     </select>
+   </div>
+   <div>
+     <label for="secondary">Secondary Measurement:</label>
+     <select class="input" name="secondary" id="secondary">
+       <option hidden disabled selected value=""> -- optional -- </option>
+       <option value=""></option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementSecondary === 'DISTANCE') { %> selected <% } %> value="DISTANCE">Distance</option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementSecondary === 'REPS') { %> selected <% } %> value="REPS">Reps</option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementSecondary === 'TIME') { %> selected <% } %> value="TIME">Time</option>
+       <option <% if (typeof exercise !== 'undefined' && exercise?.measurementSecondary === 'WEIGHT') { %> selected <% } %> value="WEIGHT">Weight</option>
+     </select>
+   </div>
+ </div>
+ <div id="exercise-new-buttons">
+   <div>
+     <a class="button" href="/exercises">Cancel</a>
+   </div>
+   <div>
+     <input class="button" type="submit" value="Save">
+   </div>
+ </div>
