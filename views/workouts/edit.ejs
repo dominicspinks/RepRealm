@@ -1,6 +1,6 @@
 <%- include('../partials/header') %>
 
-<form id="workout-container" action="/workouts/<%= workout._id %>/edit?_method=put" method="POST">
+<form id="workout-container" action="/workouts/<%= workout._id %>?_method=put" method="POST">
 
   <%- include('../partials/workout-add-edit-form') %>
 

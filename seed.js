@@ -20,13 +20,13 @@ const User = require('./models/user');
     console.log(results);
 
     // Remove admin user (if recreating)
-    // results = await User.deleteOne({ username: 'admin' });
+    // results = await User.deleteOne({ username: 'demo' });
     // console.log(results);
 
     // Create admin user (for default exercises)
     const dataUser = [
         {
-            username: 'admin',
+            username: 'demo',
             isNewUser: false,
         },
     ];
@@ -34,7 +34,7 @@ const User = require('./models/user');
     createdUsers = await User.create(dataUser);
     console.log('Users created:', createdUsers);
 
-    const adminUser = await User.findOne({ username: 'admin' });
+    const adminUser = await User.findOne({ username: 'demo' });
 
     // Import Categories
     const dataCategories = [

@@ -6,14 +6,14 @@
   <% workout.exerciseDetails.forEach((exerciseDetail) => { %>
   <div class="workouts-show-exercise-container">
     <div class="workouts-show-exercise-name">
-      <%= exerciseDetail.exercise.name %>
+      <span class="bold"><%= exerciseDetail.exercise.name %></span>
     </div>
     <div class="workouts-show-exercise-rest">
-      Rest: <%= exerciseDetail.rest %> sec
+      <span class="italic">Rest:</span> &nbsp;&nbsp;<%= exerciseDetail.rest %> sec
     </div>
     <div class="workouts-show-exercise-sets-container">
       <div class="workouts-show-exercise-sets-header">
-        <div>Sets #<%= exerciseDetail.sets.length %></div>
+        <div><span class="italic">No. of Sets:</span> &nbsp;<%= exerciseDetail.sets.length %></div>
         <div class="button-set-arrow-container"><img class="button-set-arrow button-set-arrow-down" src="/images/arrow-triangle-down.png" alt="Down Arrow"></div>
       </div>
       <table class="workouts-show-exercise-sets-details container-hide">

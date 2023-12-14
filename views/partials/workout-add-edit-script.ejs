@@ -38,7 +38,7 @@
     let primaryFieldSettings
     switch (exerciseObject.primary) {
       case 'TIME':
-        primaryFieldSettings = `<input class="input primary-measurement" type="number" min="0" step="0.01" value="${setDetails.time ?? 0}">`
+        primaryFieldSettings = `<input class="input primary-measurement" type="number" min="0" step="0" value="${setDetails.time ?? 0}">`
         break;
       case 'REPS':
         primaryFieldSettings = `<input class="input primary-measurement" type="number" min="0" value="${setDetails.reps ?? 0}">`
@@ -167,8 +167,6 @@
       addExerciseRestElement.classList.remove('input-error');
     }
 
-    // TODO Check if each primary field has a value
-
     // Get values
     const exerciseInfo = JSON.parse(addExerciseExerciseElement.value);
     // next id num
@@ -227,7 +225,6 @@
       exerciseListElement.appendChild(newExerciseElement);
     } else {
       // Remove the existing line
-      console.log(exerciseListElement);
       const existingLine = exerciseListElement.querySelector(`tr:nth-child(${tempExerciseNumber})`);
       exerciseListElement.insertBefore(newExerciseElement, existingLine);
       exerciseListElement.removeChild(existingLine);
@@ -261,7 +258,7 @@
     // actions for edit button
     if (target.classList.contains('button-workout-exercise-edit')) {
       const exerciseElement = target.closest('tr');
-      console.log(exerciseElement)
+
       const exerciseDetailsElement = exerciseElement.querySelector('td .exercise-details').value
       const exerciseDetails = JSON.parse(exerciseDetailsElement);
       const exerciseNum = exerciseElement.querySelector('td .exercise-number').value.toString()
@@ -298,12 +295,11 @@
       // Update Primary and Secondary Mesurement headers
       setHeaderPrimaryElement.innerText = exerciseValue.primary;
       setHeaderSecondaryElement.innerText = exerciseValue.secondary;
-      console.log('details', exerciseDetails)
+
       // Populate sets list
       exerciseDetails.sets.forEach((set) => {
         // Get next set number
         const rowNum = addExerciseSetListElement.childElementCount + 1;
-        console.log(set)
         addSet(exerciseValue, rowNum, set);
       })
 

@@ -18,10 +18,6 @@
             <% }) %>
           </select>
         </div>
-        <div class="label-container">
-          <label for="username">User Name</label>
-          <input type="text" name="username" id="username">
-        </div>
         <div id="workouts-filter-buttons">
           <div class="button-container">
             <button class="button">Clear</button>
@@ -65,22 +61,22 @@
       </a>
       <% }) %>
     </div>
-    <div style="display: none" id="worksouts-pagination">
-      <div>
-        <a class="button button-pagination" id="workouts-pagination-first" href="">
-          &lt;&lt; First &lt;&lt;</a>
+    <div class="pagination">
+      <div id="pagination-first" <% if (pages.currentPage < 2 ) { %> class="container-hide" <% } %>>
+        <a class="button button-pagination" href="/workouts?<%= pages.searchRedirect %>&page=0">
+          &lt;&lt; First</a>
       </div>
-      <div>
-        <a class="button button-pagination" id="workouts-pagination-previous" href="">
-          &lt; Previous &lt;</a>
+      <div id="pagination-previous" <% if (pages.currentPage < 1 ) { %> class="container-hide" <% } %>>
+        <a class="button button-pagination" href="/workouts?<%= pages.searchRedirect %>&page=<%= pages.currentPage-1 %>">
+          &lt; Prev</a>
       </div>
-      <div>
-        <a class="button button-pagination" id="workouts-pagination-next" href="">
-          &gt; Next &gt;</a>
+      <div id="pagination-next" <% if (pages.currentPage > pages.totalPages-2 ) { %> class="container-hide" <% } %>>
+        <a class="button button-pagination" href="/workouts?<%= pages.searchRedirect %>&page=<%= pages.currentPage+1 %>">
+          Next &gt;</a>
       </div>
-      <div>
-        <a class="button button-pagination" id="workouts-pagination-last" href="">
-          &gt;&gt; Last &gt;&gt;</a>
+      <div id="pagination-last" <% if (pages.currentPage > pages.totalPages-3 ) { %> class="container-hide" <% } %>>
+        <a class="button button-pagination" href="/workouts?<%= pages.searchRedirect %>&page=<%= pages.totalPages-1 %>">
+          Last &gt;&gt;</a>
       </div>
     </div>
   </div>

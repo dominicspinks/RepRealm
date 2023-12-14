@@ -15,6 +15,8 @@
     --colour-workout-container-border: rgb(146, 146, 146);
     --colour-workout-exercise-background: rgb(161, 189, 211);
     --colour-input-error: red;
+    --colour-pagination-button: rgb(205, 207, 205);
+    --colour-pagination-text: black;
 }
 
 body {
@@ -160,7 +162,7 @@ h3 {
 
 #workouts-filter-buttons .button,
 #exercises-filter-buttons .button {
-    width: 50px;
+    width: 60px;
     height: 20px;
 }
 
@@ -527,8 +529,9 @@ h3 {
 
 .workouts-show-exercise-rest {
     justify-content: flex-start;
-    font-size: 0.8em;
+    /* font-size: 0.8em; */
 }
+
 .workouts-show-exercise-sets-container {
     flex-direction: column;
     align-items: center;
@@ -537,7 +540,7 @@ h3 {
 .workouts-show-exercise-sets-header {
     display: flex;
     justify-content: space-between;
-    width: 95%;
+    width: 100%;
     align-items: center;
 }
 
@@ -720,7 +723,48 @@ h3 {
     width: 70px;
 }
 
+.pagination {
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    gap: 3px;
+    margin: 10px;
+}
+
+.button-pagination {
+    width: 100%;
+    height: 20px;
+    font-size: 0.7em;
+    background: var(--colour-pagination-button);
+    color: var(--colour-pagination-text);
+    border-width: 0.5px;
+    border-radius: 0;
+}
+
+#pagination-first {
+    grid-column: 1 / span 1;
+}
+
+#pagination-previous {
+    grid-column: 2 / span 1;
+}
+
+#pagination-next {
+    grid-column: 3 / span 1;
+}
+
+#pagination-last {
+    grid-column: 4 / span 1;
+}
+
 /* Leave at the end */
+span.bold {
+    font-weight: bold;
+}
+
+span.italic {
+    font-style: italic;
+}
+
 .input-error {
     border-color: var(--colour-input-error);
 }

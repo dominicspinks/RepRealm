@@ -12,7 +12,7 @@ router.get('/', isNewUser, exercisesController.index);
 router.get('/new', isNewUser, ensureLoggedIn, exercisesController.new);
 
 // POST Submit new exercise
-router.post('/new', isNewUser, ensureLoggedIn, exercisesController.create);
+router.post('/', isNewUser, ensureLoggedIn, exercisesController.create);
 
 // DELETE route to remove a exercise
 router.delete(

@@ -6,7 +6,6 @@ const User = require('../models/user');
 module.exports = {
     index,
     new: newWorkout,
-    // search,
     show,
     create,
     delete: deleteWorkout,
@@ -16,24 +15,77 @@ module.exports = {
 
 // Page to display list of workouts
 async function index(req, res) {
-    console.log(req.query);
+    const searchQuery = req.query;
+
     // get categories for search filter
-    const categories = await Category.find({});
-    categories.sort((a, b) => {
-        return a.name < b.name ? -1 : 1;
-    });
+    const categories = await Category.find({}).sort({ name: 'asc' });
 
     // Set workout search filter
-    const searchFilter = {};
+    const searchFilter = { $and: [] };
     if (req.user) {
-        searchFilter['$or'] = [{ isPublic: true }, { createdBy: req.user._id }];
+        searchFilter['$and'].push({
+            $or: [{ isPublic: true }, { createdBy: req.user._id }],
+        });
     } else {
-        searchFilter['isPublic'] = true;
+        searchFilter['$and'].push({
+            isPublic: true,
+        });
     }
-    // console.log(searchFilter);
+
+    // Handle workout name search filter
+    if (
+        typeof searchQuery.workoutName !== 'undefined' &&
+        searchQuery.workoutName?.trim() !== ''
+    ) {
+        searchFilter['$and'].push({
+            name: new RegExp(searchQuery.workoutName, 'i'),
+        });
+    }
+
+    // Handle category search filter
+    if (
+        typeof searchQuery.category !== 'undefined' &&
+        searchQuery.category?.trim() !== ''
+    ) {
+        // Get list of exercises for the selected category
+        const searchExercises = Array.from(
+            await Exercise.find({
+                category: searchQuery.category,
+            }).select('_id')
+        ).map((object) => object._id);
+
+        if (searchExercises.length !== 0) {
+            searchFilter['$and'].push({
+                'exerciseDetails.exercise': searchExercises[0],
+            });
+        }
+    }
+
+    // Get number of search results for pagination
+    const workoutsNum = await Workout.countDocuments(searchFilter);
+    const perPage = 10;
+    const totalPages = Math.ceil(workoutsNum / perPage);
+
+    let currentPage = 0;
+    if (
+        typeof searchQuery.page !== 'undefined' &&
+        Math.abs(parseInt(searchQuery.page)) !== NaN
+    ) {
+        currentPage = Math.abs(parseInt(searchQuery.page));
+    }
+    delete searchQuery.page;
+
+    const pages = {
+        currentPage,
+        totalPages,
+        searchRedirect: new URLSearchParams(searchQuery).toString(),
+    };
 
     // Get workouts list
     const workouts = await Workout.find(searchFilter)
+        .sort({ createdAt: 'desc' })
+        .limit(perPage)
+        .skip(perPage * currentPage)
         .populate({
             path: 'createdBy',
             select: 'username -_id',
@@ -48,28 +100,14 @@ async function index(req, res) {
         })
         .lean();
 
-    workouts.sort((a, b) => {
-        return a.createdAt > b.createdAt ? -1 : 1;
-    });
-
     // Add exercise name to each category in each workout
     workouts.forEach((workout) => {
         workout.categories = [];
-        console.log(`workout`, workout);
         workout.exerciseDetails.forEach((exercise) => {
-            console.log('start of loop');
-            console.log('exercise', exercise);
-            console.log(
-                'exercise category name',
-                exercise.exercise.category.name
-            );
-            console.log('workout categories', workout.categories);
             const categories = workout.categories.find(
                 (category) => category.name === exercise.exercise.category.name
             );
-            console.log('categories', categories);
             if (typeof categories === 'undefined') {
-                console.log('add categories object');
                 workout.categories.push({
                     name: exercise.exercise.category.name,
                     exercises: [exercise.exercise.name],
@@ -79,23 +117,17 @@ async function index(req, res) {
                     (value) => value === exercise.exercise.name
                 ) === 'undefined'
             ) {
-                console.log(
-                    categories.exercises.find((value) => {
-                        value === exercise.exercise.name;
-                    })
-                );
-                console.log('add exercise', exercise.exercise.name);
                 categories.exercises.push(exercise.exercise.name);
             }
         });
     });
-    console.log(workouts);
-    console.log(workouts[0].categories);
+
     res.render('workouts/index', {
         title: 'Workouts',
         isActive: 'workouts',
         workouts,
         categories,
+        pages,
     });
 }
 
@@ -111,9 +143,8 @@ async function newWorkout(req, res) {
     const exercises = await Exercise.find({
         $or: [{ isPublic: true }, { createdBy: req.user._id }],
     });
-    // console.log(exercises);
+
     // get exercises for each category
-    console.log(exercises);
     categories.forEach((category) => {
         category.exercises = Array.from(exercises)
             .filter(
@@ -214,7 +245,7 @@ async function edit(req, res) {
     const exercises = await Exercise.find({
         $or: [{ isPublic: true }, { createdBy: req.user._id }],
     });
-    // console.log(exercises);
+
     // get exercises for each category
     categories.forEach((category) => {
         category.exercises = Array.from(exercises)
@@ -261,8 +292,8 @@ async function update(req, res) {
     const workoutId = req.params.workoutId;
     const updatedWorkout = req.body;
     const workout = await Workout.findById(workoutId);
+
     // verify the workout is found
-    console.log(req.body);
     const category = await Category.findById(req.body.category);
 
     workout.name = updatedWorkout.name.trim();

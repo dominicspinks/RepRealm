@@ -12,7 +12,7 @@ router.get('/', isNewUser, workoutsController.index);
 router.get('/new', isNewUser, ensureLoggedIn, workoutsController.new);
 
 // POST route to create the new workout
-router.post('/new', isNewUser, ensureLoggedIn, workoutsController.create);
+router.post('/', isNewUser, ensureLoggedIn, workoutsController.create);
 
 // DELETE route to remove a workout
 router.delete(
@@ -34,11 +34,6 @@ router.get(
 );
 
 // PUT route to modify an exercise
-router.put(
-    '/:workoutId/edit',
-    isNewUser,
-    ensureLoggedIn,
-    workoutsController.update
-);
+router.put('/:workoutId', isNewUser, ensureLoggedIn, workoutsController.update);
 
 module.exports = router;

@@ -15,6 +15,6 @@ router.get('/show', isNewUser, ensureLoggedIn, profilesController.show);
 router.get('/edit', ensureLoggedIn, profilesController.edit);
 
 // PUT edit profile details
-router.put('/edit', ensureLoggedIn, profilesController.update);
+router.put('/', ensureLoggedIn, profilesController.update);
 
 module.exports = router;

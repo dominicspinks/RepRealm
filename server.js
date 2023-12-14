@@ -48,9 +48,9 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', indexRouter);
+app.use('/profiles', profilesRouter);
 app.use('/workouts', workoutsRouter);
 app.use('/exercises', exercisesRouter);
-app.use('/profiles', profilesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

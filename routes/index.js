@@ -5,7 +5,7 @@ const loginController = require('../controllers/login');
 const isNewUser = require('../config/isNewUser');
 
 // Home/Index route
-router.get('/', isNewUser, indexController.index);
+router.get('/', indexController.index);
 
 // Google OAuth login route
 router.get('/auth/google', loginController.login);
