@@ -1,5 +1,27 @@
-<%- include('./partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
 
-<div></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel='stylesheet' href='/css/style.css' />
+  <title>RepRealm</title>
+</head>
 
-<%- include('./partials/footer') %>
+<body>
+  <main>
+    <div id="welcome-container">
+      <div id="welcome-message">
+        <h1>RepRealm</h1>
+        <p>Welcome to RepRealm<br>Log In to start creating and sharing your workouts</p>
+      </div>
+      <div id="welcome-buttons-container">
+        <a class="button" href="/auth/google">Log In with Google</a>
+        <a class="button" href="/workouts">Browse as a Guest</a>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

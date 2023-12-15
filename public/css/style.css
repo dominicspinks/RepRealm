@@ -17,6 +17,7 @@
     --colour-input-error: red;
     --colour-pagination-button: rgb(205, 207, 205);
     --colour-pagination-text: black;
+    --colour-welcome-button-background: rgb(230, 230, 230);
 }
 
 body {
@@ -102,6 +103,23 @@ h3 {
 
 .button:hover {
     background: var(--colour-button-hover);
+}
+
+#welcome-container {
+    margin-top: 100px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+#welcome-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 40px;
+    border: 1px solid var(--colour-workout-container-border);
+    border-radius: 10px;
+    background: var(--colour-welcome-button-background);
 }
 
 #workouts-grid,
