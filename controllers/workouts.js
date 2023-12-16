@@ -134,15 +134,12 @@ async function index(req, res) {
 // Page to create new workout
 async function newWorkout(req, res) {
     // get categories for add exercise
-    const categories = await Category.find({}).lean();
-    categories.sort((a, b) => {
-        return a.name < b.name ? -1 : 1;
-    });
+    const categories = await Category.find({}).sort({ name: 'asc' }).lean();
 
     // Get all exercises that are public or belong to the current user
     const exercises = await Exercise.find({
         $or: [{ isPublic: true }, { createdBy: req.user._id }],
-    });
+    }).sort({ name: 'asc' });
 
     // get exercises for each category
     categories.forEach((category) => {
@@ -236,10 +233,7 @@ async function edit(req, res) {
         .lean();
 
     // get categories for search filter
-    const categories = await Category.find({});
-    categories.sort((a, b) => {
-        return a.name < b.name ? -1 : 1;
-    });
+    const categories = await Category.find({}).sort({ name: 'asc' });
 
     // Get all exercises that are public or belong to the current user
     const exercises = await Exercise.find({

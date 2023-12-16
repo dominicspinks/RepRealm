@@ -108,10 +108,7 @@ async function show(req, res) {
 // Display page to create a new exercise
 async function newExercise(req, res) {
     // get categories for search filter
-    const categories = await Category.find({});
-    categories.sort((a, b) => {
-        return a.name < b.name ? -1 : 1;
-    });
+    const categories = await Category.find({}).sort({ name: 'asc' });
 
     res.render('exercises/new', {
         title: 'Create New Exercise',
@@ -174,10 +171,7 @@ async function deleteExercise(req, res) {
 async function edit(req, res) {
     const exercise = await Exercise.findById(req.params.exerciseId);
     // get categories for search filter
-    const categories = await Category.find({});
-    categories.sort((a, b) => {
-        return a.name < b.name ? -1 : 1;
-    });
+    const categories = await Category.find({}).sort({ name: 'asc' });
 
     res.render('exercises/edit', {
         title: 'Edit Exercise',

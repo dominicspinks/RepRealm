@@ -34,6 +34,6 @@ router.get(
 );
 
 // PUT route to modify an exercise
-router.put('/:exerciseId/edit', isNewUser, exercisesController.update);
+router.put('/:exerciseId', isNewUser, exercisesController.update);
 
 module.exports = router;
