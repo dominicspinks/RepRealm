@@ -75,7 +75,7 @@
     newSetElement.innerHTML = `<label>${row}</label>
     ${primaryFieldSettings}
     ${secondaryFieldSettings}
-    <div class="button button-small button-workout-set-delete" id="button-workout-set-delete-${row}">Delete</div>`
+    <div class="button button-small button-workout-set-delete button-delete" id="button-workout-set-delete-${row}">Delete</div>`
     addExerciseSetListElement.appendChild(newSetElement);
   }
 
@@ -215,8 +215,8 @@
       <td>${rest}</td>
       <td>${setNum}</td>
       <td>
-        <div class="button button-small button-workout-exercise-edit" id="button-workout-exercise-edit">Edit</div>
-        <div class="button button-small button-workout-exercise-delete" id="button-workout-exercise-delete">Delete</div>
+        <div class="button button-small button-workout-exercise-edit button-edit" id="button-workout-exercise-edit">Edit</div>
+        <div class="button button-small button-workout-exercise-delete button-delete" id="button-workout-exercise-delete">Delete</div>
       </td>`;
     // newExerciseElement.exerciseDetails = exerciseDetails;
     newExerciseElement.querySelector('.exercise-details').value = exerciseDetailsString;

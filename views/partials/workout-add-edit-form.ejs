@@ -11,7 +11,7 @@
   <div id="workout-exercises">
     <div id="workout-exercises-title">
       <div>Exercises:</div>
-      <div class="button button-small" id="button-workout-exercise-add">Add</div>
+      <div class="button button-small button-accept" id="button-workout-exercise-add">Add</div>
     </div>
     <div class="workout-exercises-add-container container-hide">
       <div id="workout-exercises-add-details">
@@ -48,14 +48,14 @@
           <div>Sets:</div>
           <div class="primary"></div>
           <div class="secondary"></div>
-          <div class="button button-small" id="button-new-set-add">Add</div>
+          <div class="button button-small button-accept" id="button-new-set-add">Add</div>
         </div>
         <div id="workout-exercises-add-sets-details">
         </div>
       </div>
       <div id="workout-exercises-add-buttons">
-        <div class="button button-small" id="button-new-exercises-cancel">Cancel</div>
-        <div class="button button-small" id="button-new-exercises-add">Save</div>
+        <div class="button button-small button-cancel" id="button-new-exercises-cancel">Cancel</div>
+        <div class="button button-small button-new" id="button-new-exercises-add">Save</div>
       </div>
     </div>
     <table id="workout-exercises-details">
@@ -79,8 +79,8 @@
           <td><%= exercise.rest %></td>
           <td><%= exercise.sets.length %></td>
           <td>
-            <div class="button button-small button-workout-exercise-edit" id="button-workout-exercise-edit">Edit</div>
-            <div class="button button-small button-workout-exercise-delete" id="button-workout-exercise-delete">Delete</div>
+            <div class="button button-small button-workout-exercise-edit button-edit" id="button-workout-exercise-edit">Edit</div>
+            <div class="button button-small button-workout-exercise-delete button-delete" id="button-workout-exercise-delete">Delete</div>
           </td>
         </tr>
         <% }) %>
@@ -90,9 +90,9 @@
   </div>
   <div id="workout-buttons">
     <div>
-      <a class="button" href="/workouts">Cancel</a>
+      <a class="button button-cancel" href="/workouts">Cancel</a>
     </div>
     <div>
-      <input id="button-workout-save" class="button" type="submit" value="Save">
+      <input id="button-workout-save" class="button button-new" type="submit" value="Save">
     </div>
   </div>

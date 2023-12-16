@@ -18,6 +18,11 @@
     --colour-pagination-button: rgb(205, 207, 205);
     --colour-pagination-text: black;
     --colour-welcome-button-background: rgb(230, 230, 230);
+    --colour-button-red: #a20207;
+    --colour-button-green: #3f784c;
+    --colour-button-blue: #4f759b;
+    --colour-button-yellow: #b99813;
+    --colour-button-light: #f1f2ee;
 }
 
 body {
@@ -793,4 +798,25 @@ span.italic {
 
 .container-hide {
     display: none;
+}
+
+.button-accept {
+    background: var(--colour-button-blue);
+}
+
+.button-edit {
+    background: var(--colour-button-yellow);
+}
+
+.button-delete {
+    background: var(--colour-button-red);
+}
+
+.button-new {
+    background: var(--colour-button-green);
+}
+
+.button-cancel {
+    background: var(--colour-button-light);
+    color: black;
 }
