@@ -443,15 +443,16 @@ h3 {
 }
 
 #workout-exercises-add-sets-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
     border-bottom: 1px solid black;
+    justify-items: center;
 }
 
 #workout-exercises-add-sets-header > div {
     font-weight: bold;
 }
-#workout-exercises-add-sets-header > div:last-child {
+#workout-exercises-add-sets-header #button-new-set-add {
     margin: 2px;
 }
 
@@ -462,12 +463,15 @@ h3 {
 }
 
 #workout-exercises-add-sets-details > div {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+    justify-items: center;
+    align-items: center;
 }
 
 #workout-exercises-add-sets-details .input {
     width: 70px;
+    text-align: center;
 }
 
 #workout-exercises-add-buttons {
