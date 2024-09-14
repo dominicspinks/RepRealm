@@ -24,7 +24,7 @@ The inspiration for RepRealm came from one simple question: how do I share this 
 
 ## Getting Started
 
-Try out [RepRealm](https://reprealm.onrender.com/) for yourself!
+Try out [RepRealm](https://reprealm.dominicspinks.com/) for yourself!
 
 You can explore the project planning on [Trello](https://trello.com/b/E76NoRHh/sei-project-2).
 
