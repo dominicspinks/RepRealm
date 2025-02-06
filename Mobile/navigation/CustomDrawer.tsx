@@ -15,7 +15,6 @@ export default function CustomDrawer(props: any) {
             <DrawerContentScrollView {...props}>
                 {user ? (
                     <View style={styles.userInfo}>
-                        <Text style={styles.fullName}>{user.fullName}</Text>
                         <Text style={styles.email}>{user.email}</Text>
                     </View>
                 ) : (

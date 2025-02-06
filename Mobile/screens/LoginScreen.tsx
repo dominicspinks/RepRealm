@@ -28,6 +28,7 @@ export default function LoginScreen() {
             setErrorMessage(result.error ?? 'Invalid email or password.');
             return;
         }
+
         navigation.reset({
             index: 0,
             routes: [{ name: 'Main' }],
@@ -39,6 +40,10 @@ export default function LoginScreen() {
         AuthService.continueAsGuest();
         navigation.navigate('Main');
     }
+
+    const handleRegister = () => {
+        navigation.navigate('Register');
+    };
 
     return (
         <StyledContainer>
@@ -69,7 +74,7 @@ export default function LoginScreen() {
             {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
 
             {/* Sign Up */}
-            <TouchableOpacity onPress={() => console.log('Navigate to Sign Up')}>
+            <TouchableOpacity onPress={handleRegister}>
                 <Text style={styles.signUpText}>Not a member? <Text style={styles.link}>Register now</Text></Text>
             </TouchableOpacity>
 

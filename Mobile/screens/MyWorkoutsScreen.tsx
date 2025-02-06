@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import TabNavigator from '../navigation/TabNavigator';
 
 export default function MyWorkoutsScreen() {
-  return (
-    <View>
-      <Text>My Workouts</Text>
-    </View>
-  );
+    const [activeTab, setActiveTab] = useState('Workouts');
+
+    return (
+        <TabNavigator onTabChange={setActiveTab} />
+    );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { TextInput, View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons
 import { theme } from '../theme';
 
@@ -7,35 +7,45 @@ interface InputProps {
     placeholder: string;
     value: string;
     onChangeText: (text: string) => void;
-    secureTextEntry?: boolean; // Password visibility toggle
+    secureTextEntry?: boolean;
+    label?: string;
 }
 
-export default function Input({ placeholder, value, onChangeText, secureTextEntry }: InputProps) {
+export default function Input({ placeholder, value, onChangeText, secureTextEntry, label }: InputProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     return (
-        <View style={styles.container}>
-            <TextInput
-                style={styles.input}
-                placeholder={placeholder}
-                value={value}
-                onChangeText={onChangeText}
-                secureTextEntry={secureTextEntry && !isPasswordVisible}
-            />
-            {secureTextEntry && (
-                <TouchableOpacity
-                    style={styles.iconContainer}
-                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                    <FontAwesome name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} color="#555" />
-                </TouchableOpacity>
+        <View style={styles.inputContainer}>
+            {label && (
+                <Text style={styles.label}>{label}</Text>
             )}
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder={placeholder}
+                    value={value}
+                    onChangeText={onChangeText}
+                    secureTextEntry={secureTextEntry && !isPasswordVisible}
+                />
+                {secureTextEntry && (
+                    <TouchableOpacity
+                        style={styles.iconContainer}
+                        onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                    >
+                        <FontAwesome name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} color="#555" />
+                    </TouchableOpacity>
+                )}
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    inputContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+    },
+    fieldContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
@@ -51,5 +61,11 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         paddingLeft: theme.spacing.small,
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: theme.colors.text,
     },
 });

@@ -9,6 +9,7 @@ export default function MainDrawer() {
     return (
         <Drawer.Navigator
             initialRouteName="Workout Logs"
+            screenOptions={{ headerShown: false }}
             drawerContent={(props) => <CustomDrawer {...props} />}
         >
             <Drawer.Screen name="Workout Logs" component={WorkoutLogsScreen} />
