@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons
+import { FontAwesome } from '@expo/vector-icons';
 import { theme } from '../theme';
 
 interface InputProps {

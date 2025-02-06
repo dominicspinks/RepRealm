@@ -4,7 +4,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 interface ButtonProps {
     title: string;
     onPress: () => void;
-    variant?: 'primary' | 'secondary'; // Default to 'primary'
+    variant?: 'primary' | 'secondary';
     style?: object;
 }
 

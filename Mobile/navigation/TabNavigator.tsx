@@ -14,7 +14,7 @@ export default function TabNavigator({ onTabChange }: { onTabChange: (tab: strin
             screenListeners={{
                 state: (e) => {
                     const tabName = e.data.state.routeNames[e.data.state.index];
-                    onTabChange(tabName); // Notify parent component
+                    onTabChange(tabName);
                 },
             }}
         >

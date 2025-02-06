@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#DDD',
     },
     statusBarSpacing: {
-        height: StatusBar.currentHeight || 20, // Space for the status bar
+        height: StatusBar.currentHeight || 20,
     },
     header: {
         flexDirection: 'row',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
     },
     side: {
-        width: 50, // Ensures equal spacing for left and right elements
+        width: 50,
         alignItems: 'center',
     },
     centre: {
