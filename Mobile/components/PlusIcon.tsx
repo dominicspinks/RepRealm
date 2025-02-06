@@ -1,4 +1,4 @@
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../theme";
 
@@ -9,7 +9,7 @@ type PlusIconProps = {
 export default function PlusIcon({ action }: PlusIconProps) {
     return (
         <TouchableOpacity onPress={action}>
-            <FontAwesome name="plus" size={24} color={theme.colors.text} />
+            <Ionicons name="add" size={24} color={theme.colors.text} />
         </TouchableOpacity>
     )
 }

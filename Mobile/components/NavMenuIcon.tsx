@@ -1,7 +1,8 @@
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../theme";
+
 
 export default function NavMenuIcon() {
 
@@ -9,7 +10,7 @@ export default function NavMenuIcon() {
 
     return (
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <FontAwesome name="bars" size={24} color={theme.colors.text} />
+            <Ionicons name="menu" size={24} color={theme.colors.text} />
         </TouchableOpacity>
     )
 }

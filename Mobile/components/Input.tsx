@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../theme';
 
 interface InputProps {
@@ -32,7 +32,7 @@ export default function Input({ placeholder, value, onChangeText, secureTextEntr
                         style={styles.iconContainer}
                         onPress={() => setIsPasswordVisible(!isPasswordVisible)}
                     >
-                        <FontAwesome name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} color="#555" />
+                        <Ionicons name={isPasswordVisible ? 'eye-off' : 'eye'} size={20} color="#555" />
                     </TouchableOpacity>
                 )}
             </View>
