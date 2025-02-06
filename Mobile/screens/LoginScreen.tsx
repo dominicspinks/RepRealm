@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Image } from 'react-native';
 import StyledContainer from '../components/StyledContainer';
-import Button from '../components/Button';
+import Button from '../components/buttons/Button';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { AuthScreenNavigationProp } from '../navigation/types';
-import Input from '../components/Input';
+import Input from '../components/forms/Input';
 import { AuthService } from '../services/authService';
 
 export default function LoginScreen() {

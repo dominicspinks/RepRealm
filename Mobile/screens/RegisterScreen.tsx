@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import StyledContainer from '../components/StyledContainer';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Button from '../components/buttons/Button';
+import Input from '../components/forms/Input';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { AuthScreenNavigationProp } from '../navigation/types';

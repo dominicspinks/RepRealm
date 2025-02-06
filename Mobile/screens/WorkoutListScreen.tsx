@@ -1,6 +1,6 @@
 import { View } from "react-native";
-import NavMenuIcon from "../components/NavMenuIcon";
-import PlusIcon from "../components/PlusIcon";
+import NavMenuIcon from "../components/icons/NavMenuIcon";
+import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/ScreenHeader";
 import ScreenHeaderTitle from "../components/ScreenHeaderTitle";
 

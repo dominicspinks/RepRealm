@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import ScreenHeaderTitle from '../components/ScreenHeaderTitle';
-import NavMenuIcon from '../components/NavMenuIcon';
+import NavMenuIcon from '../components/icons/NavMenuIcon';
 import ScreenHeader from '../components/ScreenHeader';
-import PlusIcon from '../components/PlusIcon';
+import PlusIcon from '../components/icons/PlusIcon';
 
 export default function WorkoutLogsScreen() {
     return (
