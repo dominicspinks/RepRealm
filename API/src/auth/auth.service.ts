@@ -56,10 +56,10 @@ export class AuthService {
             create: { userId: user.id, refreshToken: hashedRefreshToken, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
         });
 
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken, userId: user.id };
     }
 
-    async createUser(dto: CreateUserDto): Promise<UserEntity> {
+    async createUser(dto: CreateUserDto): Promise<AuthResponse> {
         try {
             const hashedPassword = await bcrypt.hash(dto.password, 12);
 
@@ -71,7 +71,7 @@ export class AuthService {
                 },
             });
 
-            return this.mapUserToEntity(user);
+            return this.login({ email: dto.email, password: dto.password });
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
                 throw new ConflictException('Email is already in use');
@@ -98,6 +98,6 @@ export class AuthService {
         const payload = { sub: session.user.id, email: session.user.email };
         const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
 
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken, userId: session.user.id };
     }
 }

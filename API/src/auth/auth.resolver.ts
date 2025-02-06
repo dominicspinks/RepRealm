@@ -11,8 +11,8 @@ export class AuthResolver {
     constructor(private readonly authService: AuthService) { }
 
     @Public()
-    @Mutation(() => UserEntity)
-    async signUp(@Args('input') input: CreateUserDto): Promise<UserEntity> {
+    @Mutation(() => AuthResponse)
+    async signUp(@Args('input') input: CreateUserDto): Promise<AuthResponse> {
         return await this.authService.createUser(input);
     }
 
