@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 
 interface InputProps {
     placeholder: string;

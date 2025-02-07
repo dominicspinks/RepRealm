@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import { theme } from "../theme";
+import { theme } from "../../theme";
 
 type PlusIconProps = {
     action: () => void

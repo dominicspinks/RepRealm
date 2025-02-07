@@ -6,8 +6,8 @@ import { AssociationInfo } from '@nozbe/watermelondb/Model';
 export default class Exercise extends Model {
     static table = 'exercises';
 
-    static associations: Readonly<{ categories: AssociationInfo }> = {
-        categories: { type: 'belongs_to', key: 'category_id' },
+    static associations: Readonly<{ category: AssociationInfo }> = {
+        category: { type: 'belongs_to', key: 'category_id' },
     };
 
     @text('name') name!: string;
