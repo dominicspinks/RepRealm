@@ -13,48 +13,12 @@ interface WorkoutCardProps {
     onEdit: () => void;
 }
 
-export default function WorkoutCard({ workout, onEdit }: WorkoutCardProps) {
+export default function WorkoutCard({ workout, onEdit }: any) {
     const [expanded, setExpanded] = useState(false);
 
     return (
         <View style={styles.card}>
-            {/* Header */}
-            <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.header}>
-                <Text style={styles.title}>{workout.name}</Text>
 
-                {/* Category Labels */}
-                <View style={styles.categoryContainer}>
-                    {workout.categories.map((category) => (
-                        <View key={category.id} style={[styles.categoryLabel, { backgroundColor: category.color }]}>
-                            <Text style={styles.categoryText}>{category.name}</Text>
-                        </View>
-                    ))}
-                </View>
-
-                {/* Expand/Collapse Icon */}
-                <Ionicons
-                    name={expanded ? "chevron-up" : "chevron-down"}
-                    size={24}
-                    color={theme.colors.text}
-                />
-            </TouchableOpacity>
-
-            {/* Expanded View */}
-            {expanded && (
-                <View style={styles.expandedContainer}>
-                    {workout.exercises.map((exercise) => (
-                        <View key={exercise.id} style={styles.exerciseRow}>
-                            <View style={[styles.categoryIndicator, { backgroundColor: exercise.categoryColor }]} />
-                            <Text style={styles.exerciseText}>{exercise.name}</Text>
-                        </View>
-                    ))}
-
-                    {/* Edit Button */}
-                    <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-                        <MaterialIcons name="edit" size={20} color={theme.colors.text} />
-                    </TouchableOpacity>
-                </View>
-            )}
         </View>
     );
 }
