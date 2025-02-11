@@ -39,7 +39,10 @@ export default function CustomDrawer(props: any) {
                     </TouchableOpacity>
                 ) : (
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Login')}
+                        onPress={() => {
+                            logout();
+                            navigation.navigate('Login')
+                        }}
                         style={styles.authButton}
                     >
                         <Text style={styles.authText}>Log In</Text>

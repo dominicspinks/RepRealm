@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import "reflect-metadata";
 import 'react-native-gesture-handler';
 
 import AppNavigator from './navigation/AppNavigator';
-import { NavigationContainer } from '@react-navigation/native';
 
-import * as SQLite from 'expo-sqlite';
-import { drizzle } from 'drizzle-orm/expo-sqlite';
 import { initialiseDatabase } from "./db/initialise";
-import { Text, View } from 'react-native';
 import { useDatabaseMigrations } from './db/database';
-
-const expo = SQLite.openDatabaseSync('db.db');
-const db = drizzle(expo);
-
 
 export default function App() {
     const { success, error } = useDatabaseMigrations();

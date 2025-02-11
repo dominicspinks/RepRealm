@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.inputBorder,
         borderRadius: 5,
         paddingHorizontal: 10,
+        paddingVertical: 5,
         backgroundColor: theme.colors.inputBackground,
     },
     picker: {

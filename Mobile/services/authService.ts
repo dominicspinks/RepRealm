@@ -3,9 +3,10 @@ import Constants from 'expo-constants';
 
 const API_URL = Constants?.expoConfig?.extra?.API_URL ?? "";
 
-const signInUser = (userId: string, email: string, accessToken: string, refreshToken: string, fullName?: string) => {
-    useAuthStore.getState().setTokens(accessToken, refreshToken);
-    useAuthStore.getState().setUser({ id: userId, email, fullName }, false);
+const signInUser = async (userId: string, email: string, accessToken: string, refreshToken: string, fullName?: string) => {
+    const store = useAuthStore.getState();
+    await store.setTokens(accessToken, refreshToken);
+    await store.setUser({ id: userId, email, fullName }, false);
 }
 
 export const AuthService = {
@@ -16,14 +17,14 @@ export const AuthService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     query: `
-            mutation {
-              login(input: { email: "${email}", password: "${password}" }) {
-                accessToken
-                refreshToken
-                userId
-              }
-            }
-          `,
+                        mutation {
+                        login(input: { email: "${email}", password: "${password}" }) {
+                            accessToken
+                            refreshToken
+                            userId
+                        }
+                        }
+                    `,
                 }),
             });
 
@@ -40,8 +41,12 @@ export const AuthService = {
         }
     },
 
-    continueAsGuest() {
-        useAuthStore.getState().setUser(null, true);
+    async continueAsGuest() {
+        await useAuthStore.getState().setUser(null, true);
+    },
+
+    async logout() {
+        await useAuthStore.getState().logout();
     },
 
     async signUp(fullName: string, email: string, password: string) {
@@ -61,13 +66,13 @@ export const AuthService = {
                     `,
                 }),
             });
-            console.log(response);
+
             const result = await response.json();
             if (result.errors) {
                 return { success: false, error: result.errors[0].message };
             }
 
-            signInUser(result.data.signUp.userId, email, fullName, result.data.signUp.accessToken, result.data.signUp.refreshToken);
+            await signInUser(result.data.signUp.userId, email, fullName, result.data.signUp.accessToken, result.data.signUp.refreshToken);
 
             return { success: true };
         } catch (error) {

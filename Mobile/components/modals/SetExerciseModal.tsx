@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, Alert, StyleSheet } from "react-native";
+import { View, Modal, Alert, StyleSheet } from "react-native";
 import { isExerciseNameUnique, addExercise, updateExercise } from "../../services/exercisesService";
 import { getMeasurements, getUnits } from "../../services/measurementsService";
 import { Category, Exercise, Measurement, MeasurementUnit } from "../../db/schema";
-import { Ionicons } from "@expo/vector-icons";
 import Button from "../../components/buttons/Button";
-import { Picker } from "@react-native-picker/picker";
-import { theme } from "../../theme";
 import DropdownFieldInput from "../forms/DropdownFieldInput";
 import TextFieldInput from "../forms/TextFieldInput";
 import ModalHeader from "../headers/ModalHeader";
