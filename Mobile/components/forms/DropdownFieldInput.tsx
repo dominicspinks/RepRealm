@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.inputBorder,
         borderRadius: 5,
         paddingHorizontal: 10,
-        paddingVertical: 5,
+        paddingVertical: 0,
         backgroundColor: theme.colors.inputBackground,
     },
     picker: {
-        height: 50,
+        height: 55,
         width: "100%",
     },
 });
