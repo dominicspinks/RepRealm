@@ -114,10 +114,11 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
             await addExercise(payload);
         }
 
+        cleanForm();
         onClose();
     }
 
-    function handleClose() {
+    function cleanForm() {
         setName(exercise?.name || "");
         setCategory(exercise?.categoryId || null);
         setType1(exercise?.primaryMeasurementId || null);
@@ -126,12 +127,16 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
         setType2Unit(exercise?.secondaryMeasurementUnitId || null);
         setRest(exercise?.rest ? String(exercise.rest) : "");
         setWeightIncrement(exercise?.weightIncrement ? String(exercise.weightIncrement / 1000) : "");
+    }
+
+    function handleClose() {
+        cleanForm();
         onClose();
     }
 
-    function getDefaultUnit(measurementId: string | null) {
-        if (!measurementId) return null;
-        console.log("Default unit for", measurementId, units);
+    function getDefaultUnit(measurementNum: 1 | 2) {
+        const measurementId = measurementNum === 1 ? type1 : type2;
+        console.log(measurementId);
 
         const defaultUnits: Record<string, string> = {
             Weight: "kg",
@@ -143,8 +148,18 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
 
         // Find and return the default unit ID if it exists
         const defaultUnit = units.find(u => u.measurementId === measurementId && u.unit === defaultUnitLabel);
-        console.log("default unit", defaultUnitLabel, defaultUnit);
-        return defaultUnit ? defaultUnit.id : "";
+
+        if (!defaultUnit) {
+            return "";
+        }
+
+        if (measurementNum === 1) {
+            setType1Unit(defaultUnit.id);
+        } else if (measurementNum === 2) {
+            setType2Unit(defaultUnit.id);
+        }
+
+        return defaultUnit.id;
     }
 
     return (
@@ -188,7 +203,7 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
                         {/* Type 1 Unit Dropdown (if required) */}
                         {requiresUnit(type1) && (
                             <DropdownFieldInput
-                                selectedValue={type1Unit ?? getDefaultUnit(type1)}
+                                selectedValue={type1Unit ?? getDefaultUnit(1)}
                                 setValue={setType1Unit}
                                 items={units.filter(u => u.measurementId === type1)}
                                 labelField="unit"
@@ -217,7 +232,7 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
                         {/* Type 2 Unit Dropdown (if required) */}
                         {requiresUnit(type2) && (
                             <DropdownFieldInput
-                                selectedValue={type2Unit ?? getDefaultUnit(type2)}
+                                selectedValue={type2Unit ?? getDefaultUnit(2)}
                                 setValue={setType2Unit}
                                 items={units.filter(u => u.measurementId === type2)}
                                 labelField="unit"
