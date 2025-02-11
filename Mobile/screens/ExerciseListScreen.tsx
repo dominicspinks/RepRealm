@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
     },
     icons: {
         flexDirection: "row",
-        gap: 10,
+        gap: 15,
     }
 });

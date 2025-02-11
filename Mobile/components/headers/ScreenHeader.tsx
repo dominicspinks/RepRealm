@@ -15,9 +15,9 @@ export default function ScreenHeader({ leftElement, centreElement, rightElement 
 
             {/* Header Content */}
             <View style={styles.header}>
-                <View style={styles.side}>{leftElement}</View>
+                <View style={styles.left}>{leftElement}</View>
                 <View style={styles.centre}>{centreElement}</View>
-                <View style={styles.side}>{rightElement}</View>
+                <View style={styles.right}>{rightElement}</View>
             </View>
         </View>
     );
@@ -39,13 +39,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 15,
     },
-    side: {
-        width: 50,
-        alignItems: 'center',
+    left: {
+        flex: 1,
+        alignItems: 'flex-start',
     },
     centre: {
-        flex: 1,
+        flex: 0,
         alignItems: 'center',
         justifyContent: 'center',
     },
+    right: {
+        flex: 1,
+        alignItems: 'flex-end',
+    }
 });
