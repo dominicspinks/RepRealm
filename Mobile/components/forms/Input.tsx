@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TextInput, View, TouchableOpacity, StyleSheet, Text, ViewStyle, TextStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 
@@ -9,13 +9,14 @@ interface InputProps {
     onChangeText: (text: string) => void;
     secureTextEntry?: boolean;
     label?: string;
+    style?: ViewStyle | TextStyle;
 }
 
-export default function Input({ placeholder, value, onChangeText, secureTextEntry, label }: InputProps) {
+export default function Input({ placeholder, value, onChangeText, secureTextEntry, label, style }: InputProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     return (
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, style]}>
             {label && (
                 <Text style={styles.label}>{label}</Text>
             )}

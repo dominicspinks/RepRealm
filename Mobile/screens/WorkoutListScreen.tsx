@@ -3,8 +3,8 @@ import { FlatList, Text, View } from "react-native";
 
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
-import ScreenHeader from "../components/ScreenHeader";
-import ScreenHeaderTitle from "../components/ScreenHeaderTitle";
+import ScreenHeader from "../components/headers/ScreenHeader";
+import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import WorkoutCard from "../components/WorkoutCard";
 
 import { getColours } from "../services/coloursService";

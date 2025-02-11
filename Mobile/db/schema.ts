@@ -38,18 +38,13 @@ export const exercisesTable = sqliteTable("exercises", {
     name: text().notNull(),
     rest: integer("rest"),
     weightIncrement: integer("weight_increment"),
+    primaryMeasurementId: text("primary_measurement_id").notNull().references(() => measurementsTable.id),
+    primaryMeasurementUnitId: text("primary_measurement_unit_id").references(() => measurementUnitsTable.id),
+    secondaryMeasurementId: text("secondary_measurement_id").references(() => measurementsTable.id),
+    secondaryMeasurementUnitId: text("secondary_measurement_unit_id").references(() => measurementUnitsTable.id),
     isDeleted: integer("is_deleted", { mode: "boolean" }).default(false),
     createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(new Date()),
     updatedAt: integer("updated_at", { mode: 'timestamp' }),
-});
-
-// **Exercise Measurements Table**
-export const exerciseMeasurementsTable = sqliteTable("exercise_measurements", {
-    id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
-    exerciseId: text("exercise_id").notNull().references(() => exercisesTable.id),
-    measurementId: text("measurement_id").notNull().references(() => measurementsTable.id),
-    isPrimary: integer("is_primary", { mode: "boolean" }).default(false),
-    units: text("units"),
 });
 
 // **Routines Table**
@@ -111,9 +106,6 @@ export const CategoryInsertSchema = createInsertSchema(categoriesTable);
 export const ExerciseSelectSchema = createSelectSchema(exercisesTable);
 export const ExerciseInsertSchema = createInsertSchema(exercisesTable);
 
-export const ExerciseMeasurementSelectSchema = createSelectSchema(exerciseMeasurementsTable);
-export const ExerciseMeasurementInsertSchema = createInsertSchema(exerciseMeasurementsTable);
-
 export const RoutineSelectSchema = createSelectSchema(routinesTable);
 export const RoutineInsertSchema = createInsertSchema(routinesTable);
 
@@ -141,13 +133,13 @@ export type MeasurementUnit = typeof measurementUnitsTable.$inferSelect;
 export type NewMeasurementUnit = typeof measurementUnitsTable.$inferInsert;
 
 export type Category = typeof categoriesTable.$inferSelect;
+export type CategoryWithColour = Category & { colourHex: string };
 export type NewCategory = typeof categoriesTable.$inferInsert;
 
 export type Exercise = typeof exercisesTable.$inferSelect;
+export type ExerciseFull = typeof exercisesTable.$inferSelect & { primaryMeasurementName: string; primaryMeasurementUnitName: string; secondaryMeasurementName: string; secondaryMeasurementUnitName: string; categoryName: string; categoryColour: string; };
+export type ExerciseWithCategory = Exercise & { category: Category };
 export type NewExercise = typeof exercisesTable.$inferInsert;
-
-export type ExerciseMeasurement = typeof exerciseMeasurementsTable.$inferSelect;
-export type NewExerciseMeasurement = typeof exerciseMeasurementsTable.$inferInsert;
 
 export type Routine = typeof routinesTable.$inferSelect;
 export type NewRoutine = typeof routinesTable.$inferInsert;

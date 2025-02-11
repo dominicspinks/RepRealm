@@ -18,4 +18,7 @@ export const theme = {
         medium: 16,
         large: 24,
     },
+    cards: {
+        borderRadius: 4,
+    }
 };

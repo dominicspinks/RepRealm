@@ -1,7 +1,6 @@
 import { db } from "./database";
 import { coloursTable, measurementsTable, measurementUnitsTable } from "./schema";
 
-// Default colours to add if the table is empty
 const defaultColours = [
     { id: "0194ee8c-5209-721e-8460-49b0ee60fb79", hex: "#FF5733" },
     { id: "0194ee8c-5209-78ed-a662-d07b63463d99", hex: "#FFBD33" },
@@ -42,12 +41,10 @@ const defaultMeasurementUnits = [
 
 // Function to check and insert initial data
 export async function initialiseDatabase() {
-
-    // console.log("Resetting colours table...");
     // **Delete all existing records first**
     // await db.delete(coloursTable);
-    await db.delete(measurementsTable);
-    await db.delete(measurementUnitsTable);
+    // await db.delete(measurementsTable);
+    // await db.delete(measurementUnitsTable);
 
 
     // Insert default colours
@@ -57,9 +54,11 @@ export async function initialiseDatabase() {
         .onConflictDoNothing();
 
     console.log("Populating measurements table with default data...");
-    await db.insert(measurementsTable).values(defaultMeasurements)
+    await db.insert(measurementsTable)
+        .values(defaultMeasurements)
         .onConflictDoNothing();
-    await db.insert(measurementUnitsTable).values(defaultMeasurementUnits)
+    await db.insert(measurementUnitsTable)
+        .values(defaultMeasurementUnits)
         .onConflictDoNothing();
 
     console.log("Database initialisation complete.");
