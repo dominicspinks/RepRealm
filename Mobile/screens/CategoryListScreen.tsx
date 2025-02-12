@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { FlatList, Text, StyleSheet, Pressable, View } from "react-native";
+import { useState, useEffect } from "react";
+import { FlatList, Text, StyleSheet, View } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
@@ -9,7 +9,6 @@ import { getCategories } from "../services/categoriesService";
 import { theme } from "../theme";
 import { CategoryWithColour } from "../db/schema";
 import CategoryCard from "../components/cards/CategoryCard";
-import { useFocusEffect } from "@react-navigation/native";
 
 export default function CategoryListScreen() {
     const [categories, setCategories] = useState<CategoryWithColour[]>([]);

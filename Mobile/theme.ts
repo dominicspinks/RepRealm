@@ -8,6 +8,7 @@ export const theme = {
         inputBorder: '#DDDDDD',
         mutedText: '#AAAAAA',
         error: '#FF0000',
+        overlay: 'rgba(0, 0, 0, 0.5)',
     },
     fonts: {
         regular: 'System',

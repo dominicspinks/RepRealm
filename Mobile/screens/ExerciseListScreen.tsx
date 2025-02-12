@@ -1,25 +1,29 @@
-import { useState, useEffect, useCallback } from "react";
-import { StyleSheet, Pressable, View, FlatList, Text } from "react-native";
+import { useState, useEffect } from "react";
+import { View, FlatList, Text, StyleSheet } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import FilterIcon from "../components/icons/FilterIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import SetExerciseModal from "../components/modals/SetExerciseModal";
+import FilterModal from "../components/modals/FilterModal";
 import { getCategories } from "../services/categoriesService";
-import { theme } from "../theme";
-import { Category, Exercise, ExerciseFull } from "../db/schema";
-import { getExercises, getExercisesFull } from "../services/exercisesService";
+import { getExercisesFull } from "../services/exercisesService";
+import { Category, ExerciseFull } from "../db/schema";
 import ExerciseCard from "../components/cards/ExerciseCard";
-import { useFocusEffect } from "@react-navigation/native";
+import { theme } from "../theme";
 
 export default function ExerciseListScreen() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedExercise, setSelectedExercise] = useState<ExerciseFull | null>(null);
     const [exercises, setExercises] = useState<ExerciseFull[]>([]);
+    const [filteredExercises, setFilteredExercises] = useState<ExerciseFull[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-    // **Fetch categories when screen loads**
+    const [modalVisible, setModalVisible] = useState(false);
+    const [filterModalVisible, setFilterModalVisible] = useState(false);
+    const [selectedExercise, setSelectedExercise] = useState<ExerciseFull | null>(null);
+
+    // **Fetch categories & exercises on load**
     useEffect(() => {
         async function fetchCategories() {
             const result = await getCategories();
@@ -29,36 +33,45 @@ export default function ExerciseListScreen() {
         async function fetchExercises() {
             const result = await getExercisesFull();
             setExercises(result.sort((a, b) => a.name.localeCompare(b.name)));
+            setFilteredExercises(result);
         }
 
         fetchExercises();
         fetchCategories();
     }, [modalVisible]);
 
-    // **Close the modal and reset selected exercise**
+    // **Filter Exercises based on Selected Categories**
+    useEffect(() => {
+        if (selectedCategories.length === 0) {
+            setFilteredExercises(exercises);
+        } else {
+            setFilteredExercises(exercises.filter(ex => selectedCategories.includes(ex.categoryId)));
+        }
+    }, [selectedCategories, exercises]);
+
+    // **Close the modals**
     function closeModal() {
         setSelectedExercise(null);
         setModalVisible(false);
     }
 
-    // **Open modal for adding a new exercise**
+    function closeFilterModal() {
+        setFilterModalVisible(false);
+    }
+
+    // **Open modals**
     function openAddExercise() {
         setSelectedExercise(null);
         setModalVisible(true);
     }
 
-    // **Open modal for editing an existing exercise**
     function openEditExercise(exercise: ExerciseFull) {
         setSelectedExercise(exercise);
         setModalVisible(true);
     }
 
-    function openDeleteExercise(exercise: ExerciseFull) {
-        console.log("Delete exercise", exercise);
-    }
-
     function openFilter() {
-        console.log("Open filter modal");
+        setFilterModalVisible(true);
     }
 
     return (
@@ -77,13 +90,13 @@ export default function ExerciseListScreen() {
 
             {/* Exercise List */}
             <FlatList
-                data={exercises}
+                data={filteredExercises}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <ExerciseCard
                         item={item}
                         onEdit={openEditExercise}
-                        onDelete={openDeleteExercise}
+                        onDelete={() => console.log("Delete", item)}
                     />
                 )}
                 ListEmptyComponent={<Text style={styles.emptyText}>No exercises found.</Text>}
@@ -95,6 +108,15 @@ export default function ExerciseListScreen() {
                 onClose={closeModal}
                 categories={categories}
                 exercise={selectedExercise}
+            />
+
+            {/* Filter Modal */}
+            <FilterModal
+                visible={filterModalVisible}
+                onClose={closeFilterModal}
+                categories={categories}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
             />
         </View>
     );

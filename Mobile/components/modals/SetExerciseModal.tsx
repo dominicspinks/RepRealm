@@ -38,7 +38,10 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
             setMeasurements(measurementList);
             setUnits(unitList);
         }
-        if (visible) fetchData();
+        if (visible) {
+            fetchData();
+            cleanForm();
+        };
     }, [visible]);
 
     // **Handle Type 1 Selection**
