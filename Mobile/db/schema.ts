@@ -137,7 +137,7 @@ export type CategoryWithColour = Category & { colourHex: string };
 export type NewCategory = typeof categoriesTable.$inferInsert;
 
 export type Exercise = typeof exercisesTable.$inferSelect;
-export type ExerciseFull = typeof exercisesTable.$inferSelect & { primaryMeasurementName: string; primaryMeasurementUnitName: string; secondaryMeasurementName: string; secondaryMeasurementUnitName: string; categoryName: string; categoryColour: string; };
+export type ExerciseFull = typeof exercisesTable.$inferSelect & { primaryMeasurementName: string; primaryMeasurementUnitName: string | null; secondaryMeasurementName: string | null; secondaryMeasurementUnitName: string | null; categoryName: string; categoryColour: string; };
 export type ExerciseWithCategory = Exercise & { category: Category };
 export type NewExercise = typeof exercisesTable.$inferInsert;
 

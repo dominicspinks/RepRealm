@@ -5,7 +5,7 @@ import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
-import WorkoutCard from "../components/WorkoutCard";
+import WorkoutCard from "../components/cards/WorkoutCard";
 
 import { getColours } from "../services/coloursService";
 

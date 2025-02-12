@@ -1,9 +1,24 @@
+import { alias } from "drizzle-orm/sqlite-core";
 import { db } from "../db/database";
-import { exercisesTable, categoriesTable, measurementsTable, measurementUnitsTable, coloursTable, NewExercise } from "../db/schema";
+import { exercisesTable, categoriesTable, measurementsTable, measurementUnitsTable, coloursTable, NewExercise, ExerciseFull, Exercise } from "../db/schema";
 import { eq, and } from "drizzle-orm";
 
 // **Fetch all exercises (excluding deleted ones)**
-export async function getExercises() {
+export async function getExercises(): Promise<Exercise[]> {
+    return await db.select()
+        .from(exercisesTable)
+        .where(eq(exercisesTable.isDeleted, false));
+}
+
+// Aliases for multiple joins
+const primaryMeasurementAlias = alias(measurementsTable, "primary_measurement");
+const primaryUnitAlias = alias(measurementUnitsTable, "primary_unit");
+const secondaryMeasurementAlias = alias(measurementsTable, "secondary_measurement");
+const secondaryUnitAlias = alias(measurementUnitsTable, "secondary_unit");
+
+// **Fetch all exercises with full details (excluding deleted ones)**
+export async function getExercisesFull(): Promise<ExerciseFull[]> {
+    console.log('Fetching all exercises');
     return await db
         .select({
             id: exercisesTable.id,
@@ -12,23 +27,26 @@ export async function getExercises() {
             categoryName: categoriesTable.name,
             categoryColour: coloursTable.hex,
             primaryMeasurementId: exercisesTable.primaryMeasurementId,
-            primaryMeasurementName: measurementsTable.name,
+            primaryMeasurementName: primaryMeasurementAlias.name,
             primaryMeasurementUnitId: exercisesTable.primaryMeasurementUnitId,
-            primaryMeasurementUnitName: measurementUnitsTable.unit,
+            primaryMeasurementUnitName: primaryUnitAlias.unit,
             secondaryMeasurementId: exercisesTable.secondaryMeasurementId,
-            secondaryMeasurementName: measurementsTable.name,
+            secondaryMeasurementName: secondaryMeasurementAlias.name,
             secondaryMeasurementUnitId: exercisesTable.secondaryMeasurementUnitId,
-            secondaryMeasurementUnitName: measurementUnitsTable.unit,
+            secondaryMeasurementUnitName: secondaryUnitAlias.unit,
             rest: exercisesTable.rest,
             weightIncrement: exercisesTable.weightIncrement,
+            createdAt: exercisesTable.createdAt,
+            updatedAt: exercisesTable.updatedAt,
+            isDeleted: exercisesTable.isDeleted,
         })
         .from(exercisesTable)
         .innerJoin(categoriesTable, eq(categoriesTable.id, exercisesTable.categoryId))
-        .innerJoin(measurementsTable, eq(measurementsTable.id, exercisesTable.primaryMeasurementId))
         .innerJoin(coloursTable, eq(coloursTable.id, categoriesTable.colourId))
-        .leftJoin(measurementUnitsTable, eq(measurementUnitsTable.id, exercisesTable.primaryMeasurementUnitId))
-        .leftJoin(measurementsTable, eq(measurementsTable.id, exercisesTable.secondaryMeasurementId))
-        .leftJoin(measurementUnitsTable, eq(measurementUnitsTable.id, exercisesTable.secondaryMeasurementUnitId))
+        .innerJoin(primaryMeasurementAlias, eq(primaryMeasurementAlias.id, exercisesTable.primaryMeasurementId))
+        .leftJoin(primaryUnitAlias, eq(primaryUnitAlias.id, exercisesTable.primaryMeasurementUnitId))
+        .leftJoin(secondaryMeasurementAlias, eq(secondaryMeasurementAlias.id, exercisesTable.secondaryMeasurementId))
+        .leftJoin(secondaryUnitAlias, eq(secondaryUnitAlias.id, exercisesTable.secondaryMeasurementUnitId))
         .where(eq(exercisesTable.isDeleted, false));
 }
 

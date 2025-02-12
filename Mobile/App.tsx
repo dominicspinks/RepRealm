@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import "reflect-metadata";
 import 'react-native-gesture-handler';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -39,8 +40,10 @@ export default function App() {
     }
 
     return (
-        <NavigationContainer>
-            <AppNavigator />
-        </NavigationContainer>
+        <MenuProvider>
+            <NavigationContainer>
+                <AppNavigator />
+            </NavigationContainer>
+        </MenuProvider>
     );
 }

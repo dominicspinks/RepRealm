@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { FlatList, Text, StyleSheet, Pressable } from "react-native";
+import { FlatList, Text, StyleSheet, Pressable, View } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
@@ -14,7 +14,6 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function CategoryListScreen() {
     const [categories, setCategories] = useState<CategoryWithColour[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [openMenuId, setOpenMenuId] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<CategoryWithColour | null>(null);
 
     // **Fetch categories when screen loads**
@@ -26,13 +25,6 @@ export default function CategoryListScreen() {
 
         fetchCategories();
     }, [modalVisible]);
-
-    // **Close menu when switching tabs**
-    useFocusEffect(
-        useCallback(() => {
-            setOpenMenuId(null);
-        }, [])
-    );
 
     function openAddCategory() {
         setSelectedCategory(null);
@@ -55,7 +47,7 @@ export default function CategoryListScreen() {
     }
 
     return (
-        <Pressable style={{ flex: 1 }} onPress={() => setOpenMenuId(null)} >
+        <View style={{ flex: 1 }} >
             {/* Header */}
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
@@ -70,10 +62,9 @@ export default function CategoryListScreen() {
                 renderItem={({ item }) => (
                     <CategoryCard
                         item={item}
-                        isOpen={openMenuId === item.id}
                         onEdit={openEditCategory}
                         onDelete={openDeleteCategory}
-                        setOpenMenuId={setOpenMenuId} />
+                    />
                 )}
                 ListEmptyComponent={<Text style={styles.emptyText}>No categories found.</Text>}
             />
@@ -84,7 +75,7 @@ export default function CategoryListScreen() {
                 onClose={closeModal}
                 category={selectedCategory}
             />
-        </Pressable>
+        </View>
     );
 }
 

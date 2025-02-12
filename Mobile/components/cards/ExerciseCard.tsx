@@ -1,19 +1,22 @@
 import { View, Text, StyleSheet } from "react-native";
 import { theme } from "../../theme";
-import { CategoryWithColour } from "../../db/schema";
+import { ExerciseFull } from "../../db/schema";
 import MenuList from "../MenuList";
 
-interface CategoryCardProps {
-    item: CategoryWithColour;
-    onEdit: (item: CategoryWithColour) => void;
-    onDelete: (item: CategoryWithColour) => void;
+interface ExerciseCardProps {
+    item: ExerciseFull;
+    onEdit: (item: ExerciseFull) => void;
+    onDelete: (item: ExerciseFull) => void;
 }
 
-export default function CategoryCard({ item, onEdit, onDelete }: CategoryCardProps) {
+export default function ExerciseCard({ item, onEdit, onDelete }: ExerciseCardProps) {
     return (
-        <View style={styles.categoryCard}>
-            <View style={[styles.colourEdge, { backgroundColor: item.colourHex }]} />
-            <Text style={styles.categoryName}>{item.name}</Text>
+        <View style={styles.exerciseCard}>
+            {/* Category Colour Indicator */}
+            <View style={[styles.colourEdge, { backgroundColor: item.categoryColour }]} />
+
+            {/* Exercise Name */}
+            <Text style={styles.exerciseName}>{item.name}</Text>
 
             {/* Options Menu */}
             <MenuList options={[
@@ -26,7 +29,7 @@ export default function CategoryCard({ item, onEdit, onDelete }: CategoryCardPro
 
 // **Styles**
 const styles = StyleSheet.create({
-    categoryCard: {
+    exerciseCard: {
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: theme.colors.cardBackground,
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: theme.cards.borderRadius,
         marginRight: theme.spacing.medium,
     },
-    categoryName: {
+    exerciseName: {
         flex: 1,
         fontSize: 16,
         fontWeight: "bold",
