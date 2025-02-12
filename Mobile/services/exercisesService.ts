@@ -1,7 +1,7 @@
 import { alias } from "drizzle-orm/sqlite-core";
 import { db } from "../db/database";
 import { exercisesTable, categoriesTable, measurementsTable, measurementUnitsTable, coloursTable, NewExercise, ExerciseFull, Exercise } from "../db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, ne } from "drizzle-orm";
 
 // **Fetch all exercises (excluding deleted ones)**
 export async function getExercises(): Promise<Exercise[]> {
@@ -59,7 +59,7 @@ export async function isExerciseNameUnique(name: string, excludeId?: string) {
             and(
                 eq(exercisesTable.name, name.trim()),
                 eq(exercisesTable.isDeleted, false),
-                excludeId ? eq(exercisesTable.id, excludeId) : eq(exercisesTable.id, "")
+                excludeId ? ne(exercisesTable.id, excludeId) : ne(exercisesTable.id, "")
             )
         );
 
