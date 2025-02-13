@@ -1,6 +1,5 @@
-import { alias } from "drizzle-orm/sqlite-core";
 import { db } from "../db/database";
-import { exercisesTable, categoriesTable, measurementsTable, measurementUnitsTable, coloursTable, NewExercise, ExerciseFull, Exercise, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
+import { exercisesTable, categoriesTable, coloursTable, NewExercise, ExerciseFull, Exercise, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
 import { eq, and, ne } from "drizzle-orm";
 
 // **Fetch all exercises (excluding deleted ones)**

@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import SetMeasurementRow from "./SetMeasurementRow";
 import SetTimeRow from "./SetTimeRow";
-import { theme } from "../../theme";
 
 interface SetMeasurementContainerProps {
     index: number;
@@ -73,13 +72,6 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         gap: 5,
-    },
-    measurementRow: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: 10,
-        gap: 10,
     },
     measurementLabel: {
         fontSize: 14,

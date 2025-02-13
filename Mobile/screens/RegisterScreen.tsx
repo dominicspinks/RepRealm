@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import StyledContainer from '../components/StyledContainer';
 import Button from '../components/buttons/Button';
 import Input from '../components/forms/Input';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { AuthScreenNavigationProp } from '../navigation/types';
-import { useAuthStore } from '../store/authStore';
 import { AuthService } from '../services/authService';
 
 export default function RegisterScreen() {
@@ -71,12 +70,6 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-    logo: {
-        width: 150,
-        height: 150,
-        marginBottom: theme.spacing.large,
-        resizeMode: 'contain',
-    },
     title: {
         fontSize: 24,
         fontFamily: theme.fonts.bold,

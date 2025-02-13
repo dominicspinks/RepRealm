@@ -1,4 +1,3 @@
-import { index } from "drizzle-orm/mysql-core";
 import { View, TextInput, StyleSheet } from "react-native";
 import MinusIcon from "../icons/MinusIcon";
 import PlusIcon from "../icons/PlusIcon";

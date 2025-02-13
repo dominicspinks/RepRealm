@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Text, Alert, FlatList } from "react-native";
+import { View, TextInput, StyleSheet, Alert, FlatList } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -13,7 +13,7 @@ import EditIcon from "../components/icons/EditIcon";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import PlusIcon from "../components/icons/PlusIcon";
 import SelectCategoryModal from "../components/modals/SelectCategoryModal";
-import { CategoryWithColour, Exercise, ExerciseFull, NewWorkoutExerciseWithSets, WorkoutExerciseWithSets } from "../db/schema";
+import { CategoryWithColour, ExerciseFull, NewWorkoutExerciseWithSets, WorkoutExerciseWithSets } from "../db/schema";
 import SelectExerciseModal from "../components/modals/SelectExerciseModal";
 import SetWorkoutExerciseModal from "../components/modals/SetWorkoutExerciseModal";
 import { addWorkoutExercise, deleteWorkoutById, deleteWorkoutExerciseById, getWorkoutExercisesByWorkoutId, updateWorkoutExercise, updateWorkoutNameById } from "../services/workoutsService";

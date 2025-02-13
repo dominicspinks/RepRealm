@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, Image } from 'react-native';
 import StyledContainer from '../components/StyledContainer';
 import Button from '../components/buttons/Button';
 import { theme } from '../theme';
@@ -131,15 +131,6 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.bold,
         color: theme.colors.text,
         marginBottom: theme.spacing.large,
-    },
-    input: {
-        width: '100%',
-        backgroundColor: theme.colors.inputBackground,
-        padding: theme.spacing.medium,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
-        marginBottom: theme.spacing.medium,
     },
     signUpText: {
         marginTop: theme.spacing.large,

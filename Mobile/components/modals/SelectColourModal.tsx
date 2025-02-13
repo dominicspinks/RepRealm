@@ -18,13 +18,11 @@ export default function SelectColourModal({ visible, onClose, onSelectColour, se
         <Modal visible={visible} transparent animationType="fade">
             <View style={styles.overlay}>
                 <View style={styles.modalContainer}>
-                    {/* Header */}
                     <ModalHeader
                         leftElement={<BackIcon action={onClose} />}
                         centreElement={<ModalHeaderTitle title="Select Colour" />}
                     />
 
-                    {/* Colour Grid */}
                     <FlatList
                         data={colours}
                         keyExtractor={(item) => item.id}
@@ -62,17 +60,6 @@ const styles = StyleSheet.create({
         padding: theme.spacing.medium,
         width: "80%",
         borderRadius: 10,
-    },
-    header: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: theme.spacing.medium,
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: theme.colors.text,
     },
     gridContainer: {
         alignItems: "center",

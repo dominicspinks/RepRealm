@@ -1,15 +1,13 @@
 import { useState } from "react";
-import { View, Text, Modal, TouchableOpacity, FlatList, StyleSheet, TextInput } from "react-native";
+import { View, Text, Modal, FlatList, StyleSheet } from "react-native";
 import { theme } from "../../theme";
-import { ExerciseFull, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, Workout, WorkoutExerciseInsertSchema, WorkoutExerciseSet, WorkoutExerciseWithSets, WorkoutWithExercises } from "../../db/schema";
+import { ExerciseFull, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, Workout, WorkoutExerciseWithSets } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import BackIcon from "../icons/BackIcon";
 import PlusIcon from "../icons/PlusIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import Button from "../buttons/Button";
-import SetMeasurementRow from "../forms/SetMeasurementRow";
-import MeasurementContainer from "../forms/SetMeasurementContainer";
 import SetMeasurementContainer from "../forms/SetMeasurementContainer";
 
 interface SetWorkoutExerciseModalProps {
@@ -73,18 +71,6 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
             const parsedValue = parseFloat(value) || 0;
             newSets[index][field] = Math.max(0, parsedValue).toString();
         }
-        setSets(newSets);
-    }
-
-    // Update time values
-    function updateTime(index: number, hours: string, minutes: string, seconds: string) {
-        const totalMilliseconds =
-            (parseInt(hours || "0", 10) * 3600000) +
-            (parseInt(minutes || "0", 10) * 60000) +
-            (parseInt(seconds || "0", 10) * 1000);
-
-        const newSets = [...sets];
-        newSets[index].measurement1Value = totalMilliseconds.toString();
         setSets(newSets);
     }
 
@@ -222,35 +208,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         color: theme.colors.text,
-    },
-    measurementContainer: {
-        marginTop: 10,
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 5,
-    },
-    measurementRow: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: 10,
-        gap: 10,
-    },
-    measurementLabel: {
-        fontSize: 14,
-        fontWeight: "bold",
-    },
-    adjustButton: {
-        fontSize: 40,
-        color: theme.colors.primary,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
-        width: 100,
-        height: 60,
-        textAlign: "center",
-        fontSize: 16,
     },
     error: {
         color: "red",

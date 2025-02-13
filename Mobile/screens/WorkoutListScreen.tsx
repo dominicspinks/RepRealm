@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -7,10 +7,10 @@ import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import { RootStackParamList } from "../navigation/types";
-import { createWorkout, deleteWorkoutById, getWorkoutById, getWorkouts, getWorkoutsWithExercises } from "../services/workoutsService";
-import { Workout, WorkoutWithExercises } from "../db/schema";
+import { createWorkout, deleteWorkoutById, getWorkoutsWithExercises } from "../services/workoutsService";
+import { WorkoutWithExercises } from "../db/schema";
 import { theme } from "../theme";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import WorkoutCard from "../components/cards/WorkoutCard";
 
 // **Define navigation type**
@@ -80,29 +80,6 @@ export default function WorkoutListScreen() {
 
 // **Styles**
 const styles = StyleSheet.create({
-    workoutRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: theme.spacing.medium,
-        borderBottomWidth: 1,
-        borderColor: theme.colors.border,
-    },
-    workoutName: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: theme.colors.text,
-    },
-    deleteButton: {
-        backgroundColor: theme.colors.danger,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-    },
-    deleteText: {
-        color: "white",
-        fontWeight: "bold",
-    },
     emptyText: {
         textAlign: "center",
         marginTop: theme.spacing.large,

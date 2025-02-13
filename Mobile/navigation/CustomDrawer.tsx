@@ -60,11 +60,6 @@ const styles = StyleSheet.create({
         borderBottomColor: theme.colors.inputBorder,
         marginVertical: 10,
     },
-    fullName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: theme.colors.text,
-    },
     email: {
         fontSize: 14,
         color: theme.colors.text,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Text, TextInput, Modal, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { theme } from "../../theme";
-import { Exercise, ExerciseFull } from "../../db/schema";
+import { ExerciseFull } from "../../db/schema";
 import { getExercisesFull } from "../../services/exercisesService";
 import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";

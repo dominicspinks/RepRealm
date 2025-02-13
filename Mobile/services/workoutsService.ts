@@ -1,8 +1,7 @@
 import { SQLiteRunResult } from "expo-sqlite";
 import { db } from "../db/database";
-import { workoutsTable, workoutExercisesTable, exercisesTable, categoriesTable, coloursTable, WorkoutWithExercises, Workout, WorkoutExerciseSet, workoutExerciseSetsTable, WorkoutExerciseWithSets, WorkoutExercise, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, measurementsTable, measurementUnitsTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
+import { workoutsTable, workoutExercisesTable, exercisesTable, categoriesTable, coloursTable, WorkoutWithExercises, Workout, workoutExerciseSetsTable, WorkoutExerciseWithSets, WorkoutExercise, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
 import { eq, inArray } from "drizzle-orm";
-import { alias } from "drizzle-orm/sqlite-core";
 
 // **Create a new workout**
 export async function createWorkout(name: string): Promise<WorkoutWithExercises> {

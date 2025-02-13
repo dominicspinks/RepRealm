@@ -124,15 +124,6 @@ const styles = StyleSheet.create({
         width: "80%",
         borderRadius: 10,
     },
-    header: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-    },
     inputContainer: {
         flexDirection: "row",
         alignItems: "center",

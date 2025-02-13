@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
-import { WorkoutExerciseSet, WorkoutExerciseWithSets } from "../../db/schema";
-import { formatSet } from "../../utilities/formatHelpers";
+import { WorkoutExerciseWithSets } from "../../db/schema";
 import ExerciseWithSets from "../ExerciseWithSets";
 
 interface WorkoutExerciseCardProps {
@@ -57,15 +56,5 @@ const styles = StyleSheet.create({
         width: 10,
         borderTopLeftRadius: theme.cards.borderRadius,
         borderBottomLeftRadius: theme.cards.borderRadius,
-    },
-    deleteButton: {
-        position: "absolute",
-        top: theme.spacing.small,
-        right: theme.spacing.small,
-    },
-    editButton: {
-        position: "absolute",
-        bottom: theme.spacing.small,
-        right: theme.spacing.small,
     },
 });

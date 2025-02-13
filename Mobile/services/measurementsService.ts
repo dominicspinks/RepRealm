@@ -1,5 +1,5 @@
 import { db } from "../db/database";
-import { Measurement, measurementsTable, measurementUnitsTable } from "../db/schema";
+import { measurementsTable, measurementUnitsTable } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 // **Fetch all measurements**

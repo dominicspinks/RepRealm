@@ -1,6 +1,3 @@
-import { StyleSheet } from "react-native";
-import { theme } from "../theme";
-import React from "react";
 import { Menu, MenuTrigger, MenuOptions, MenuOption } from "react-native-popup-menu";
 import OptionsIcon from "./icons/OptionsIcon";
 
