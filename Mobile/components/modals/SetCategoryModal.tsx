@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, Alert, StyleSheet } from "react-native";
+import { View, TextInput, TouchableOpacity, Modal, Alert, StyleSheet } from "react-native";
 import { isCategoryNameUnique, addCategory, updateCategory } from "../../services/categoriesService";
 import { getColours } from "../../services/coloursService";
 import { Category, Colour } from "../../db/schema";
-import { Ionicons } from "@expo/vector-icons";
 import Button from "../buttons/Button";
 import SelectColourModal from "./SelectColourModal";
 import BackIcon from "../icons/BackIcon";
 import ModalHeader from "../headers/ModalHeader";
-import ModalHeaderTitle from "../headers/ModalheaderTitle";
+import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 
 export default function SetCategoryModal({ visible, onClose, category }: { visible: boolean; onClose: () => void; category?: Category | null }) {
     const [name, setName] = useState(category?.name || "");

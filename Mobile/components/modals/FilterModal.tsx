@@ -6,7 +6,7 @@ import { theme } from "../../theme";
 import { Category } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
-import ModalHeaderTitle from "../headers/ModalheaderTitle";
+import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 
 interface FilterModalProps {
     visible: boolean;

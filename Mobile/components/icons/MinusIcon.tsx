@@ -1,13 +1,13 @@
 import { ViewStyle, TextStyle } from "react-native";
 import Icon from "./Icon";
 
-type PlusIconProps = {
+type MinusIconProps = {
     action: () => void,
     style?: ViewStyle | TextStyle | null
 }
 
-export default function PlusIcon({ action, style }: PlusIconProps) {
+export default function MinusIcon({ action, style }: MinusIconProps) {
     return (
-        <Icon icon="filter" action={action} style={style} />
+        <Icon icon="remove" action={action} style={style} />
     )
 }

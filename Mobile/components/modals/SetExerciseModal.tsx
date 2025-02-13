@@ -8,7 +8,7 @@ import DropdownFieldInput from "../forms/DropdownFieldInput";
 import TextFieldInput from "../forms/TextFieldInput";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
-import ModalHeaderTitle from "../headers/ModalheaderTitle";
+import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 
 interface SetExerciseModalProps {
     visible: boolean;

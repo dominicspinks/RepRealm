@@ -9,6 +9,8 @@ export const theme = {
         mutedText: '#AAAAAA',
         error: '#FF0000',
         overlay: 'rgba(0, 0, 0, 0.5)',
+        danger: '#FF0000',
+        border: '#DDDDDD',
     },
     fonts: {
         regular: 'System',

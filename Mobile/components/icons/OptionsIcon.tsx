@@ -1,13 +1,12 @@
-import { Ionicons } from "@expo/vector-icons";
 import { TextStyle, ViewStyle } from "react-native";
-import { theme } from "../../theme";
+import Icon from "./Icon";
 
 type OptionsIconProps = {
-    style?: ViewStyle | TextStyle
+    style?: ViewStyle | TextStyle | null
 }
 
 export default function OptionsIcon({ style }: OptionsIconProps) {
     return (
-        <Ionicons name="ellipsis-vertical" size={24} color={theme.colors.text} style={style} />
+        <Icon icon="ellipsis-vertical" clickable={false} style={style} />
     )
 }

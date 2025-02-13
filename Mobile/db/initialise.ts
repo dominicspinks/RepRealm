@@ -30,13 +30,13 @@ const defaultMeasurements = [
 ]
 
 const defaultMeasurementUnits = [
-    { id: "0194ee8c-5209-7b3e-ad53-79850de04965", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "m" },
-    { id: "0194ee8c-5209-7559-8c67-f6cdaf47980b", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "km" },
-    { id: "0194ee8c-5209-713f-97e1-75e58efb3613", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "ft" },
-    { id: "0194ee8c-5209-7a5f-86ed-b15a82cdacb4", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "yd" },
-    { id: "0194ee8c-5209-7f3d-9d2f-e30d97f3faa8", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "mi" },
-    { id: "0194ee8c-5209-7952-8ea8-145933247711", measurementId: "0194ee8c-5209-7037-be51-192205d4808d", unit: "kg" },
-    { id: "0194ee8c-5209-7e22-a8b8-05fb12b64bf0", measurementId: "0194ee8c-5209-7037-be51-192205d4808d", unit: "lb" },
+    { id: "0194ee8c-5209-7b3e-ad53-79850de04965", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "m", decimalPlaces: 0 },
+    { id: "0194ee8c-5209-7559-8c67-f6cdaf47980b", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "km", decimalPlaces: 2 },
+    { id: "0194ee8c-5209-713f-97e1-75e58efb3613", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "ft", decimalPlaces: 0 },
+    { id: "0194ee8c-5209-7a5f-86ed-b15a82cdacb4", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "yd", decimalPlaces: 0 },
+    { id: "0194ee8c-5209-7f3d-9d2f-e30d97f3faa8", measurementId: "0194ee8c-5209-79c6-b749-e7184d2a4ed6", unit: "mi", decimalPlaces: 2 },
+    { id: "0194ee8c-5209-7952-8ea8-145933247711", measurementId: "0194ee8c-5209-7037-be51-192205d4808d", unit: "kg", decimalPlaces: 1 },
+    { id: "0194ee8c-5209-7e22-a8b8-05fb12b64bf0", measurementId: "0194ee8c-5209-7037-be51-192205d4808d", unit: "lb", decimalPlaces: 1 },
 ]
 
 // Function to check and insert initial data

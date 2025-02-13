@@ -1,13 +1,13 @@
 import { TextStyle, ViewStyle } from "react-native";
 import Icon from "./Icon";
 
-type BackIconProps = {
+type AcceptIconProps = {
     action: () => void,
     style?: ViewStyle | TextStyle | null
 }
 
-export default function BackIcon({ action, style }: BackIconProps) {
+export default function AcceptIcon({ action, style }: AcceptIconProps) {
     return (
-        <Icon icon="arrow-back" action={action} style={style} />
+        <Icon icon="checkmark" action={action} style={style} />
     )
 }

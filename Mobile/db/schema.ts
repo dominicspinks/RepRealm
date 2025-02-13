@@ -1,6 +1,7 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import { UUIDv7Schema } from "../validators/commonValidators";
+import { decimal } from "drizzle-orm/mysql-core";
 
 // **Colours Table**
 export const coloursTable = sqliteTable("colours", {
@@ -19,6 +20,7 @@ export const measurementUnitsTable = sqliteTable("measurement_units", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     measurementId: text("measurement_id").notNull().references(() => measurementsTable.id),
     unit: text("unit").notNull(),
+    decimalPlaces: integer("decimal_places").notNull().default(0),
 });
 
 // **Categories Table**
@@ -82,7 +84,6 @@ export const workoutExercisesTable = sqliteTable("workout_exercises", {
 export const workoutExerciseSetsTable = sqliteTable("workout_exercise_sets", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     workoutExerciseId: text("workout_exercise_id").notNull().references(() => workoutExercisesTable.id),
-    reps: integer("reps").notNull(),
     measurement1Id: text("measurement_1_id").notNull().references(() => measurementsTable.id),
     measurement1Value: text("measurement_1_value"),
     measurement2Id: text("measurement_2_id").references(() => measurementsTable.id),
@@ -137,7 +138,16 @@ export type CategoryWithColour = Category & { colourHex: string };
 export type NewCategory = typeof categoriesTable.$inferInsert;
 
 export type Exercise = typeof exercisesTable.$inferSelect;
-export type ExerciseFull = typeof exercisesTable.$inferSelect & { primaryMeasurementName: string; primaryMeasurementUnitName: string | null; secondaryMeasurementName: string | null; secondaryMeasurementUnitName: string | null; categoryName: string; categoryColour: string; };
+export type ExerciseFull = typeof exercisesTable.$inferSelect & {
+    primaryMeasurementName: string;
+    primaryMeasurementUnitName: string | null;
+    primaryMeasurementUnitDecimalPlaces: number | null;
+    secondaryMeasurementName: string | null;
+    secondaryMeasurementUnitName: string | null;
+    secondaryMeasurementUnitDecimalPlaces: number | null;
+    categoryName: string;
+    categoryColour: string;
+};
 export type ExerciseWithCategory = Exercise & { category: Category };
 export type NewExercise = typeof exercisesTable.$inferInsert;
 
@@ -148,10 +158,13 @@ export type RoutineWorkout = typeof routineWorkoutsTable.$inferSelect;
 export type NewRoutineWorkout = typeof routineWorkoutsTable.$inferInsert;
 
 export type Workout = typeof workoutsTable.$inferSelect;
+export type WorkoutWithExercises = Workout & { exercises: WorkoutExerciseWithSets[] };
 export type NewWorkout = typeof workoutsTable.$inferInsert;
 
 export type WorkoutExercise = typeof workoutExercisesTable.$inferSelect;
+export type WorkoutExerciseWithSets = WorkoutExercise & Omit<ExerciseFull, "id" | "createdAt" | "updatedAt" | "isDeleted"> & { sets?: WorkoutExerciseSet[] };
 export type NewWorkoutExercise = typeof workoutExercisesTable.$inferInsert;
+export type NewWorkoutExerciseWithSets = NewWorkoutExercise & { sets: NewWorkoutExerciseSet[] };
 
 export type WorkoutExerciseSet = typeof workoutExerciseSetsTable.$inferSelect;
 export type NewWorkoutExerciseSet = typeof workoutExerciseSetsTable.$inferInsert;

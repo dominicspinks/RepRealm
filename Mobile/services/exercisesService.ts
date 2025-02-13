@@ -30,10 +30,12 @@ export async function getExercisesFull(): Promise<ExerciseFull[]> {
             primaryMeasurementName: primaryMeasurementAlias.name,
             primaryMeasurementUnitId: exercisesTable.primaryMeasurementUnitId,
             primaryMeasurementUnitName: primaryUnitAlias.unit,
+            primaryMeasurementUnitDecimalPlaces: primaryUnitAlias.decimalPlaces,
             secondaryMeasurementId: exercisesTable.secondaryMeasurementId,
             secondaryMeasurementName: secondaryMeasurementAlias.name,
             secondaryMeasurementUnitId: exercisesTable.secondaryMeasurementUnitId,
             secondaryMeasurementUnitName: secondaryUnitAlias.unit,
+            secondaryMeasurementUnitDecimalPlaces: secondaryUnitAlias.decimalPlaces,
             rest: exercisesTable.rest,
             weightIncrement: exercisesTable.weightIncrement,
             createdAt: exercisesTable.createdAt,
@@ -122,4 +124,42 @@ export async function updateExercise(
 // **Soft delete an exercise (sets is_deleted = true)**
 export async function deleteExercise(id: string) {
     await db.update(exercisesTable).set({ isDeleted: true }).where(eq(exercisesTable.id, id));
+}
+
+
+// **Get an exercise by ID**
+export async function getExerciseById(id: string): Promise<ExerciseFull | null> {
+    const rows = await db
+        .select({
+            id: exercisesTable.id,
+            name: exercisesTable.name,
+            categoryId: exercisesTable.categoryId,
+            categoryName: categoriesTable.name,
+            categoryColour: coloursTable.hex,
+            primaryMeasurementId: exercisesTable.primaryMeasurementId,
+            primaryMeasurementName: primaryMeasurementAlias.name,
+            primaryMeasurementUnitId: exercisesTable.primaryMeasurementUnitId,
+            primaryMeasurementUnitName: primaryUnitAlias.unit,
+            primaryMeasurementUnitDecimalPlaces: primaryUnitAlias.decimalPlaces,
+            secondaryMeasurementId: exercisesTable.secondaryMeasurementId,
+            secondaryMeasurementName: secondaryMeasurementAlias.name,
+            secondaryMeasurementUnitId: exercisesTable.secondaryMeasurementUnitId,
+            secondaryMeasurementUnitName: secondaryUnitAlias.unit,
+            secondaryMeasurementUnitDecimalPlaces: secondaryUnitAlias.decimalPlaces,
+            rest: exercisesTable.rest,
+            weightIncrement: exercisesTable.weightIncrement,
+            createdAt: exercisesTable.createdAt,
+            updatedAt: exercisesTable.updatedAt,
+            isDeleted: exercisesTable.isDeleted,
+        })
+        .from(exercisesTable)
+        .innerJoin(categoriesTable, eq(categoriesTable.id, exercisesTable.categoryId))
+        .innerJoin(coloursTable, eq(coloursTable.id, categoriesTable.colourId))
+        .innerJoin(primaryMeasurementAlias, eq(primaryMeasurementAlias.id, exercisesTable.primaryMeasurementId))
+        .leftJoin(primaryUnitAlias, eq(primaryUnitAlias.id, exercisesTable.primaryMeasurementUnitId))
+        .leftJoin(secondaryMeasurementAlias, eq(secondaryMeasurementAlias.id, exercisesTable.secondaryMeasurementId))
+        .leftJoin(secondaryUnitAlias, eq(secondaryUnitAlias.id, exercisesTable.secondaryMeasurementUnitId))
+        .where(eq(exercisesTable.id, id));
+
+    return rows.length > 0 ? rows[0] : null;
 }

@@ -1,10 +1,9 @@
-import { View, Text, TouchableOpacity, Modal, StyleSheet, FlatList } from "react-native";
+import { View, TouchableOpacity, Modal, StyleSheet, FlatList } from "react-native";
 import { theme } from "../../theme";
 import { Colour } from "../../db/schema";
-import { Ionicons } from "@expo/vector-icons";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
-import ModalHeaderTitle from "../headers/ModalheaderTitle";
+import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 
 interface SelectColourModalProps {
     visible: boolean;

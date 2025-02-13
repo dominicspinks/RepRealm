@@ -1,15 +1,13 @@
-import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
-import { theme } from "../../theme";
+import { ViewStyle, TextStyle } from "react-native";
+import Icon from "./Icon";
 
 type PlusIconProps = {
-    action: () => void
+    action: () => void,
+    style?: ViewStyle | TextStyle | null
 }
 
-export default function PlusIcon({ action }: PlusIconProps) {
+export default function PlusIcon({ action, style }: PlusIconProps) {
     return (
-        <TouchableOpacity onPress={action}>
-            <Ionicons name="add" size={24} color={theme.colors.text} />
-        </TouchableOpacity>
+        <Icon icon="add" action={action} style={style} />
     )
 }
