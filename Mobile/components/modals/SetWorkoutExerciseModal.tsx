@@ -158,17 +158,16 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
 
                                 {/* Measurement 2 (If Exists) */}
                                 {exercise?.secondaryMeasurementId && (
-                                    <View style={styles.measurementContainer}>
-                                        <Text style={styles.measurementLabel}>
-                                            {exercise?.secondaryMeasurementName} {exercise?.secondaryMeasurementUnitName ? `(${exercise.secondaryMeasurementUnitName})` : ""}
-                                        </Text>
-                                        <SetMeasurementRow
-                                            value={item.measurement2Value || ""}
-                                            decrementMeasurement={() => updateMeasurement(index, "measurement2Value", (Number(item.measurement2Value) - (exercise.secondaryMeasurementName?.toLowerCase() === "weight" && exercise.weightIncrement ? exercise.weightIncrement / 1000 : 1)).toString())}
-                                            setMeasurement={(value) => updateMeasurement(index, "measurement2Value", value)}
-                                            incrementMeasurement={() => updateMeasurement(index, "measurement2Value", (Number(item.measurement2Value) + (exercise.secondaryMeasurementName?.toLowerCase() === "weight" && exercise.weightIncrement ? exercise.weightIncrement / 1000 : 1)).toString())}
-                                            decimalPlaces={exercise.secondaryMeasurementUnitDecimalPlaces ?? 0} />
-                                    </View>
+                                    <SetMeasurementContainer
+                                        index={index}
+                                        measurementType="secondary"
+                                        measurementName={exercise.secondaryMeasurementName}
+                                        measurementUnitName={exercise.secondaryMeasurementUnitName}
+                                        measurementUnitDecimalPlaces={exercise.secondaryMeasurementUnitDecimalPlaces}
+                                        value={item.measurement2Value ?? null}
+                                        updateMeasurement={updateMeasurement}
+                                        weightIncrement={exercise.weightIncrement}
+                                    />
                                 )}
                             </View>
                         )}

@@ -1,6 +1,6 @@
 import { alias } from "drizzle-orm/sqlite-core";
 import { db } from "../db/database";
-import { exercisesTable, categoriesTable, measurementsTable, measurementUnitsTable, coloursTable, NewExercise, ExerciseFull, Exercise } from "../db/schema";
+import { exercisesTable, categoriesTable, measurementsTable, measurementUnitsTable, coloursTable, NewExercise, ExerciseFull, Exercise, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
 import { eq, and, ne } from "drizzle-orm";
 
 // **Fetch all exercises (excluding deleted ones)**
@@ -9,12 +9,6 @@ export async function getExercises(): Promise<Exercise[]> {
         .from(exercisesTable)
         .where(eq(exercisesTable.isDeleted, false));
 }
-
-// Aliases for multiple joins
-const primaryMeasurementAlias = alias(measurementsTable, "primary_measurement");
-const primaryUnitAlias = alias(measurementUnitsTable, "primary_unit");
-const secondaryMeasurementAlias = alias(measurementsTable, "secondary_measurement");
-const secondaryUnitAlias = alias(measurementUnitsTable, "secondary_unit");
 
 // **Fetch all exercises with full details (excluding deleted ones)**
 export async function getExercisesFull(): Promise<ExerciseFull[]> {

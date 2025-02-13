@@ -1,6 +1,6 @@
 import { SQLiteRunResult } from "expo-sqlite";
 import { db } from "../db/database";
-import { workoutsTable, workoutExercisesTable, exercisesTable, categoriesTable, coloursTable, WorkoutWithExercises, Workout, WorkoutExerciseSet, workoutExerciseSetsTable, WorkoutExerciseWithSets, WorkoutExercise, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, measurementsTable, measurementUnitsTable } from "../db/schema";
+import { workoutsTable, workoutExercisesTable, exercisesTable, categoriesTable, coloursTable, WorkoutWithExercises, Workout, WorkoutExerciseSet, workoutExerciseSetsTable, WorkoutExerciseWithSets, WorkoutExercise, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, measurementsTable, measurementUnitsTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 
@@ -31,6 +31,34 @@ export async function getWorkouts(): Promise<Workout[]> {
     return await db
         .select()
         .from(workoutsTable);
+}
+
+// **Get all workouts with exercises**
+export async function getWorkoutsWithExercises(): Promise<WorkoutWithExercises[]> {
+    // Step 1: Fetch all workouts
+    const workouts: Workout[] = await db
+        .select()
+        .from(workoutsTable);
+
+    // Step 2: Fetch exercises for each workout
+    const workoutsWithExercises: WorkoutWithExercises[] = await Promise.all(
+        workouts.map(async (workout) => {
+            const exercises = await getWorkoutExercisesByWorkoutId(workout.id);
+            return { ...workout, exercises };
+        })
+    );
+
+    return workoutsWithExercises;
+}
+
+// **Get workout by ID**
+export async function getWorkoutById(id: string): Promise<Workout | null> {
+    const rows = await db
+        .select()
+        .from(workoutsTable)
+        .where(eq(workoutsTable.id, id));
+
+    return rows.length > 0 ? rows[0] : null;
 }
 
 // **Delete a workout by ID**
@@ -81,6 +109,7 @@ export async function addWorkoutExercise(workoutId: string, exerciseId: string, 
     return await getWorkoutExerciseById(workoutExerciseId);
 }
 
+// **Update a workout exercise**
 export async function updateWorkoutExercise(workoutExercise: NewWorkoutExerciseWithSets) {
     if (!workoutExercise.id) {
         throw new Error("Cannot update workout exercise without an ID.");
@@ -100,11 +129,6 @@ export async function updateWorkoutExercise(workoutExercise: NewWorkoutExerciseW
 }
 
 // **Get exercises for a workout**
-const primaryMeasurementAlias = alias(measurementsTable, "primary_measurement");
-const primaryUnitAlias = alias(measurementUnitsTable, "primary_unit");
-const secondaryMeasurementAlias = alias(measurementsTable, "secondary_measurement");
-const secondaryUnitAlias = alias(measurementUnitsTable, "secondary_unit");
-
 export async function getWorkoutExercisesByWorkoutId(workoutId: string): Promise<WorkoutExerciseWithSets[]> {
     // **1. Fetch workout exercises (without sets)**
     const exercises = await db
@@ -181,15 +205,6 @@ export async function getWorkoutExercisesByWorkoutId(workoutId: string): Promise
     return Array.from(exerciseMap.values());
 }
 
-// **Get workout by ID**
-export async function getWorkoutById(id: string): Promise<Workout | null> {
-    const rows = await db
-        .select()
-        .from(workoutsTable)
-        .where(eq(workoutsTable.id, id));
-
-    return rows.length > 0 ? rows[0] : null;
-}
 
 // **Delete workout exercise by Id**
 export async function deleteWorkoutExerciseById(id: string): Promise<SQLiteRunResult> {

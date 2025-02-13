@@ -7,22 +7,28 @@ import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import { RootStackParamList } from "../navigation/types";
-import { createWorkout, deleteWorkoutById, getWorkoutById, getWorkouts } from "../services/workoutsService";
-import { Workout } from "../db/schema";
+import { createWorkout, deleteWorkoutById, getWorkoutById, getWorkouts, getWorkoutsWithExercises } from "../services/workoutsService";
+import { Workout, WorkoutWithExercises } from "../db/schema";
 import { theme } from "../theme";
 import { useCallback, useEffect, useState } from "react";
+import WorkoutCard from "../components/cards/WorkoutCard";
 
 // **Define navigation type**
 type WorkoutListScreenNavigationProp = StackNavigationProp<RootStackParamList, "WorkoutList">;
 
 export default function WorkoutListScreen() {
     const navigation = useNavigation<WorkoutListScreenNavigationProp>();
-    const [workouts, setWorkouts] = useState<Workout[]>([]);
+    const [workouts, setWorkouts] = useState<WorkoutWithExercises[]>([]);
 
     useFocusEffect(
         useCallback(() => {
             async function fetchWorkouts() {
-                const result = await getWorkouts();
+                const result = await getWorkoutsWithExercises();
+                result.sort((a, b) => {
+                    const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : new Date(a.createdAt).getTime();
+                    const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : new Date(b.createdAt).getTime();
+                    return dateB - dateA;
+                });
                 setWorkouts(result);
             }
             fetchWorkouts();
@@ -34,17 +40,14 @@ export default function WorkoutListScreen() {
         navigation.navigate("SetWorkout", { workout });
     }
 
-    async function handleDeleteButton(workoutId: string) {
+    async function handleDeleteWorkout(workoutId: string) {
         await deleteWorkoutById(workoutId);
         setWorkouts(workouts.filter(w => w.id !== workoutId));
     }
 
-    async function handleEditButton(workoutId: string) {
-        console.log("Edit workout");
+    async function handleEditWorkout(workoutId: string) {
         const workout = workouts.find(w => w.id === workoutId);
-        if (!workout) {
-            return;
-        }
+        if (!workout) return;
         navigation.navigate("SetWorkout", { workout });
     }
 
@@ -57,20 +60,16 @@ export default function WorkoutListScreen() {
                 rightElement={<PlusIcon action={openSetWorkoutScreen} />}
             />
 
-            {/* Basic Workout List */}
+            {/* Workout List */}
             <FlatList
                 data={workouts}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <View style={styles.workoutRow}>
-                        <Text style={styles.workoutName}>{item.name}</Text>
-                        <TouchableOpacity onPress={() => handleEditButton(item.id)} style={styles.deleteButton}>
-                            <Text style={styles.deleteText}>Edit</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleDeleteButton(item.id)} style={styles.deleteButton}>
-                            <Text style={styles.deleteText}>Delete</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <WorkoutCard
+                        workout={item}
+                        onDelete={handleDeleteWorkout}
+                        onEdit={handleEditWorkout}
+                    />
                 )}
                 ListEmptyComponent={<Text style={styles.emptyText}>No workouts found.</Text>}
             />

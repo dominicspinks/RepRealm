@@ -1,7 +1,6 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { alias, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
-import { UUIDv7Schema } from "../validators/commonValidators";
-import { decimal } from "drizzle-orm/mysql-core";
+import { UUIDv7Schema } from "../utilities/commonValidators";
 
 // **Colours Table**
 export const coloursTable = sqliteTable("colours", {
@@ -168,3 +167,10 @@ export type NewWorkoutExerciseWithSets = NewWorkoutExercise & { sets: NewWorkout
 
 export type WorkoutExerciseSet = typeof workoutExerciseSetsTable.$inferSelect;
 export type NewWorkoutExerciseSet = typeof workoutExerciseSetsTable.$inferInsert;
+
+
+// **Aliases**
+export const primaryMeasurementAlias = alias(measurementsTable, "primary_measurement");
+export const primaryUnitAlias = alias(measurementUnitsTable, "primary_unit");
+export const secondaryMeasurementAlias = alias(measurementsTable, "secondary_measurement");
+export const secondaryUnitAlias = alias(measurementUnitsTable, "secondary_unit");
