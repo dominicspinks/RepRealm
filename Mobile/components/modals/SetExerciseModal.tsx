@@ -139,7 +139,6 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
 
     function getDefaultUnit(measurementNum: 1 | 2) {
         const measurementId = measurementNum === 1 ? type1 : type2;
-        console.log(measurementId);
 
         const defaultUnits: Record<string, string> = {
             Weight: "kg",

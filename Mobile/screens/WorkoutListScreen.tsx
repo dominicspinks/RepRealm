@@ -12,6 +12,7 @@ import { WorkoutWithExercises } from "../db/schema";
 import { theme } from "../theme";
 import { useCallback, useState } from "react";
 import WorkoutCard from "../components/cards/WorkoutCard";
+import EmptyListNotice from "../components/EmptyListNotice";
 
 // **Define navigation type**
 type WorkoutListScreenNavigationProp = StackNavigationProp<RootStackParamList, "WorkoutList">;
@@ -71,7 +72,7 @@ export default function WorkoutListScreen() {
                         onEdit={handleEditWorkout}
                     />
                 )}
-                ListEmptyComponent={<Text style={styles.emptyText}>No workouts found.</Text>}
+                ListEmptyComponent={<EmptyListNotice text="No workouts found" />}
             />
         </View>
     );

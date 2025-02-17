@@ -31,7 +31,6 @@ export default function SetRoutineScreen() {
     const [workoutModalOpen, setWorkoutModalOpen] = useState(false);
 
     useEffect(() => {
-        console.log("get workout exercises...")
         fetchRoutineWorkouts();
     }, [routine]);
 
@@ -77,8 +76,6 @@ export default function SetRoutineScreen() {
     }
 
     async function handleSelectWorkout(workout: WorkoutWithExercises) {
-        console.log("Adding workout", workout);
-
         // Check if workout is already in routine
         const routineWorkout = routineWorkouts.find(rw => rw.workout.id === workout.id);
         if (routineWorkout) {
@@ -91,7 +88,6 @@ export default function SetRoutineScreen() {
             workoutId: workout.id,
             order: routineWorkouts.length + 1,
         });
-        console.log("Workout added", response);
 
         fetchRoutineWorkouts();
         setWorkoutModalOpen(false);

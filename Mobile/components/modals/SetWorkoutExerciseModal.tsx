@@ -83,7 +83,6 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
         setError("");
 
         // If editing an existing workoutExercise, update it
-        console.log("workout exercise", workoutExercise, "exercise", exercise, "sets", sets);
         if (workoutExercise) {
             const updatedWorkoutExercise: NewWorkoutExerciseWithSets = {
                 ...workoutExercise,

@@ -41,7 +41,6 @@ export default function SetWorkoutScreen() {
     const [workoutExercises, setWorkoutExercises] = useState<WorkoutExerciseWithSets[]>([]);
 
     useEffect(() => {
-        console.log("get workout exercises...")
         fetchWorkoutExercises();
     }, [workout]);
 
@@ -98,7 +97,6 @@ export default function SetWorkoutScreen() {
         setSelectedExercise(null);
         setWorkoutExercise(null);
 
-        console.log(closeAll)
         if (!closeAll) {
             setExerciseModalOpen(true);
         }
@@ -125,8 +123,6 @@ export default function SetWorkoutScreen() {
     }
 
     async function handleSaveWorkoutExercise(workoutExercise: NewWorkoutExerciseWithSets) {
-        console.log("Saving workout exercise:", workoutExercise);
-
         if (workoutExercise.id) {
             // **Update existing workout exercise**
             await updateWorkoutExercise(workoutExercise);
@@ -140,7 +136,6 @@ export default function SetWorkoutScreen() {
     }
 
     async function handleEditExercise(workoutExercise: WorkoutExerciseWithSets) {
-        console.log("Editing exercise:", workoutExercise);
         const exercise = await getExerciseById(workoutExercise.exerciseId);
         setSelectedExercise(exercise);
         setWorkoutExercise(workoutExercise);

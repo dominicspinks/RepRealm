@@ -1,6 +1,7 @@
 import { db } from "../db/database";
-import { categoriesTable, CategoryWithColour, coloursTable } from "../db/schema";
+import { categoriesTable, CategoryWithColour, coloursTable, exercisesTable } from "../db/schema";
 import { eq, is } from "drizzle-orm";
+import { deleteExercises } from "./exercisesService";
 
 // **Fetch all categories (excluding deleted ones)**
 export async function getCategories(): Promise<CategoryWithColour[]> {
@@ -42,4 +43,18 @@ export async function addCategory(name: string, colourId: string) {
 // **Update an existing category**
 export async function updateCategory(id: string, name: string, colourId: string) {
     await db.update(categoriesTable).set({ name, colourId, updatedAt: new Date() }).where(eq(categoriesTable.id, id));
+}
+
+// **Delete a category by ID**
+export async function deleteCategory(id: string) {
+    await db.transaction(async (tx) => {
+        await tx.update(categoriesTable).set({ isDeleted: true }).where(eq(categoriesTable.id, id));
+
+        const exerciseIds = await tx
+            .select({ id: exercisesTable.id })
+            .from(exercisesTable)
+            .where(eq(exercisesTable.categoryId, id));
+
+        await deleteExercises(exerciseIds.map((e) => e.id));
+    });
 }

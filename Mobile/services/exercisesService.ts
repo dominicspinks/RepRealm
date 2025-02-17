@@ -1,6 +1,6 @@
 import { db } from "../db/database";
-import { exercisesTable, categoriesTable, coloursTable, NewExercise, ExerciseFull, Exercise, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias } from "../db/schema";
-import { eq, and, ne } from "drizzle-orm";
+import { exercisesTable, categoriesTable, coloursTable, NewExercise, ExerciseFull, Exercise, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, workoutExercisesTable } from "../db/schema";
+import { eq, and, ne, inArray } from "drizzle-orm";
 
 // **Fetch all exercises (excluding deleted ones)**
 export async function getExercises(): Promise<Exercise[]> {
@@ -11,7 +11,6 @@ export async function getExercises(): Promise<Exercise[]> {
 
 // **Fetch all exercises with full details (excluding deleted ones)**
 export async function getExercisesFull(): Promise<ExerciseFull[]> {
-    console.log('Fetching all exercises');
     return await db
         .select({
             id: exercisesTable.id,
@@ -114,11 +113,21 @@ export async function updateExercise(
         .where(eq(exercisesTable.id, id));
 }
 
-// **Soft delete an exercise (sets is_deleted = true)**
+// **Delete an exercise (sets is_deleted = true)**
 export async function deleteExercise(id: string) {
-    await db.update(exercisesTable).set({ isDeleted: true }).where(eq(exercisesTable.id, id));
+    await db.transaction(async (tx) => {
+        await tx.update(exercisesTable).set({ isDeleted: true }).where(eq(exercisesTable.id, id));
+        await tx.delete(workoutExercisesTable).where(eq(workoutExercisesTable.exerciseId, id));
+    });
 }
 
+// **Delete multiple exercises**
+export async function deleteExercises(ids: string[]) {
+    await db.transaction(async (tx) => {
+        await tx.update(exercisesTable).set({ isDeleted: true }).where(inArray(exercisesTable.id, ids));
+        await tx.delete(workoutExercisesTable).where(inArray(workoutExercisesTable.exerciseId, ids));
+    });
+}
 
 // **Get an exercise by ID**
 export async function getExerciseById(id: string): Promise<ExerciseFull | null> {

@@ -27,7 +27,6 @@ export async function createRoutine(name: string): Promise<RoutineWithWorkouts> 
 
 // **Add workout to routine**
 export async function addWorkoutToRoutine({ routineId, workoutId, order }: NewRoutineWorkout): Promise<RoutineWorkout> {
-    console.log("Adding workout to routine", { routineId, workoutId, order });
     const result = await db
         .insert(routineWorkoutsTable)
         .values({ routineId, workoutId, order })
@@ -42,7 +41,6 @@ export async function addWorkoutToRoutine({ routineId, workoutId, order }: NewRo
             order: routineWorkoutsTable.order,
         });
 
-    console.log("Workout added", result);
     return result[0];
 }
 

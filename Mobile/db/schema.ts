@@ -1,7 +1,7 @@
-import { alias, integer, sqliteTable, text, unique, UniqueConstraintBuilder } from "drizzle-orm/sqlite-core";
+import { alias, integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import { UUIDv7Schema } from "../utilities/commonValidators";
-import { UniqueConstraint } from "drizzle-orm/mysql-core";
+import { sql } from "drizzle-orm";
 
 // **Colours Table**
 export const coloursTable = sqliteTable("colours", {
@@ -18,7 +18,7 @@ export const measurementsTable = sqliteTable("measurements", {
 // **Measurement Units Table**
 export const measurementUnitsTable = sqliteTable("measurement_units", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
-    measurementId: text("measurement_id").notNull().references(() => measurementsTable.id),
+    measurementId: text("measurement_id").notNull().references(() => measurementsTable.id, { onDelete: "no action" }),
     unit: text("unit").notNull(),
     decimalPlaces: integer("decimal_places").notNull().default(0),
 });
@@ -27,25 +27,25 @@ export const measurementUnitsTable = sqliteTable("measurement_units", {
 export const categoriesTable = sqliteTable("categories", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     name: text("name").notNull(),
-    colourId: text("colour_id").notNull().references(() => coloursTable.id),
+    colourId: text("colour_id").notNull().references(() => coloursTable.id, { onDelete: "no action" }),
     isDeleted: integer("is_deleted", { mode: "boolean" }).default(false),
-    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(new Date()),
+    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
     updatedAt: integer("updated_at", { mode: 'timestamp' }),
 });
 
 // **Exercises Table**
 export const exercisesTable = sqliteTable("exercises", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
-    categoryId: text("category_id").notNull().references(() => categoriesTable.id),
+    categoryId: text("category_id").notNull().references(() => categoriesTable.id, { onDelete: "no action" }),
     name: text().notNull(),
     rest: integer("rest"),
     weightIncrement: integer("weight_increment"),
-    primaryMeasurementId: text("primary_measurement_id").notNull().references(() => measurementsTable.id),
+    primaryMeasurementId: text("primary_measurement_id").notNull().references(() => measurementsTable.id, { onDelete: "no action" }),
     primaryMeasurementUnitId: text("primary_measurement_unit_id").references(() => measurementUnitsTable.id),
-    secondaryMeasurementId: text("secondary_measurement_id").references(() => measurementsTable.id),
+    secondaryMeasurementId: text("secondary_measurement_id").references(() => measurementsTable.id, { onDelete: "set null" }),
     secondaryMeasurementUnitId: text("secondary_measurement_unit_id").references(() => measurementUnitsTable.id),
     isDeleted: integer("is_deleted", { mode: "boolean" }).default(false),
-    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(new Date()),
+    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
     updatedAt: integer("updated_at", { mode: 'timestamp' }),
 });
 
@@ -53,42 +53,42 @@ export const exercisesTable = sqliteTable("exercises", {
 export const routinesTable = sqliteTable("routines", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     name: text("name").notNull(),
-    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(new Date()),
+    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
     updatedAt: integer("updated_at", { mode: 'timestamp' }),
 });
 
 // **Routine Workouts Table**
 export const routineWorkoutsTable = sqliteTable("routine_workouts", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
-    routineId: text("routine_id").notNull().references(() => routinesTable.id),
-    workoutId: text("workout_id").notNull().references(() => workoutsTable.id),
+    routineId: text("routine_id").notNull().references(() => routinesTable.id, { onDelete: "cascade" }),
+    workoutId: text("workout_id").notNull().references(() => workoutsTable.id, { onDelete: "cascade" }),
     order: integer("order").notNull(),
-}, (table) => ({
-    uniqueRoutineWorkout: unique().on(table.routineId, table.workoutId),
-}));
+}, (table) => [
+    unique("unique_routine_workout").on(table.routineId, table.workoutId)
+]);
 
 // **Workouts Table**
 export const workoutsTable = sqliteTable("workouts", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     name: text("name").notNull(),
-    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(new Date()),
+    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
     updatedAt: integer("updated_at", { mode: 'timestamp' }),
 });
 
 // **Workout Exercises Table**
 export const workoutExercisesTable = sqliteTable("workout_exercises", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
-    workoutId: text("workout_id").notNull().references(() => workoutsTable.id),
-    exerciseId: text("exercise_id").notNull().references(() => exercisesTable.id),
-    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(new Date()),
+    workoutId: text("workout_id").notNull().references(() => workoutsTable.id, { onDelete: "cascade" }),
+    exerciseId: text("exercise_id").notNull().references(() => exercisesTable.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
 });
 
 export const workoutExerciseSetsTable = sqliteTable("workout_exercise_sets", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
-    workoutExerciseId: text("workout_exercise_id").notNull().references(() => workoutExercisesTable.id),
-    measurement1Id: text("measurement_1_id").notNull().references(() => measurementsTable.id),
+    workoutExerciseId: text("workout_exercise_id").notNull().references(() => workoutExercisesTable.id, { onDelete: "cascade" }),
+    measurement1Id: text("measurement_1_id").notNull().references(() => measurementsTable.id, { onDelete: "no action" }),
     measurement1Value: text("measurement_1_value"),
-    measurement2Id: text("measurement_2_id").references(() => measurementsTable.id),
+    measurement2Id: text("measurement_2_id").references(() => measurementsTable.id, { onDelete: "set null" }),
     measurement2Value: text("measurement_2_value"),
 });
 

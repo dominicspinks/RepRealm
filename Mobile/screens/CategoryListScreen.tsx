@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { FlatList, Text, StyleSheet, View } from "react-native";
+import { Alert, FlatList, StyleSheet, View } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import SetCategoryModal from "../components/modals/SetCategoryModal";
-import { getCategories } from "../services/categoriesService";
-import { theme } from "../theme";
+import { deleteCategory, getCategories } from "../services/categoriesService";
 import { CategoryWithColour } from "../db/schema";
 import CategoryCard from "../components/cards/CategoryCard";
+import EmptyListNotice from "../components/EmptyListNotice";
 
 export default function CategoryListScreen() {
     const [categories, setCategories] = useState<CategoryWithColour[]>([]);
@@ -17,13 +17,13 @@ export default function CategoryListScreen() {
 
     // **Fetch categories when screen loads**
     useEffect(() => {
-        async function fetchCategories() {
-            const result = await getCategories();
-            setCategories(result.sort((a, b) => a.name.localeCompare(b.name)));
-        }
-
         fetchCategories();
     }, [modalVisible]);
+
+    async function fetchCategories() {
+        const result = await getCategories();
+        setCategories(result.sort((a, b) => a.name.localeCompare(b.name)));
+    }
 
     function openAddCategory() {
         setSelectedCategory(null);
@@ -35,14 +35,30 @@ export default function CategoryListScreen() {
         setModalVisible(true);
     }
 
-    function openDeleteCategory(category: CategoryWithColour) {
-        console.log("Delete category", category);
-    }
-
     function closeModal() {
-        console.log("Close modal");
         setSelectedCategory(null);
         setModalVisible(false);
+    }
+
+    async function handleDeleteCategory(id: string) {
+        Alert.alert(
+            "Delete Category",
+            "Are you sure you want to delete this category? It will also delete any exercises in this category.",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                        await deleteCategory(id);
+                        fetchCategories();
+                    },
+                },
+            ]
+        )
     }
 
     return (
@@ -62,10 +78,10 @@ export default function CategoryListScreen() {
                     <CategoryCard
                         item={item}
                         onEdit={openEditCategory}
-                        onDelete={openDeleteCategory}
+                        onDelete={handleDeleteCategory}
                     />
                 )}
-                ListEmptyComponent={<Text style={styles.emptyText}>No categories found.</Text>}
+                ListEmptyComponent={<EmptyListNotice text="No categories found" />}
             />
 
             {/* Set Category Modal */}
@@ -80,9 +96,4 @@ export default function CategoryListScreen() {
 
 // **Styles**
 const styles = StyleSheet.create({
-    emptyText: {
-        textAlign: "center",
-        marginTop: theme.spacing.large,
-        color: theme.colors.mutedText,
-    },
 });

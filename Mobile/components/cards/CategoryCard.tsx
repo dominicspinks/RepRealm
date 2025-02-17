@@ -6,7 +6,7 @@ import MenuList from "../MenuList";
 interface CategoryCardProps {
     item: CategoryWithColour;
     onEdit: (item: CategoryWithColour) => void;
-    onDelete: (item: CategoryWithColour) => void;
+    onDelete: (itemId: string) => void;
 }
 
 export default function CategoryCard({ item, onEdit, onDelete }: CategoryCardProps) {
@@ -18,7 +18,7 @@ export default function CategoryCard({ item, onEdit, onDelete }: CategoryCardPro
             {/* Options Menu */}
             <MenuList options={[
                 { label: "Edit", onPress: () => { onEdit(item) } },
-                { label: "Delete", onPress: () => { onDelete(item) } }
+                { label: "Delete", onPress: () => { onDelete(item.id) } }
             ]} />
         </View>
     );

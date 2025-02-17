@@ -11,6 +11,7 @@ import { RoutineWithFullWorkouts, RoutineWithWorkouts } from "../db/schema";
 import { getWorkoutsWithExercises } from "../services/workoutsService";
 import { createRoutine, deleteRoutineById, getRoutinesWithWorkouts } from "../services/routinesService";
 import RoutineCard from "../components/cards/RoutineCard";
+import EmptyListNotice from "../components/EmptyListNotice";
 
 type RoutineListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RoutineList'>;
 
@@ -61,6 +62,7 @@ export default function RoutineListScreen() {
                         onEdit={() => navigation.navigate("SetRoutine", { routine: item })}
                         onDelete={() => handleDeleteRoutine(item.id)} />
                 )}
+                ListEmptyComponent={<EmptyListNotice text="No routines found" />}
             />
         </View>
     )

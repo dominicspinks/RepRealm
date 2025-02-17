@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, Alert } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import FilterIcon from "../components/icons/FilterIcon";
@@ -8,10 +8,11 @@ import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import SetExerciseModal from "../components/modals/SetExerciseModal";
 import FilterModal from "../components/modals/FilterModal";
 import { getCategories } from "../services/categoriesService";
-import { getExercisesFull } from "../services/exercisesService";
+import { deleteExercise, getExercisesFull } from "../services/exercisesService";
 import { Category, ExerciseFull } from "../db/schema";
 import ExerciseCard from "../components/cards/ExerciseCard";
 import { theme } from "../theme";
+import EmptyListNotice from "../components/EmptyListNotice";
 
 export default function ExerciseListScreen() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -25,20 +26,20 @@ export default function ExerciseListScreen() {
 
     // **Fetch categories & exercises on load**
     useEffect(() => {
-        async function fetchCategories() {
-            const result = await getCategories();
-            setCategories(result.sort((a, b) => a.name.localeCompare(b.name)));
-        }
-
-        async function fetchExercises() {
-            const result = await getExercisesFull();
-            setExercises(result.sort((a, b) => a.name.localeCompare(b.name)));
-            setFilteredExercises(result);
-        }
-
         fetchExercises();
         fetchCategories();
     }, [modalVisible]);
+
+    async function fetchCategories() {
+        const result = await getCategories();
+        setCategories(result.sort((a, b) => a.name.localeCompare(b.name)));
+    }
+
+    async function fetchExercises() {
+        const result = await getExercisesFull();
+        setExercises(result.sort((a, b) => a.name.localeCompare(b.name)));
+        setFilteredExercises(result);
+    }
 
     // **Filter Exercises based on Selected Categories**
     useEffect(() => {
@@ -74,6 +75,27 @@ export default function ExerciseListScreen() {
         setFilterModalVisible(true);
     }
 
+    async function handleDeleteExercise(id: string) {
+        Alert.alert(
+            "Delete Exercise",
+            "Are you sure you want to delete this exercise? It will be removed from any saved workouts.",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                        await deleteExercise(id);
+                        fetchExercises();
+                    },
+                },
+            ]
+        )
+    }
+
     return (
         <View style={{ flex: 1 }}>
             {/* Header */}
@@ -96,10 +118,10 @@ export default function ExerciseListScreen() {
                     <ExerciseCard
                         item={item}
                         onEdit={openEditExercise}
-                        onDelete={() => console.log("Delete", item)}
+                        onDelete={() => handleDeleteExercise(item.id)}
                     />
                 )}
-                ListEmptyComponent={<Text style={styles.emptyText}>No exercises found.</Text>}
+                ListEmptyComponent={<EmptyListNotice text="No exercises found" />}
             />
 
             {/* Set Exercise Modal */}
@@ -124,11 +146,6 @@ export default function ExerciseListScreen() {
 
 // **Styles**
 const styles = StyleSheet.create({
-    emptyText: {
-        textAlign: "center",
-        marginTop: theme.spacing.large,
-        color: theme.colors.mutedText,
-    },
     icons: {
         flexDirection: "row",
         gap: 15,
