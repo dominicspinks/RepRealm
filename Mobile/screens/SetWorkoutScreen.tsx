@@ -105,7 +105,7 @@ export default function SetWorkoutScreen() {
     }
 
     function handleBackButton() {
-        if (workoutExercises.length === 10) {
+        if (workoutExercises.length === 0) {
             Alert.alert(
                 "Delete Workout?",
                 "This workout has no exercises and will be deleted if you go back. Do you want to continue?",

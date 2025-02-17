@@ -80,10 +80,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     input: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         textAlign: "center",
-        fontSize: 16,
+        fontSize: 24,
         borderWidth: 1,
         borderColor: theme.colors.inputBorder,
         borderRadius: 5,

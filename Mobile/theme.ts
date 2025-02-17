@@ -6,11 +6,13 @@ export const theme = {
         text: '#333333',
         inputBackground: '#FFFFFF',
         inputBorder: '#DDDDDD',
+        inputBackgroundDark: '#F2F2F2',
         mutedText: '#AAAAAA',
         error: '#FF0000',
         overlay: 'rgba(0, 0, 0, 0.5)',
         danger: '#FF0000',
         border: '#DDDDDD',
+        borderStrong: '#AAAAAA',
     },
     fonts: {
         regular: 'System',

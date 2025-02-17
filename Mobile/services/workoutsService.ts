@@ -33,13 +33,27 @@ export async function getWorkouts(): Promise<Workout[]> {
 }
 
 // **Get all workouts with exercises**
-export async function getWorkoutsWithExercises(): Promise<WorkoutWithExercises[]> {
-    // Step 1: Fetch all workouts
-    const workouts: Workout[] = await db
-        .select()
-        .from(workoutsTable);
+export async function getWorkoutsWithExercises(id?: string | string[]): Promise<WorkoutWithExercises[]> {
+    let workouts: Workout[];
 
-    // Step 2: Fetch exercises for each workout
+    if (typeof id === "string") {
+        workouts = await db
+            .select()
+            .from(workoutsTable)
+            .where(eq(workoutsTable.id, id));
+    }
+    else if (Array.isArray(id)) {
+        workouts = await db
+            .select()
+            .from(workoutsTable)
+            .where(inArray(workoutsTable.id, id));
+    }
+    else {
+        workouts = await db
+            .select()
+            .from(workoutsTable);
+    }
+
     const workoutsWithExercises: WorkoutWithExercises[] = await Promise.all(
         workouts.map(async (workout) => {
             const exercises = await getWorkoutExercisesByWorkoutId(workout.id);
@@ -48,83 +62,6 @@ export async function getWorkoutsWithExercises(): Promise<WorkoutWithExercises[]
     );
 
     return workoutsWithExercises;
-}
-
-// **Get workout by ID**
-export async function getWorkoutById(id: string): Promise<Workout | null> {
-    const rows = await db
-        .select()
-        .from(workoutsTable)
-        .where(eq(workoutsTable.id, id));
-
-    return rows.length > 0 ? rows[0] : null;
-}
-
-// **Delete a workout by ID**
-export async function deleteWorkoutById(id: string): Promise<SQLiteRunResult> {
-    return await db
-        .delete(workoutsTable)
-        .where(eq(workoutsTable.id, id));
-}
-
-// **Update workout name by ID**
-export async function updateWorkoutNameById(id: string, name: string): Promise<SQLiteRunResult> {
-    return await db
-        .update(workoutsTable)
-        .set({ name })
-        .where(eq(workoutsTable.id, id));
-}
-
-// **Get workout exercise by IDs**
-export async function getWorkoutExerciseById(id: string): Promise<WorkoutExercise> {
-    const rows = await db
-        .select()
-        .from(workoutExercisesTable)
-        .where(eq(workoutExercisesTable.id, id));
-
-    return rows[0];
-}
-
-// **Add Exercise to workout**
-export async function addWorkoutExercise(workoutId: string, exerciseId: string, sets: NewWorkoutExerciseSet[]): Promise<WorkoutExercise> {
-    // Add new exercise entry to workout
-    const insertedWorkoutExercise = await db
-        .insert(workoutExercisesTable)
-        .values({ workoutId, exerciseId })
-        .returning({ id: workoutExercisesTable.id });
-
-    const workoutExerciseId = insertedWorkoutExercise[0].id;
-
-    // Add sets if provided
-    if (sets.length > 0) {
-        const setsWithWorkoutExerciseId = sets.map(set => ({
-            ...set,
-            workoutExerciseId,
-        }));
-
-        await db.insert(workoutExerciseSetsTable).values(setsWithWorkoutExerciseId);
-    }
-
-    return await getWorkoutExerciseById(workoutExerciseId);
-}
-
-// **Update a workout exercise**
-export async function updateWorkoutExercise(workoutExercise: NewWorkoutExerciseWithSets) {
-    if (!workoutExercise.id) {
-        throw new Error("Cannot update workout exercise without an ID.");
-    }
-
-    // Remove existing sets
-    await db
-        .delete(workoutExerciseSetsTable)
-        .where(eq(workoutExerciseSetsTable.workoutExerciseId, workoutExercise.id));
-
-    // Insert new sets (if any)
-    if (workoutExercise.sets.length > 0) {
-        await db.insert(workoutExerciseSetsTable).values(workoutExercise.sets);
-    }
-
-    return await getWorkoutExerciseById(workoutExercise.id);
 }
 
 // **Get exercises for a workout**
@@ -204,6 +141,82 @@ export async function getWorkoutExercisesByWorkoutId(workoutId: string): Promise
     return Array.from(exerciseMap.values());
 }
 
+// **Get workout by ID**
+export async function getWorkoutById(id: string): Promise<Workout | null> {
+    const rows = await db
+        .select()
+        .from(workoutsTable)
+        .where(eq(workoutsTable.id, id));
+
+    return rows.length > 0 ? rows[0] : null;
+}
+
+// **Delete a workout by ID**
+export async function deleteWorkoutById(id: string): Promise<SQLiteRunResult> {
+    return await db
+        .delete(workoutsTable)
+        .where(eq(workoutsTable.id, id));
+}
+
+// **Update workout name by ID**
+export async function updateWorkoutNameById(id: string, name: string): Promise<SQLiteRunResult> {
+    return await db
+        .update(workoutsTable)
+        .set({ name })
+        .where(eq(workoutsTable.id, id));
+}
+
+// **Get workout exercise by IDs**
+export async function getWorkoutExerciseById(id: string): Promise<WorkoutExercise> {
+    const rows = await db
+        .select()
+        .from(workoutExercisesTable)
+        .where(eq(workoutExercisesTable.id, id));
+
+    return rows[0];
+}
+
+// **Add Exercise to workout**
+export async function addWorkoutExercise(workoutId: string, exerciseId: string, sets: NewWorkoutExerciseSet[]): Promise<WorkoutExercise> {
+    // Add new exercise entry to workout
+    const insertedWorkoutExercise = await db
+        .insert(workoutExercisesTable)
+        .values({ workoutId, exerciseId })
+        .returning({ id: workoutExercisesTable.id });
+
+    const workoutExerciseId = insertedWorkoutExercise[0].id;
+
+    // Add sets if provided
+    if (sets.length > 0) {
+        const setsWithWorkoutExerciseId = sets.map(set => ({
+            ...set,
+            workoutExerciseId,
+        }));
+
+        await db.insert(workoutExerciseSetsTable).values(setsWithWorkoutExerciseId);
+    }
+
+    return await getWorkoutExerciseById(workoutExerciseId);
+}
+
+// **Update a workout exercise**
+export async function updateWorkoutExercise(workoutExercise: NewWorkoutExerciseWithSets) {
+    if (!workoutExercise.id) {
+        throw new Error("Cannot update workout exercise without an ID.");
+    }
+
+    // Remove existing sets
+    await db
+        .delete(workoutExerciseSetsTable)
+        .where(eq(workoutExerciseSetsTable.workoutExerciseId, workoutExercise.id));
+
+    // Insert new sets (if any)
+    if (workoutExercise.sets.length > 0) {
+        await db.insert(workoutExerciseSetsTable).values(workoutExercise.sets);
+    }
+
+    return await getWorkoutExerciseById(workoutExercise.id);
+}
 
 // **Delete workout exercise by Id**
 export async function deleteWorkoutExerciseById(id: string): Promise<SQLiteRunResult> {

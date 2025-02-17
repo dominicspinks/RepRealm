@@ -10,26 +10,48 @@ import ExerciseWithSets from "../ExerciseWithSets";
 
 interface WorkoutCardProps {
     workout: WorkoutWithExercises;
-    onEdit: (workoutId: string) => void;
-    onDelete: (workoutId: string) => void;
+    onEdit?: (workoutId: string) => void; // Action when edit button is pressed, editable prop must be true
+    onDelete?: (workoutId: string) => void; // Action when delete button is pressed, deletable prop must be true
+    onSelect?: (workoutId: string) => void; // Action when card is selected, selectable prop must be true
+    collapsible?: boolean;
+    selectable?: boolean;
+    editable?: boolean;
+    deletable?: boolean;
+    variant?: "default" | "embedded";
 }
 
-export default function WorkoutCard({ workout, onEdit, onDelete }: WorkoutCardProps) {
-    const [expanded, setExpanded] = useState(false);
+export default function WorkoutCard({
+    workout,
+    onEdit = () => { },
+    onDelete = () => { },
+    onSelect = () => { },
+    collapsible = true,
+    selectable = false,
+    editable = true,
+    deletable = true,
+    variant = "default"
+}: WorkoutCardProps) {
+    const [expanded, setExpanded] = useState(!collapsible);
 
-    function toggleExpand() {
-        setExpanded(prev => !prev);
+    function handlePress() {
+        if (selectable) {
+            onSelect(workout.id);
+        } else if (collapsible) {
+            setExpanded(prev => !prev);
+        }
     }
 
     return (
-        <View style={styles.card}>
+        <TouchableOpacity
+            style={[styles.card, variant === "embedded" && styles.modalCard]}
+            onPress={handlePress}
+            activeOpacity={selectable ? 0.7 : 1}>
             {/* Workout Header */}
-            <TouchableOpacity style={styles.headerContainer} onPress={toggleExpand}>
+            <View style={styles.headerContainer}>
                 <View style={styles.header}>
                     <Text style={styles.workoutName}>{workout.name}</Text>
 
                     {/* Categories (Collapsed State) */}
-
                     <View style={styles.categoryContainer}>
                         {[...new Map(workout.exercises.map(exercise => [exercise.categoryId, {
                             id: exercise.categoryId,
@@ -43,9 +65,11 @@ export default function WorkoutCard({ workout, onEdit, onDelete }: WorkoutCardPr
                     </View>
                 </View>
 
-                {/* Expand/Collapse Icon */}
-                <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={theme.colors.text} />
-            </TouchableOpacity>
+                {/* Expand/Collapse Icon (Hidden if collapsible is false) */}
+                {collapsible && (
+                    <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={theme.colors.text} />
+                )}
+            </View>
 
             {/* Expanded View: Exercises */}
             {expanded && (
@@ -55,22 +79,22 @@ export default function WorkoutCard({ workout, onEdit, onDelete }: WorkoutCardPr
                             {/* Category Colour Bar */}
                             <View style={[styles.categoryBar, { backgroundColor: exercise.categoryColour }]} />
 
-                            <ExerciseWithSets
-                                exercise={exercise}
-                            />
+                            <ExerciseWithSets exercise={exercise} />
                         </View>
                     ))}
                 </View>
             )}
 
-            {/* Action Buttons */}
+            {/* Action Buttons (Visible only when expanded) */}
             {expanded && (
                 <View style={styles.buttonRow}>
-                    <EditIcon action={() => onEdit(workout.id)} />
-                    <DeleteIcon action={() => onDelete(workout.id)} />
+                    {editable &&
+                        <EditIcon action={() => onEdit(workout.id)} />}
+                    {deletable &&
+                        <DeleteIcon action={() => onDelete(workout.id)} />}
                 </View>
             )}
-        </View>
+        </TouchableOpacity>
     );
 }
 
@@ -92,6 +116,17 @@ const styles = StyleSheet.create({
         width: "90%",
         alignSelf: "center",
     },
+    modalCard: {
+        width: "100%",
+        marginHorizontal: 0,
+        borderRadius: 0,
+        elevation: 0,
+        shadowOpacity: 0,
+        marginVertical: 0,
+        paddingBottom: 0,
+        borderBottomColor: theme.colors.borderStrong,
+        borderBottomWidth: 1
+    },
     headerContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -112,6 +147,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         gap: 10,
+        marginBottom: 10,
     },
     categoryBadge: {
         paddingHorizontal: 12,
@@ -132,8 +168,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         padding: theme.spacing.small,
-        borderBottomWidth: 1,
-        borderColor: theme.colors.border,
     },
     categoryBar: {
         width: 5,

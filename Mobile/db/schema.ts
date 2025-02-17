@@ -1,6 +1,7 @@
-import { alias, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { alias, integer, sqliteTable, text, unique, UniqueConstraintBuilder } from "drizzle-orm/sqlite-core";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import { UUIDv7Schema } from "../utilities/commonValidators";
+import { UniqueConstraint } from "drizzle-orm/mysql-core";
 
 // **Colours Table**
 export const coloursTable = sqliteTable("colours", {
@@ -62,7 +63,9 @@ export const routineWorkoutsTable = sqliteTable("routine_workouts", {
     routineId: text("routine_id").notNull().references(() => routinesTable.id),
     workoutId: text("workout_id").notNull().references(() => workoutsTable.id),
     order: integer("order").notNull(),
-});
+}, (table) => ({
+    uniqueRoutineWorkout: unique().on(table.routineId, table.workoutId),
+}));
 
 // **Workouts Table**
 export const workoutsTable = sqliteTable("workouts", {
@@ -151,9 +154,12 @@ export type ExerciseWithCategory = Exercise & { category: Category };
 export type NewExercise = typeof exercisesTable.$inferInsert;
 
 export type Routine = typeof routinesTable.$inferSelect;
+export type RoutineWithWorkouts = Routine & { workouts: RoutineWorkout[] };
+export type RoutineWithFullWorkouts = Routine & { workouts: RoutineWorkoutWithWorkout[] };
 export type NewRoutine = typeof routinesTable.$inferInsert;
 
 export type RoutineWorkout = typeof routineWorkoutsTable.$inferSelect;
+export type RoutineWorkoutWithWorkout = RoutineWorkout & { workout: WorkoutWithExercises };
 export type NewRoutineWorkout = typeof routineWorkoutsTable.$inferInsert;
 
 export type Workout = typeof workoutsTable.$inferSelect;

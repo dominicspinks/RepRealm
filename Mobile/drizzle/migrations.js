@@ -6,6 +6,7 @@ import m0001 from './0001_cynical_enchantress.sql';
 import m0002 from './0002_many_cerise.sql';
 import m0003 from './0003_tearful_legion.sql';
 import m0004 from './0004_closed_bushwacker.sql';
+import m0005 from './0005_previous_nova.sql';
 
   export default {
     journal,
@@ -14,7 +15,8 @@ import m0004 from './0004_closed_bushwacker.sql';
 m0001,
 m0002,
 m0003,
-m0004
+m0004,
+m0005
     }
   }
   

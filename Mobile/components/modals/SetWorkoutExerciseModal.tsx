@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Modal, FlatList, StyleSheet } from "react-native";
+import { View, Text, Modal, FlatList, StyleSheet, Dimensions } from "react-native";
 import { theme } from "../../theme";
 import { ExerciseFull, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, Workout, WorkoutExerciseWithSets } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
@@ -118,46 +118,49 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
                         rightElement={<PlusIcon action={addSet} />}
                     />
 
-                    {/* Sets List */}
-                    <FlatList
-                        data={sets}
-                        keyExtractor={(item, index) => item.id || `temp-${index}`}
-                        renderItem={({ item, index }) => (
-                            <View style={styles.setContainer}>
-                                {/* Set Number & Delete Icon */}
-                                <View style={styles.setRow}>
-                                    <Text style={styles.setLabel}>Set {index + 1}</Text>
-                                    <DeleteIcon action={() => deleteSet(index)} />
-                                </View>
+                    {/* Scrollable Set List */}
+                    <View style={styles.setListContainer}>
+                        <FlatList
+                            data={sets}
+                            keyExtractor={(item, index) => item.id || `temp-${index}`}
+                            keyboardShouldPersistTaps="handled"
+                            renderItem={({ item, index }) => (
+                                <View style={styles.setContainer}>
+                                    {/* Set Number & Delete Icon */}
+                                    <View style={styles.setRow}>
+                                        <Text style={styles.setLabel}>Set {index + 1}</Text>
+                                        <DeleteIcon action={() => deleteSet(index)} />
+                                    </View>
 
-                                {/* Measurement 1 */}
-                                <SetMeasurementContainer
-                                    index={index}
-                                    measurementType="primary"
-                                    measurementName={exercise.primaryMeasurementName}
-                                    measurementUnitName={exercise.primaryMeasurementUnitName}
-                                    measurementUnitDecimalPlaces={exercise.primaryMeasurementUnitDecimalPlaces}
-                                    value={item.measurement1Value ?? null}
-                                    updateMeasurement={updateMeasurement}
-                                    weightIncrement={exercise.weightIncrement}
-                                />
-
-                                {/* Measurement 2 (If Exists) */}
-                                {exercise?.secondaryMeasurementId && (
+                                    {/* Measurement 1 */}
                                     <SetMeasurementContainer
                                         index={index}
-                                        measurementType="secondary"
-                                        measurementName={exercise.secondaryMeasurementName}
-                                        measurementUnitName={exercise.secondaryMeasurementUnitName}
-                                        measurementUnitDecimalPlaces={exercise.secondaryMeasurementUnitDecimalPlaces}
-                                        value={item.measurement2Value ?? null}
+                                        measurementType="primary"
+                                        measurementName={exercise.primaryMeasurementName}
+                                        measurementUnitName={exercise.primaryMeasurementUnitName}
+                                        measurementUnitDecimalPlaces={exercise.primaryMeasurementUnitDecimalPlaces}
+                                        value={item.measurement1Value ?? null}
                                         updateMeasurement={updateMeasurement}
                                         weightIncrement={exercise.weightIncrement}
                                     />
-                                )}
-                            </View>
-                        )}
-                    />
+
+                                    {/* Measurement 2 (If Exists) */}
+                                    {exercise?.secondaryMeasurementId && (
+                                        <SetMeasurementContainer
+                                            index={index}
+                                            measurementType="secondary"
+                                            measurementName={exercise.secondaryMeasurementName}
+                                            measurementUnitName={exercise.secondaryMeasurementUnitName}
+                                            measurementUnitDecimalPlaces={exercise.secondaryMeasurementUnitDecimalPlaces}
+                                            value={item.measurement2Value ?? null}
+                                            updateMeasurement={updateMeasurement}
+                                            weightIncrement={exercise.weightIncrement}
+                                        />
+                                    )}
+                                </View>
+                            )}
+                        />
+                    </View>
 
                     {/* Error Message */}
                     {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -173,6 +176,8 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
     );
 }
 
+const screenHeight = Dimensions.get("window").height;
+
 // **Styles**
 const styles = StyleSheet.create({
     overlay: {
@@ -187,6 +192,9 @@ const styles = StyleSheet.create({
         width: "85%",
         borderRadius: 10,
         elevation: 5,
+    },
+    setListContainer: {
+        maxHeight: screenHeight * 0.7,
     },
     setContainer: {
         marginBottom: 15,
@@ -217,6 +225,7 @@ const styles = StyleSheet.create({
     buttonRow: {
         flexDirection: "row",
         justifyContent: "space-between",
+        marginTop: 20
     },
     button: {
         width: "48%",
