@@ -41,7 +41,7 @@ export default function SetRoutineScreen() {
     }
 
     function handleBackButton() {
-        if (routineWorkouts.length === 10) {
+        if (routineWorkouts.length === 0) {
             Alert.alert(
                 "Delete Workout?",
                 "This workout has no exercises and will be deleted if you go back. Do you want to continue?",
@@ -116,8 +116,8 @@ export default function SetRoutineScreen() {
                         )}
                         {isEditingTitle ? (
                             <View style={styles.editIcons}>
-                                <CloseIcon action={handleCancelEditName} />
                                 <AcceptIcon action={handleSaveName} />
+                                <CloseIcon action={handleCancelEditName} />
                             </View>
                         ) : (
                             <EditIcon action={handleEditName} />
