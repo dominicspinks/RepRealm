@@ -8,6 +8,8 @@ import SelectColourModal from "./SelectColourModal";
 import BackIcon from "../icons/BackIcon";
 import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
+import ModalContainer from "./ModalContainer";
+import React from "react";
 
 export default function SetCategoryModal({ visible, onClose, category }: { visible: boolean; onClose: () => void; category?: Category | null }) {
     const [name, setName] = useState(category?.name || "");
@@ -66,15 +68,16 @@ export default function SetCategoryModal({ visible, onClose, category }: { visib
     }
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    {/* Header */}
-                    <ModalHeader
-                        leftElement={<BackIcon action={handleClose} />}
-                        centreElement={<ModalHeaderTitle title={category ? "Edit Category" : "Add Category"} />}
-                    />
-
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={handleClose} />}
+                    centreElement={<ModalHeaderTitle title={category ? "Edit Category" : "Add Category"} />}
+                />
+            }
+            content={
+                <>
                     <View style={styles.inputContainer}>
                         {/* Name Input */}
                         <TextInput
@@ -89,24 +92,22 @@ export default function SetCategoryModal({ visible, onClose, category }: { visib
                             <View style={[styles.colourPreview, { backgroundColor: colours.find(c => c.id === colour)?.hex || "#000" }]} />
                         </TouchableOpacity>
                     </View>
-
-                    {/* Buttons */}
-                    <View style={styles.buttonRow}>
-                        <Button variant="secondary" title="Cancel" onPress={handleClose} style={styles.button} />
-                        <Button title="Save" onPress={handleSave} style={styles.button} />
-                    </View>
-                </View>
-            </View>
-
-            {/* Select Colour Modal */}
-            <SelectColourModal
-                visible={isSelectColourVisible}
-                onClose={() => setIsSelectColourVisible(false)}
-                onSelectColour={setColour}
-                selectedColourId={colour}
-                colours={colours}
-            />
-        </Modal>
+                </>
+            }
+            button1={<Button variant="secondary" title="Cancel" onPress={handleClose} style={styles.button} />}
+            button2={<Button title="Save" onPress={handleSave} style={styles.button} />}
+            modals={
+                <>
+                    <SelectColourModal
+                        visible={isSelectColourVisible}
+                        onClose={() => setIsSelectColourVisible(false)}
+                        onSelectColour={setColour}
+                        selectedColourId={colour}
+                        colours={colours}
+                    />
+                </>
+            }
+        />
     );
 }
 

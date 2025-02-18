@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { View, Modal, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Alert, StyleSheet } from "react-native";
 import { isExerciseNameUnique, addExercise, updateExercise } from "../../services/exercisesService";
 import { getMeasurements, getUnits } from "../../services/measurementsService";
 import { Category, Exercise, Measurement, MeasurementUnit } from "../../db/schema";
@@ -9,6 +9,7 @@ import TextFieldInput from "../forms/TextFieldInput";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
+import ModalContainer from "./ModalContainer";
 
 interface SetExerciseModalProps {
     visible: boolean;
@@ -165,157 +166,117 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
     }
 
     return (
-        <Modal visible={visible} transparent animationType="fade" >
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-                <View style={styles.overlay}>
-                    <View style={styles.modalContainer}>
-                        {/* Header */}
-                        <ModalHeader
-                            leftElement={<BackIcon action={handleClose} />}
-                            centreElement={<ModalHeaderTitle title={exercise ? "Edit Exercise" : "Add Exercise"} />}
+        <ModalContainer
+            visible={visible}
+            header={<ModalHeader
+                leftElement={<BackIcon action={handleClose} />}
+                centreElement={<ModalHeaderTitle title={exercise ? "Edit Exercise" : "Add Exercise"} />}
+            />}
+            content={
+                <>
+                    <TextFieldInput label="Exercise name" placeholder="Exercise name" value={name} setValue={setName} />
+
+                    {/* Category Dropdown */}
+                    <DropdownFieldInput
+                        selectedValue={category}
+                        setValue={setCategory}
+                        items={categories}
+                        labelField="name"
+                        valueField="id"
+                        placeholder="Select a category"
+                        label="Category"
+                    />
+
+                    {/* Type 1 Measurement & Unit Dropdowns in a row */}
+                    <View style={styles.rowContainer}>
+                        {/* Type 1 Dropdown */}
+                        <DropdownFieldInput
+                            selectedValue={type1}
+                            setValue={handleType1Change}
+                            items={measurements}
+                            labelField="name"
+                            valueField="id"
+                            placeholder="Select a measurement"
+                            label="Measurement"
+                            style={styles.flexGrow}
                         />
 
-                        {/* Inputs */}
-                        <ScrollView
-                            contentContainerStyle={styles.scrollContainer}
-                            keyboardShouldPersistTaps="handled"
-                            showsVerticalScrollIndicator={true}
-                        >
-                            <TextFieldInput label="Exercise name" placeholder="Exercise name" value={name} setValue={setName} />
-
-                            {/* Category Dropdown */}
+                        {/* Type 1 Unit Dropdown (if required) */}
+                        {requiresUnit(type1) && (
                             <DropdownFieldInput
-                                selectedValue={category}
-                                setValue={setCategory}
-                                items={categories}
-                                labelField="name"
+                                selectedValue={type1Unit ?? getDefaultUnit(1)}
+                                setValue={setType1Unit}
+                                items={units.filter(u => u.measurementId === type1)}
+                                labelField="unit"
                                 valueField="id"
-                                placeholder="Select a category"
-                                label="Category"
+                                placeholder=""
+                                label="Unit"
+                                style={styles.fixedWidth}
                             />
-
-                            {/* Type 1 Measurement & Unit Dropdowns in a row */}
-                            <View style={styles.rowContainer}>
-                                {/* Type 1 Dropdown */}
-                                <DropdownFieldInput
-                                    selectedValue={type1}
-                                    setValue={handleType1Change}
-                                    items={measurements}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder="Select a measurement"
-                                    label="Measurement"
-                                    style={styles.flexGrow}
-                                />
-
-                                {/* Type 1 Unit Dropdown (if required) */}
-                                {requiresUnit(type1) && (
-                                    <DropdownFieldInput
-                                        selectedValue={type1Unit ?? getDefaultUnit(1)}
-                                        setValue={setType1Unit}
-                                        items={units.filter(u => u.measurementId === type1)}
-                                        labelField="unit"
-                                        valueField="id"
-                                        placeholder=""
-                                        label="Unit"
-                                        style={styles.fixedWidth}
-                                    />
-                                )}
-                            </View>
-
-                            {/* Type 2 Measurement & Unit Dropdowns in a row */}
-                            <View style={styles.rowContainer}>
-                                {/* Type 2 Dropdown */}
-                                <DropdownFieldInput
-                                    selectedValue={type2}
-                                    setValue={handleType2Change}
-                                    items={measurements}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder="Optional"
-                                    label="Secondary Measurement"
-                                    style={styles.flexGrow}
-                                />
-
-                                {/* Type 2 Unit Dropdown (if required) */}
-                                {requiresUnit(type2) && (
-                                    <DropdownFieldInput
-                                        selectedValue={type2Unit ?? getDefaultUnit(2)}
-                                        setValue={setType2Unit}
-                                        items={units.filter(u => u.measurementId === type2)}
-                                        labelField="unit"
-                                        valueField="id"
-                                        placeholder=""
-                                        label="Unit"
-                                        style={styles.fixedWidth}
-                                    />
-                                )}
-                            </View>
-
-
-                            <View style={styles.rowContainer}>
-                                {/* Rest Input */}
-                                <TextFieldInput
-                                    label="Rest (sec)"
-                                    placeholder="eg 60"
-                                    value={rest}
-                                    setValue={setRest}
-                                    keyboardType="numeric"
-                                    style={{ width: "48%" }}
-                                />
-
-                                {/* Weight Increment Input */}
-                                <TextFieldInput
-                                    label="Weight Increment"
-                                    placeholder="eg 2.5"
-                                    value={weightIncrement}
-                                    setValue={setWeightIncrement}
-                                    keyboardType="numeric"
-                                    style={{ width: "48%" }}
-                                />
-                            </View>
-                        </ScrollView>
-
-                        {/* Save/Cancel Buttons */}
-                        <View style={styles.buttonRow}>
-                            <Button title="Cancel" variant="secondary" onPress={handleClose} style={styles.button} />
-                            <Button title="Save" onPress={handleSave} style={styles.button} />
-                        </View>
+                        )}
                     </View>
-                </View>
-            </KeyboardAvoidingView>
-        </Modal>
+
+                    {/* Type 2 Measurement & Unit Dropdowns in a row */}
+                    <View style={styles.rowContainer}>
+                        {/* Type 2 Dropdown */}
+                        <DropdownFieldInput
+                            selectedValue={type2}
+                            setValue={handleType2Change}
+                            items={measurements}
+                            labelField="name"
+                            valueField="id"
+                            placeholder="Optional"
+                            label="Secondary Measurement"
+                            style={styles.flexGrow}
+                        />
+
+                        {/* Type 2 Unit Dropdown (if required) */}
+                        {requiresUnit(type2) && (
+                            <DropdownFieldInput
+                                selectedValue={type2Unit ?? getDefaultUnit(2)}
+                                setValue={setType2Unit}
+                                items={units.filter(u => u.measurementId === type2)}
+                                labelField="unit"
+                                valueField="id"
+                                placeholder=""
+                                label="Unit"
+                                style={styles.fixedWidth}
+                            />
+                        )}
+                    </View>
+
+
+                    <View style={styles.rowContainer}>
+                        {/* Rest Input */}
+                        <TextFieldInput
+                            label="Rest (sec)"
+                            placeholder="eg 60"
+                            value={rest}
+                            setValue={setRest}
+                            keyboardType="numeric"
+                            style={{ width: "48%" }}
+                        />
+
+                        {/* Weight Increment Input */}
+                        <TextFieldInput
+                            label="Weight Increment"
+                            placeholder="eg 2.5"
+                            value={weightIncrement}
+                            setValue={setWeightIncrement}
+                            keyboardType="numeric"
+                            style={{ width: "48%" }}
+                        />
+                    </View>
+                </>
+            }
+            button1={<Button title="Cancel" variant="secondary" onPress={handleClose} style={styles.button} />}
+            button2={<Button title="Save" onPress={handleSave} style={styles.button} />}
+        />
     );
 }
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        padding: 20,
-        width: "85%",
-        borderRadius: 10,
-        elevation: 5,
-        maxHeight: "90%",
-    },
-    scrollContainer: {
-        flexGrow: 1,
-        paddingBottom: 10
-    },
-    buttonRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 20,
-    },
     rowContainer: {
         flexDirection: "row",
         alignItems: "center",

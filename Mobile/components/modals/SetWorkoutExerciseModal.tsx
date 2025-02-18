@@ -9,6 +9,8 @@ import PlusIcon from "../icons/PlusIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import Button from "../buttons/Button";
 import SetMeasurementContainer from "../forms/SetMeasurementContainer";
+import ModalContainer from "./ModalContainer";
+import React from "react";
 
 interface SetWorkoutExerciseModalProps {
     visible: boolean;
@@ -65,7 +67,7 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
     // Update measurement value
     function updateMeasurement(index: number, field: "measurement1Value" | "measurement2Value", value: string | null) {
         const newSets = [...sets];
-        if (value === null) {
+        if (value === null || value === "") {
             newSets[index][field] = null;
         } else {
             const parsedValue = parseFloat(value) || 0;
@@ -107,71 +109,60 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
     }
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    {/* Header */}
-                    <ModalHeader
-                        leftElement={<BackIcon action={() => onClose(false)} />}
-                        centreElement={<ModalHeaderTitle title={exercise?.name || "Exercise"} />}
-                        rightElement={<PlusIcon action={addSet} />}
-                    />
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={() => onClose(false)} />}
+                    centreElement={<ModalHeaderTitle title={exercise?.name || "Exercise"} />}
+                    rightElement={<PlusIcon action={addSet} />}
+                />
+            }
+            content={
+                <>
+                    {sets.map((item, index) => (
+                        <View key={item.id || `temp-${index}`} style={styles.setContainer}>
+                            {/* Set Number & Delete Icon */}
+                            <View style={styles.setRow}>
+                                <Text style={styles.setLabel}>Set {index + 1}</Text>
+                                <DeleteIcon action={() => deleteSet(index)} />
+                            </View>
 
-                    {/* Scrollable Set List */}
-                    <View style={styles.setListContainer}>
-                        <FlatList
-                            data={sets}
-                            keyExtractor={(item, index) => item.id || `temp-${index}`}
-                            keyboardShouldPersistTaps="handled"
-                            renderItem={({ item, index }) => (
-                                <View style={styles.setContainer}>
-                                    {/* Set Number & Delete Icon */}
-                                    <View style={styles.setRow}>
-                                        <Text style={styles.setLabel}>Set {index + 1}</Text>
-                                        <DeleteIcon action={() => deleteSet(index)} />
-                                    </View>
+                            {/* Measurement 1 */}
+                            <SetMeasurementContainer
+                                index={index}
+                                measurementType="primary"
+                                measurementName={exercise.primaryMeasurementName}
+                                measurementUnitName={exercise.primaryMeasurementUnitName}
+                                measurementUnitDecimalPlaces={exercise.primaryMeasurementUnitDecimalPlaces}
+                                value={item.measurement1Value ?? null}
+                                updateMeasurement={updateMeasurement}
+                                weightIncrement={exercise.weightIncrement}
+                            />
 
-                                    {/* Measurement 1 */}
-                                    <SetMeasurementContainer
-                                        index={index}
-                                        measurementType="primary"
-                                        measurementName={exercise.primaryMeasurementName}
-                                        measurementUnitName={exercise.primaryMeasurementUnitName}
-                                        measurementUnitDecimalPlaces={exercise.primaryMeasurementUnitDecimalPlaces}
-                                        value={item.measurement1Value ?? null}
-                                        updateMeasurement={updateMeasurement}
-                                        weightIncrement={exercise.weightIncrement}
-                                    />
-
-                                    {/* Measurement 2 (If Exists) */}
-                                    {exercise?.secondaryMeasurementId && (
-                                        <SetMeasurementContainer
-                                            index={index}
-                                            measurementType="secondary"
-                                            measurementName={exercise.secondaryMeasurementName}
-                                            measurementUnitName={exercise.secondaryMeasurementUnitName}
-                                            measurementUnitDecimalPlaces={exercise.secondaryMeasurementUnitDecimalPlaces}
-                                            value={item.measurement2Value ?? null}
-                                            updateMeasurement={updateMeasurement}
-                                            weightIncrement={exercise.weightIncrement}
-                                        />
-                                    )}
-                                </View>
+                            {/* Measurement 2 (If Exists) */}
+                            {exercise?.secondaryMeasurementId && (
+                                <SetMeasurementContainer
+                                    index={index}
+                                    measurementType="secondary"
+                                    measurementName={exercise.secondaryMeasurementName}
+                                    measurementUnitName={exercise.secondaryMeasurementUnitName}
+                                    measurementUnitDecimalPlaces={exercise.secondaryMeasurementUnitDecimalPlaces}
+                                    value={item.measurement2Value ?? null}
+                                    updateMeasurement={updateMeasurement}
+                                    weightIncrement={exercise.weightIncrement}
+                                />
                             )}
-                        />
-                    </View>
-
+                        </View>
+                    ))}
                     {/* Error Message */}
                     {error ? <Text style={styles.error}>{error}</Text> : null}
 
-                    {/* Buttons */}
-                    <View style={styles.buttonRow}>
-                        <Button title="Cancel" variant="secondary" onPress={() => onClose(true)} style={styles.button} />
-                        <Button title="Save" onPress={handleSave} style={styles.button} />
-                    </View>
-                </View>
-            </View>
-        </Modal>
+                </>
+            }
+            button1={<Button title="Cancel" variant="secondary" onPress={() => onClose(true)} style={styles.button} />}
+            button2={<Button title="Save" onPress={handleSave} style={styles.button} />}
+        />
     );
 }
 
@@ -179,22 +170,6 @@ const screenHeight = Dimensions.get("window").height;
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: theme.colors.overlay,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        padding: 20,
-        width: "85%",
-        borderRadius: 10,
-        elevation: 5,
-    },
-    setListContainer: {
-        maxHeight: screenHeight * 0.7,
-    },
     setContainer: {
         marginBottom: 15,
         paddingBottom: 10,
@@ -207,7 +182,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        paddingVertical: theme.spacing.medium,
+        padding: theme.spacing.medium,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.inputBorder,
     },

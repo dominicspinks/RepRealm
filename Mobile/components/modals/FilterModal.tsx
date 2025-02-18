@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, Text, Modal, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, FlatList, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Button from "../buttons/Button";
 import { theme } from "../../theme";
@@ -7,6 +7,7 @@ import { Category } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
+import ModalContainer from "./ModalContainer";
 
 interface FilterModalProps {
     visible: boolean;
@@ -43,16 +44,17 @@ export default function FilterModal({
     }
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    {/* Header */}
-                    <ModalHeader
-                        leftElement={<BackIcon action={onClose} />}
-                        centreElement={<ModalHeaderTitle title="Filter" />}
-                    />
-
-                    {/* Category List */}
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={onClose} />}
+                    centreElement={<ModalHeaderTitle title="Filter" />}
+                />
+            }
+            scrollable={false}
+            content={
+                <View style={styles.categoryList}>
                     <Text style={styles.label}>Category</Text>
                     <FlatList
                         data={categories}
@@ -68,32 +70,18 @@ export default function FilterModal({
                             </TouchableOpacity>
                         )}
                     />
-
-                    {/* Buttons */}
-                    <View style={styles.buttonRow}>
-                        <Button title="Reset" variant="secondary" onPress={resetFilter} style={styles.button} />
-                        <Button title="Apply" onPress={applyFilter} style={styles.button} />
-                    </View>
                 </View>
-            </View>
-        </Modal>
+            }
+            button1={<Button title="Reset" variant="secondary" onPress={resetFilter} style={styles.button} />}
+            button2={<Button title="Apply" onPress={applyFilter} style={styles.button} />}
+        />
     );
 }
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: theme.colors.overlay,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        padding: 20,
-        width: "85%",
-        borderRadius: 10,
-        elevation: 5,
+    categoryList: {
+        paddingHorizontal: 20,
     },
     label: {
         fontSize: 16,
@@ -108,11 +96,6 @@ const styles = StyleSheet.create({
     categoryText: {
         fontSize: 16,
         marginLeft: 10,
-    },
-    buttonRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 20,
     },
     button: {
         padding: 10,

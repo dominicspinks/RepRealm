@@ -4,6 +4,8 @@ import { Colour } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
+import ModalContainer from "./ModalContainer";
+import React from "react";
 
 interface SelectColourModalProps {
     visible: boolean;
@@ -15,14 +17,17 @@ interface SelectColourModalProps {
 
 export default function SelectColourModal({ visible, onClose, onSelectColour, selectedColourId, colours }: SelectColourModalProps) {
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    <ModalHeader
-                        leftElement={<BackIcon action={onClose} />}
-                        centreElement={<ModalHeaderTitle title="Select Colour" />}
-                    />
-
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={onClose} />}
+                    centreElement={<ModalHeaderTitle title="Select Colour" />}
+                />
+            }
+            scrollable={false}
+            content={
+                <>
                     <FlatList
                         data={colours}
                         keyExtractor={(item) => item.id}
@@ -40,9 +45,9 @@ export default function SelectColourModal({ visible, onClose, onSelectColour, se
                             </TouchableOpacity>
                         )}
                     />
-                </View>
-            </View>
-        </Modal>
+                </>
+            }
+        />
     );
 }
 

@@ -7,6 +7,9 @@ import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import BackIcon from "../icons/BackIcon";
 import PlusIcon from "../icons/PlusIcon";
+import ModalContainer from "./ModalContainer";
+import React from "react";
+import ModalSearchField from "../forms/ModalSearchField";
 
 interface SelectExerciseModalProps {
     visible: boolean;
@@ -38,23 +41,19 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
     );
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    {/* Header */}
-                    <ModalHeader
-                        leftElement={<BackIcon action={onClose} />}
-                        centreElement={<ModalHeaderTitle title="Select Exercise" />}
-                        rightElement={<PlusIcon action={onAddExercise} />}
-                    />
-
-                    {/* Search Bar */}
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search exercises..."
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                    />
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={onClose} />}
+                    centreElement={<ModalHeaderTitle title="Select Exercise" />}
+                    rightElement={<PlusIcon action={onAddExercise} />}
+                />
+            }
+            scrollable={false}
+            content={
+                <>
+                    <ModalSearchField placeholder="Search Exercises..." value={searchQuery} handleSearch={setSearchQuery} />
 
                     {/* Exercise List */}
                     <FlatList
@@ -66,9 +65,9 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
                             </TouchableOpacity>
                         )}
                     />
-                </View>
-            </View>
-        </Modal>
+                </>
+            }
+        />
     );
 }
 
@@ -98,6 +97,7 @@ const styles = StyleSheet.create({
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.inputBorder,
+        paddingHorizontal: theme.spacing.medium,
     },
     exerciseText: {
         fontSize: 16,

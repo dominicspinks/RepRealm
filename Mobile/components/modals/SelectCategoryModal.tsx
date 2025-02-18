@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { View, Text, TextInput, Modal, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CategoryWithColour } from "../../db/schema";
 import { getCategories } from "../../services/categoriesService";
@@ -7,6 +7,8 @@ import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import BackIcon from "../icons/BackIcon";
 import PlusIcon from "../icons/PlusIcon";
+import ModalContainer from "./ModalContainer";
+import ModalSearchField from "../forms/ModalSearchField";
 
 interface SelectCategoryModalProps {
     visible: boolean;
@@ -35,23 +37,20 @@ export default function SelectCategoryModal({ visible, onClose, onSelectCategory
     );
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    {/* Header */}
-                    <ModalHeader
-                        leftElement={<BackIcon action={onClose} />}
-                        centreElement={<ModalHeaderTitle title="Select Category" />}
-                        rightElement={<PlusIcon action={onAddCategory} />}
-                    />
-
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={onClose} />}
+                    centreElement={<ModalHeaderTitle title="Select Category" />}
+                    rightElement={<PlusIcon action={onAddCategory} />}
+                />
+            }
+            scrollable={false}
+            content={
+                <>
                     {/* Search Bar */}
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search categories..."
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                    />
+                    <ModalSearchField placeholder="Search categories..." value={searchQuery} handleSearch={setSearchQuery} />
 
                     {/* Category List */}
                     <FlatList
@@ -64,40 +63,21 @@ export default function SelectCategoryModal({ visible, onClose, onSelectCategory
                             </TouchableOpacity>
                         )}
                     />
-                </View>
-            </View>
-        </Modal>
+                </>
+            }
+        />
     );
 }
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: theme.colors.overlay,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        padding: 20,
-        width: "85%",
-        borderRadius: 10,
-        elevation: 5,
-    },
-    searchInput: {
-        borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
-        borderRadius: 8,
-        padding: theme.spacing.medium,
-        marginVertical: theme.spacing.medium,
-    },
     categoryItem: {
         flexDirection: "row",
         alignItems: "center",
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.inputBorder,
+        paddingHorizontal: theme.spacing.medium,
     },
     colourIndicator: {
         width: 15,

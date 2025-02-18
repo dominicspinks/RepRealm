@@ -11,6 +11,8 @@ import WorkoutCard from "../cards/WorkoutCard";
 import ModalSearchField from "../forms/ModalSearchField";
 import FilterModal from "./FilterModal";
 import { getCategories } from "../../services/categoriesService";
+import ModalContainer from "./ModalContainer";
+import React from "react";
 
 interface SelectWorkoutModalProps {
     visible: boolean;
@@ -67,16 +69,18 @@ export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, 
     }
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    {/* Header */}
-                    <ModalHeader
-                        leftElement={<BackIcon action={onClose} />}
-                        centreElement={<ModalHeaderTitle title="Select Workout" />}
-                        rightElement={<FilterIcon action={() => setFilterModalOpen(true)} />}
-                    />
-
+        <ModalContainer
+            visible={visible}
+            header={
+                <ModalHeader
+                    leftElement={<BackIcon action={onClose} />}
+                    centreElement={<ModalHeaderTitle title="Select Workout" />}
+                    rightElement={<FilterIcon action={() => setFilterModalOpen(true)} />}
+                />
+            }
+            scrollable={false}
+            content={
+                <>
                     {/* Search Bar */}
                     <ModalSearchField
                         placeholder="Search workouts..."
@@ -94,7 +98,10 @@ export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, 
                         ListEmptyComponent={<Text style={styles.emptyText}>No workouts found.</Text>}
                     />
 
-                    {/* Filter Modal */}
+                </>
+            }
+            modals={
+                <>
                     <FilterModal
                         visible={filterModalOpen}
                         onClose={() => setFilterModalOpen(false)}
@@ -102,9 +109,9 @@ export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, 
                         selectedCategories={selectedCategories}
                         setSelectedCategories={handleFilterUpdate}
                     />
-                </View>
-            </View>
-        </Modal>
+                </>
+            }
+        />
     );
 }
 
