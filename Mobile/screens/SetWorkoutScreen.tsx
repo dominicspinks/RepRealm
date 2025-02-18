@@ -176,8 +176,8 @@ export default function SetWorkoutScreen() {
                         )}
                         {isEditingTitle ? (
                             <View style={styles.editIcons}>
-                                <CloseIcon action={handleCancelEditName} />
                                 <AcceptIcon action={handleSaveName} />
+                                <CloseIcon action={handleCancelEditName} />
                             </View>
                         ) : (
                             <EditIcon action={handleEditName} />
