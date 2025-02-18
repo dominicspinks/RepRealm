@@ -84,14 +84,6 @@ export default function SetWorkoutScreen() {
         setCategoryModalOpen(true);
     }
 
-    function handleAddCategory() {
-        console.log("Open SetCategoryModal");
-    }
-
-    function handleAddExercise() {
-        console.log("Open SetExerciseModal");
-    }
-
     function handleCloseSetWorkoutExercise(closeAll: boolean) {
         setWorkoutExerciseModalOpen(false);
         setSelectedExercise(null);
@@ -198,17 +190,17 @@ export default function SetWorkoutScreen() {
                 visible={categoryModalOpen}
                 onClose={() => setCategoryModalOpen(false)}
                 onSelectCategory={handleSelectCategory}
-                onAddCategory={handleAddCategory}
             />
 
+            {/* Select Exercise Modal */}
             <SelectExerciseModal
                 visible={exerciseModalOpen}
                 onClose={handleCloseSelectExercise}
                 category={selectedCategory}
                 onSelectExercise={handleSelectExercise}
-                onAddExercise={handleAddExercise}
             />
 
+            {/* Set Workout Exercise Modal */}
             {selectedExercise && (
                 <SetWorkoutExerciseModal
                     visible={workoutExerciseModalOpen}

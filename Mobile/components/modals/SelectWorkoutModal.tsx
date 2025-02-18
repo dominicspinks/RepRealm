@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, View, Text, FlatList, StyleSheet } from "react-native";
+import { Text, FlatList, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { Category, WorkoutWithExercises } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
@@ -78,6 +78,7 @@ export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, 
                     rightElement={<FilterIcon action={() => setFilterModalOpen(true)} />}
                 />
             }
+            onClose={onClose}
             scrollable={false}
             content={
                 <>
@@ -117,27 +118,6 @@ export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, 
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: theme.colors.overlay,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        paddingVertical: 20,
-        width: "85%",
-        borderRadius: 10,
-        elevation: 5,
-        maxHeight: "80%",
-    },
-    searchBar: {
-        backgroundColor: theme.colors.inputBackgroundDark,
-        padding: 10,
-        borderRadius: 0,
-        marginVertical: 10,
-        fontSize: 16,
-    },
     emptyText: {
         textAlign: "center",
         marginTop: theme.spacing.large,

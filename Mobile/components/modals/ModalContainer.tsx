@@ -1,10 +1,11 @@
 import React from "react";
-import { FlatList, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
 interface ModalContainerProps {
     visible: boolean;
     header: React.ReactNode;
     content: React.ReactNode;
+    onClose: () => void;
     button1?: React.ReactNode;
     button2?: React.ReactNode;
     scrollable?: boolean;           // If true, uses ScrollView for content, if false, content controls its own scrolling (if any)
@@ -16,6 +17,7 @@ export default function ModalContainer({
     visible,
     header,
     content,
+    onClose,
     button1,
     button2,
     scrollable = true,
@@ -24,43 +26,45 @@ export default function ModalContainer({
 }: ModalContainerProps) {
     return (
         <Modal visible={visible} transparent animationType="fade" >
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-                <View style={styles.overlay}>
-                    <View style={styles.modalContainer}>
-                        {/* Header */}
-                        {header}
+            <TouchableWithoutFeedback onPress={onClose} >
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={{ flex: 1 }}
+                >
+                    <View style={styles.overlay} >
+                        <View style={styles.modalContainer} onStartShouldSetResponder={() => true}>
+                            {/* Header */}
+                            {header}
 
-                        {/* Conditional Scrolling */}
-                        {scrollable ? (
-                            <ScrollView
-                                contentContainerStyle={[styles.contentContainer, fullWidthContent && styles.fullWidth]}
-                                keyboardShouldPersistTaps="handled"
-                                showsVerticalScrollIndicator={true}
-                            >
-                                {content}
-                            </ScrollView>
-                        ) : (
-                            <>
-                                {content}
-                            </>
-                        )}
+                            {/* Conditional Scrolling */}
+                            {scrollable ? (
+                                <ScrollView
+                                    contentContainerStyle={[styles.contentContainer, fullWidthContent && styles.fullWidth]}
+                                    keyboardShouldPersistTaps="handled"
+                                    showsVerticalScrollIndicator={true}
+                                >
+                                    {content}
+                                </ScrollView>
+                            ) : (
+                                <>
+                                    {content}
+                                </>
+                            )}
 
-                        {/* Buttons */}
-                        {button1 || button2 ? (
-                            <View style={styles.buttonRow}>
-                                {button1}
-                                {button2}
-                            </View>
-                        ) : null}
+                            {/* Buttons */}
+                            {button1 || button2 ? (
+                                <View style={styles.buttonRow}>
+                                    {button1}
+                                    {button2}
+                                </View>
+                            ) : null}
 
-                        {/* Modals */}
-                        {modals}
+                            {/* Modals */}
+                            {modals}
+                        </View>
                     </View>
-                </View>
-            </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
         </Modal>
     );
 }

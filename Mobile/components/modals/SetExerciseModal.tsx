@@ -10,17 +10,19 @@ import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
+import { getCategories } from "../../services/categoriesService";
 
 interface SetExerciseModalProps {
     visible: boolean;
     onClose: () => void;
-    categories: Category[];
     exercise?: Exercise | null;
+    activeCategoryId?: string | null;
 }
 
-export default function SetExerciseModal({ visible, onClose, categories, exercise }: SetExerciseModalProps) {
+export default function SetExerciseModal({ visible, onClose, exercise, activeCategoryId }: SetExerciseModalProps) {
     const [name, setName] = useState(exercise?.name || "");
-    const [category, setCategory] = useState<string | null>(exercise?.categoryId || null);
+    const [category, setCategory] = useState<string | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [type1, setType1] = useState<string | null>(exercise?.primaryMeasurementId || null);
     const [type1Unit, setType1Unit] = useState<string | null>(exercise?.primaryMeasurementUnitId || null);
     const [type2, setType2] = useState<string | null>(exercise?.secondaryMeasurementId || null);
@@ -33,17 +35,24 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
 
     // **Fetch Measurements & Units when modal opens**
     useEffect(() => {
-        async function fetchData() {
-            const measurementList = await getMeasurements();
-            const unitList = await getUnits();
-            setMeasurements(measurementList);
-            setUnits(unitList);
-        }
         if (visible) {
             fetchData();
             cleanForm();
         };
     }, [visible]);
+
+    useEffect(() => {
+        setCategory(exercise?.categoryId ?? activeCategoryId ?? null);
+    }, [visible, exercise?.categoryId, activeCategoryId]);
+
+    async function fetchData() {
+        const measurementList = await getMeasurements();
+        const unitList = await getUnits();
+        const categoryList = await getCategories();
+        setCategories(categoryList);
+        setMeasurements(measurementList);
+        setUnits(unitList);
+    }
 
     // **Handle Type 1 Selection**
     function handleType1Change(selectedType: string) {
@@ -172,6 +181,7 @@ export default function SetExerciseModal({ visible, onClose, categories, exercis
                 leftElement={<BackIcon action={handleClose} />}
                 centreElement={<ModalHeaderTitle title={exercise ? "Edit Exercise" : "Add Exercise"} />}
             />}
+            onClose={onClose}
             content={
                 <>
                     <TextFieldInput label="Exercise name" placeholder="Exercise name" value={name} setValue={setName} />

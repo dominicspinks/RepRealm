@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Modal, FlatList, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { theme } from "../../theme";
 import { ExerciseFull, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, Workout, WorkoutExerciseWithSets } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
@@ -118,6 +118,7 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
                     rightElement={<PlusIcon action={addSet} />}
                 />
             }
+            onClose={() => onClose(false)}
             content={
                 <>
                     {sets.map((item, index) => (
@@ -195,11 +196,6 @@ const styles = StyleSheet.create({
         color: "red",
         textAlign: "center",
         marginTop: 10,
-    },
-    buttonRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 20
     },
     button: {
         width: "48%",

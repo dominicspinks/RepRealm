@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Modal, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { ExerciseFull } from "../../db/schema";
 import { getExercisesFull } from "../../services/exercisesService";
@@ -10,35 +10,47 @@ import PlusIcon from "../icons/PlusIcon";
 import ModalContainer from "./ModalContainer";
 import React from "react";
 import ModalSearchField from "../forms/ModalSearchField";
+import SetExerciseModal from "./SetExerciseModal";
+import EmptyListNotice from "../EmptyListNotice";
 
 interface SelectExerciseModalProps {
     visible: boolean;
     onClose: () => void;
     category: { id: string; name: string } | null;
     onSelectExercise: (exercise: ExerciseFull) => void;
-    onAddExercise: () => void;
 }
 
-export default function SelectExerciseModal({ visible, onClose, category, onSelectExercise, onAddExercise }: SelectExerciseModalProps) {
+export default function SelectExerciseModal({ visible, onClose, category, onSelectExercise }: SelectExerciseModalProps) {
     const [exercises, setExercises] = useState<ExerciseFull[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
 
     // Fetch exercises when modal opens
     useEffect(() => {
-        async function fetchExercises() {
-            if (!category) return;
-            const result = await getExercisesFull();
-            const filtered = result.filter((exercise) => exercise.categoryId === category.id);
-            setExercises(filtered.sort((a, b) => a.name.localeCompare(b.name)));
-        }
-
         if (visible) fetchExercises();
     }, [visible, category]);
+
+    async function fetchExercises() {
+        if (!category) return;
+        const result = await getExercisesFull();
+        const filtered = result.filter((exercise) => exercise.categoryId === category.id);
+        setExercises(filtered.sort((a, b) => a.name.localeCompare(b.name)));
+    }
 
     // Filter exercises based on search query
     const filteredExercises = exercises.filter((exercise) =>
         exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    function handleCloseExerciseModal() {
+        setExerciseModalVisible(false);
+        fetchExercises();
+    }
+
+    function onAddExercise() {
+        setExerciseModalVisible(true);
+        fetchExercises();
+    }
 
     return (
         <ModalContainer
@@ -50,6 +62,7 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
                     rightElement={<PlusIcon action={onAddExercise} />}
                 />
             }
+            onClose={onClose}
             scrollable={false}
             content={
                 <>
@@ -64,6 +77,17 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
                                 <Text style={styles.exerciseText}>{item.name}</Text>
                             </TouchableOpacity>
                         )}
+                        ListEmptyComponent={<EmptyListNotice text="No exercises found" />}
+                    />
+                </>
+            }
+            modals={
+                <>
+                    {/* Set Exercise Modal */}
+                    <SetExerciseModal
+                        visible={exerciseModalVisible}
+                        onClose={handleCloseExerciseModal}
+                        activeCategoryId={category?.id}
                     />
                 </>
             }
@@ -73,26 +97,6 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: theme.colors.overlay,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        padding: 20,
-        width: "85%",
-        borderRadius: 10,
-        elevation: 5,
-    },
-    searchInput: {
-        borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
-        borderRadius: 8,
-        padding: theme.spacing.medium,
-        marginVertical: theme.spacing.medium,
-    },
     exerciseItem: {
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,

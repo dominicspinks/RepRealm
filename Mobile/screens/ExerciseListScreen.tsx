@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, FlatList, Text, StyleSheet, Alert } from "react-native";
+import { View, FlatList, StyleSheet, Alert } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import FilterIcon from "../components/icons/FilterIcon";
@@ -11,7 +11,6 @@ import { getCategories } from "../services/categoriesService";
 import { deleteExercise, getExercisesFull } from "../services/exercisesService";
 import { Category, ExerciseFull } from "../db/schema";
 import ExerciseCard from "../components/cards/ExerciseCard";
-import { theme } from "../theme";
 import EmptyListNotice from "../components/EmptyListNotice";
 
 export default function ExerciseListScreen() {
@@ -128,7 +127,6 @@ export default function ExerciseListScreen() {
             <SetExerciseModal
                 visible={modalVisible}
                 onClose={closeModal}
-                categories={categories}
                 exercise={selectedExercise}
             />
 

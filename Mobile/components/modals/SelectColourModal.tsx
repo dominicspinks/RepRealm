@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Modal, StyleSheet, FlatList } from "react-native";
+import { View, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import { theme } from "../../theme";
 import { Colour } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
@@ -25,6 +25,7 @@ export default function SelectColourModal({ visible, onClose, onSelectColour, se
                     centreElement={<ModalHeaderTitle title="Select Colour" />}
                 />
             }
+            onClose={onClose}
             scrollable={false}
             content={
                 <>
@@ -54,18 +55,6 @@ export default function SelectColourModal({ visible, onClose, onSelectColour, se
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: theme.colors.cardBackground,
-        padding: theme.spacing.medium,
-        width: "80%",
-        borderRadius: 10,
-    },
     gridContainer: {
         alignItems: "center",
     },

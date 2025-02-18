@@ -52,6 +52,7 @@ export default function FilterModal({
                     centreElement={<ModalHeaderTitle title="Filter" />}
                 />
             }
+            onClose={onClose}
             scrollable={false}
             content={
                 <View style={styles.categoryList}>

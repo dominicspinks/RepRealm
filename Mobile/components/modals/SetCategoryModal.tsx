@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, Modal, Alert, StyleSheet } from "react-native";
+import { View, TextInput, TouchableOpacity, Alert, StyleSheet, Keyboard } from "react-native";
 import { isCategoryNameUnique, addCategory, updateCategory } from "../../services/categoriesService";
 import { getColours } from "../../services/coloursService";
 import { Category, Colour } from "../../db/schema";
@@ -11,7 +11,13 @@ import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
 import React from "react";
 
-export default function SetCategoryModal({ visible, onClose, category }: { visible: boolean; onClose: () => void; category?: Category | null }) {
+interface SetCategoryModalProps {
+    visible: boolean;
+    onClose: () => void;
+    category?: Category | null;
+}
+
+export default function SetCategoryModal({ visible, onClose, category }: SetCategoryModalProps) {
     const [name, setName] = useState(category?.name || "");
     const [colour, setColour] = useState(category?.colourId || null);
     const [colours, setColours] = useState<Colour[]>([]);
@@ -76,6 +82,7 @@ export default function SetCategoryModal({ visible, onClose, category }: { visib
                     centreElement={<ModalHeaderTitle title={category ? "Edit Category" : "Add Category"} />}
                 />
             }
+            onClose={onClose}
             content={
                 <>
                     <View style={styles.inputContainer}>
@@ -88,7 +95,12 @@ export default function SetCategoryModal({ visible, onClose, category }: { visib
                         />
 
                         {/* Colour Selection */}
-                        <TouchableOpacity onPress={() => setIsSelectColourVisible(true)} style={styles.colourButton}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                Keyboard.dismiss();
+                                setIsSelectColourVisible(true)
+                            }}
+                            style={styles.colourButton}>
                             <View style={[styles.colourPreview, { backgroundColor: colours.find(c => c.id === colour)?.hex || "#000" }]} />
                         </TouchableOpacity>
                     </View>
@@ -113,18 +125,6 @@ export default function SetCategoryModal({ visible, onClose, category }: { visib
 
 // **Styles**
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        padding: 20,
-        width: "80%",
-        borderRadius: 10,
-    },
     inputContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -147,11 +147,6 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-    },
-    buttonRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 20,
     },
     button: {
         padding: 10,
