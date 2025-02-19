@@ -120,11 +120,10 @@ export default function SetWorkoutScreen() {
             await updateWorkoutExercise(workoutExercise);
         } else {
             // **Create a new workout exercise**
-            await addWorkoutExercise(workout.id, workoutExercise.exerciseId, workoutExercise.sets ?? []);
+            await addWorkoutExercise(workout.id, workoutExercise.exerciseId, workoutExercises.length + 1, workoutExercise.sets ?? []);
         }
         setWorkoutExercise(null);
         fetchWorkoutExercises();
-
     }
 
     async function handleEditExercise(workoutExercise: WorkoutExerciseWithSets) {

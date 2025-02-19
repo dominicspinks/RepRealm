@@ -80,9 +80,11 @@ export const workoutExercisesTable = sqliteTable("workout_exercises", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     workoutId: text("workout_id").notNull().references(() => workoutsTable.id, { onDelete: "cascade" }),
     exerciseId: text("exercise_id").notNull().references(() => exercisesTable.id, { onDelete: "cascade" }),
+    order: integer("order").notNull(),
     createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
 });
 
+// **Workout Exercise Sets Table**
 export const workoutExerciseSetsTable = sqliteTable("workout_exercise_sets", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     workoutExerciseId: text("workout_exercise_id").notNull().references(() => workoutExercisesTable.id, { onDelete: "cascade" }),
@@ -92,6 +94,34 @@ export const workoutExerciseSetsTable = sqliteTable("workout_exercise_sets", {
     measurement2Value: text("measurement_2_value"),
 });
 
+// **Workout Logs Table**
+export const workoutLogsTable = sqliteTable("workout_logs", {
+    id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
+    workoutId: text("workout_id").references(() => workoutsTable.id, { onDelete: "set null" }),
+    duration: integer("duration"),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+    startedAt: integer("started_at", { mode: "timestamp" }),
+});
+
+// **Workout Log Exercises Table**
+export const workoutLogExercisesTable = sqliteTable("workout_log_exercises", {
+    id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
+    workoutLogId: text("workout_log_id").notNull().references(() => workoutLogsTable.id, { onDelete: "cascade" }),
+    exerciseId: text("exercise_id").notNull().references(() => exercisesTable.id, { onDelete: "cascade" }),
+    order: integer("order").notNull(),
+});
+
+// **Workout Log Exercise Sets Table**
+export const workoutLogExerciseSetsTable = sqliteTable("workout_log_exercise_sets", {
+    id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
+    workoutLogExerciseId: text("workout_log_exercise_id").notNull().references(() => workoutLogExercisesTable.id, { onDelete: "cascade" }),
+    measurement1Id: text("measurement_1_type_id").notNull().references(() => measurementsTable.id, { onDelete: "no action" }),
+    measurement1Value: text("measurement_1_value"),
+    measurement2Id: text("measurement_2_type_id").references(() => measurementsTable.id, { onDelete: "set null" }),
+    measurement2Value: text("measurement_2_value"),
+    isComplete: integer("is_complete", { mode: "boolean" }).default(false),
+    completedAt: integer("completed_at", { mode: "timestamp" }),
+});
 
 // **Auto-generate Zod validation schemas**
 export const ColourSelectSchema = createSelectSchema(coloursTable);
@@ -124,6 +154,14 @@ export const WorkoutExerciseInsertSchema = createInsertSchema(workoutExercisesTa
 export const WorkoutExerciseSetSelectSchema = createSelectSchema(workoutExerciseSetsTable);
 export const WorkoutExerciseSetInsertSchema = createInsertSchema(workoutExerciseSetsTable);
 
+export const WorkoutLogSelectSchema = createSelectSchema(workoutLogsTable);
+export const WorkoutLogInsertSchema = createInsertSchema(workoutLogsTable);
+
+export const WorkoutLogExerciseSelectSchema = createSelectSchema(workoutLogExercisesTable);
+export const WorkoutLogExerciseInsertSchema = createInsertSchema(workoutLogExercisesTable);
+
+export const WorkoutLogExerciseSetSelectSchema = createSelectSchema(workoutLogExerciseSetsTable);
+export const WorkoutLogExerciseSetInsertSchema = createInsertSchema(workoutLogExerciseSetsTable);
 
 // **Infer TypeScript types**
 export type Colour = typeof coloursTable.$inferSelect;
@@ -140,7 +178,7 @@ export type CategoryWithColour = Category & { colourHex: string };
 export type NewCategory = typeof categoriesTable.$inferInsert;
 
 export type Exercise = typeof exercisesTable.$inferSelect;
-export type ExerciseFull = typeof exercisesTable.$inferSelect & {
+export type ExerciseFull = Exercise & {
     primaryMeasurementName: string;
     primaryMeasurementUnitName: string | null;
     primaryMeasurementUnitDecimalPlaces: number | null;
@@ -174,6 +212,17 @@ export type NewWorkoutExerciseWithSets = NewWorkoutExercise & { sets: NewWorkout
 export type WorkoutExerciseSet = typeof workoutExerciseSetsTable.$inferSelect;
 export type NewWorkoutExerciseSet = typeof workoutExerciseSetsTable.$inferInsert;
 
+export type WorkoutLog = typeof workoutLogsTable.$inferSelect;
+export type WorkoutLogWithExercises = WorkoutLog & { exercises: WorkoutLogExerciseWithSets[] };
+export type NewWorkoutLog = typeof workoutLogsTable.$inferInsert;
+
+export type WorkoutLogExercise = typeof workoutLogExercisesTable.$inferSelect;
+export type WorkoutLogExerciseFull = WorkoutLogExercise & Omit<ExerciseFull, "id" | "createdAt" | "updatedAt" | "isDeleted">;
+export type WorkoutLogExerciseWithSets = WorkoutLogExercise & { sets?: WorkoutLogExerciseSet[] };
+export type NewWorkoutLogExercise = typeof workoutLogExercisesTable.$inferInsert;
+
+export type WorkoutLogExerciseSet = typeof workoutLogExerciseSetsTable.$inferSelect;
+export type NewWorkoutLogExerciseSet = typeof workoutLogExerciseSetsTable.$inferInsert;
 
 // **Aliases**
 export const primaryMeasurementAlias = alias(measurementsTable, "primary_measurement");

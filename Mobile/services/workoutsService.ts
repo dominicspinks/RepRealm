@@ -73,6 +73,7 @@ export async function getWorkoutExercisesByWorkoutId(workoutId: string): Promise
             createdAt: workoutExercisesTable.createdAt,
             workoutId: workoutExercisesTable.workoutId,
             exerciseId: workoutExercisesTable.exerciseId,
+            order: workoutExercisesTable.order,
 
             // Exercise details
             name: exercisesTable.name,
@@ -177,11 +178,11 @@ export async function getWorkoutExerciseById(id: string): Promise<WorkoutExercis
 }
 
 // **Add Exercise to workout**
-export async function addWorkoutExercise(workoutId: string, exerciseId: string, sets: NewWorkoutExerciseSet[]): Promise<WorkoutExercise> {
+export async function addWorkoutExercise(workoutId: string, exerciseId: string, order: number, sets: NewWorkoutExerciseSet[]): Promise<WorkoutExercise> {
     // Add new exercise entry to workout
     const insertedWorkoutExercise = await db
         .insert(workoutExercisesTable)
-        .values({ workoutId, exerciseId })
+        .values({ workoutId, exerciseId, order })
         .returning({ id: workoutExercisesTable.id });
 
     const workoutExerciseId = insertedWorkoutExercise[0].id;

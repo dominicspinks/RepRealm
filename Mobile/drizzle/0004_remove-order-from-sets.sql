@@ -1,0 +1,1 @@
+ALTER TABLE `workout_log_exercise_sets` DROP COLUMN `order`;
