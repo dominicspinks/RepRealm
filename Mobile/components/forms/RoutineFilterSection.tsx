@@ -1,0 +1,40 @@
+import { StyleSheet, Text, View } from "react-native"
+import DropdownFieldInput from "./DropdownFieldInput"
+import { Routine } from "../../db/schema";
+import { useState } from "react";
+import FilterTypeHeader from "../headers/FilterTypeHeader";
+
+interface RoutineFilterSectionProps {
+    selectedValue: string | null;
+    setValue: (value: string) => void;
+    routines: Routine[];
+    expanded?: boolean
+}
+
+export default function RoutineFilterSection({ selectedValue, setValue, routines, expanded = true }: RoutineFilterSectionProps) {
+    const [isExpanded, setIsExpanded] = useState(expanded);
+
+    return (
+        <View>
+            <FilterTypeHeader label="Routine" isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
+            {isExpanded &&
+                <DropdownFieldInput
+                    selectedValue={selectedValue}
+                    setValue={setValue}
+                    items={routines}
+                    placeholder="Select a routine"
+                    labelField="name"
+                    valueField="id"
+                    style={styles.routine}
+                />
+            }
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    routine: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+    },
+})

@@ -6,11 +6,11 @@ interface ModalContainerProps {
     header: React.ReactNode;
     content: React.ReactNode;
     onClose: () => void;
-    button1?: React.ReactNode;
-    button2?: React.ReactNode;
+    buttons?: React.ReactElement[];    // List of buttons to display at bottom of modal
+    verticalButtons?: boolean;      // If true, buttons are displayed vertically, if false, horizontally
     scrollable?: boolean;           // If true, uses ScrollView for content, if false, content controls its own scrolling (if any)
     fullWidthContent?: boolean;     // Applies if scrollable is true. If true, removes horizontal padding on scrollable content
-    modals?: React.ReactNode;
+    modals?: React.ReactNode;       // Any additional modals the modal needs to control
 }
 
 export default function ModalContainer({
@@ -18,8 +18,8 @@ export default function ModalContainer({
     header,
     content,
     onClose,
-    button1,
-    button2,
+    buttons,
+    verticalButtons = false,
     scrollable = true,
     fullWidthContent = false,
     modals,
@@ -52,10 +52,11 @@ export default function ModalContainer({
                             )}
 
                             {/* Buttons */}
-                            {button1 || button2 ? (
-                                <View style={styles.buttonRow}>
-                                    {button1}
-                                    {button2}
+                            {buttons && buttons?.length > 0 ? (
+                                <View style={[styles.buttonRow, verticalButtons && styles.verticalButtons]}>
+                                    {buttons?.map((button, index) => (
+                                        React.cloneElement(button, { key: index })
+                                    ))}
                                 </View>
                             ) : null}
 
@@ -98,4 +99,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingHorizontal: 20,
     },
+    verticalButtons: {
+        flexDirection: "column",
+        gap: 10,
+    }
 })

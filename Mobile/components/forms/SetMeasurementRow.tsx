@@ -94,5 +94,6 @@ const styles = StyleSheet.create({
         height: 60,
         textAlign: "center",
         fontSize: 24,
+        backgroundColor: "white",
     },
 })

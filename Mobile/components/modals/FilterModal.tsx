@@ -1,45 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, FlatList, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Button from "../buttons/Button";
 import { theme } from "../../theme";
-import { Category } from "../../db/schema";
+import { Category, Routine } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
+import { getCategories } from "../../services/categoriesService";
+import CategoryFilterSection from "../forms/CategoryFilterSection";
+import RoutineFilterSection from "../forms/RoutineFilterSection";
+import { getRoutines } from "../../services/routinesService";
+
+interface FilterProps<T> {
+    selected: T;                        // Selected value(s)
+    setSelected: (selected: T) => void; // Function to update selected value(s)
+    position?: number;                   // Order in which filters appear
+}
 
 interface FilterModalProps {
     visible: boolean;
     onClose: () => void;
-    categories: Category[];
-    selectedCategories: string[];
-    setSelectedCategories: (categories: string[]) => void;
+    categoryFilter?: FilterProps<string[]> | null;
+    routineFilter?: FilterProps<string | null>;
 }
 
 export default function FilterModal({
     visible,
     onClose,
-    categories,
-    selectedCategories,
-    setSelectedCategories
+    categoryFilter = null,
+    routineFilter
 }: FilterModalProps) {
-    const [tempSelected, setTempSelected] = useState<string[]>(selectedCategories);
+    const [tempSelectedCategory, setTempSelectedCategory] = useState<string[]>(categoryFilter?.selected ?? []);
+    const [tempSelectedRoutine, setTempSelectedRoutine] = useState<string | null>(routineFilter?.selected ?? null);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [routines, setRoutines] = useState<Routine[]>([]);
+
+    useEffect(() => {
+        if (!visible) return;
+        if (categoryFilter) loadCategories();
+        if (routineFilter) loadRoutines();
+    }, [visible]);
+
+    async function loadCategories() {
+        const result = await getCategories();
+        setCategories(result);
+    }
+
+    async function loadRoutines() {
+        const result = await getRoutines();
+        setRoutines(result);
+    }
 
     function toggleCategory(categoryId: string) {
-        setTempSelected(prev =>
+        setTempSelectedCategory(prev =>
             prev.includes(categoryId) ? prev.filter(id => id !== categoryId) : [...prev, categoryId]
         );
     }
 
     function applyFilter() {
-        setSelectedCategories(tempSelected);
+        if (categoryFilter) categoryFilter.setSelected(tempSelectedCategory);
+        if (routineFilter && tempSelectedRoutine) routineFilter.setSelected(tempSelectedRoutine);
         onClose();
     }
 
     function resetFilter() {
-        setTempSelected([]);
-        setSelectedCategories([]);
+        if (categoryFilter) {
+            setTempSelectedCategory([]);
+            categoryFilter.setSelected([]);
+        }
+        if (routineFilter) {
+            setTempSelectedRoutine(null);
+            routineFilter.setSelected(null);
+        }
         onClose();
     }
 
@@ -55,32 +89,50 @@ export default function FilterModal({
             onClose={onClose}
             scrollable={false}
             content={
-                <View style={styles.categoryList}>
-                    <Text style={styles.label}>Category</Text>
-                    <FlatList
-                        data={categories}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity style={styles.categoryItem} onPress={() => toggleCategory(item.id)}>
-                                <Ionicons
-                                    name={tempSelected.includes(item.id) ? "checkbox" : "square-outline"}
-                                    size={24}
-                                    color={theme.colors.primary}
+                <View style={styles.filterList}>
+                    {[
+                        routineFilter && {
+                            component: (
+                                <RoutineFilterSection
+                                    selectedValue={tempSelectedRoutine}
+                                    setValue={setTempSelectedRoutine}
+                                    routines={routines}
                                 />
-                                <Text style={styles.categoryText}>{item.name}</Text>
-                            </TouchableOpacity>
-                        )}
-                    />
+                            ),
+                            position: routineFilter.position ?? 0,
+                        },
+                        categoryFilter && {
+                            component: (
+                                <CategoryFilterSection
+                                    categories={categories}
+                                    toggleCategory={toggleCategory}
+                                    tempSelected={tempSelectedCategory}
+                                />
+                            ),
+                            position: categoryFilter.position ?? 0,
+                        },
+                    ]
+                        .filter((item): item is { component: JSX.Element; position: number } => Boolean(item))
+                        .sort((a, b) => a.position - b.position)
+                        .map((item) => item.component)
+                    }
                 </View>
             }
-            button1={<Button title="Reset" variant="secondary" onPress={resetFilter} style={styles.button} />}
-            button2={<Button title="Apply" onPress={applyFilter} style={styles.button} />}
+            buttons={
+                [
+                    <Button title="Reset" variant="secondary" onPress={resetFilter} style={styles.button} />,
+                    <Button title="Apply" onPress={applyFilter} style={styles.button} />
+                ]}
         />
     );
 }
 
 // **Styles**
 const styles = StyleSheet.create({
+    filterList: {
+        flexDirection: "column",
+        gap: 10,
+    },
     categoryList: {
         paddingHorizontal: 20,
     },

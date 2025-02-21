@@ -96,6 +96,7 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
             const newWorkoutExercise: NewWorkoutExerciseWithSets = {
                 workoutId: workout.id,
                 exerciseId: exercise.id,
+                order: 1,
                 sets: sets || [],
             };
             onSave(newWorkoutExercise);
@@ -161,8 +162,10 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
 
                 </>
             }
-            button1={<Button title="Cancel" variant="secondary" onPress={() => onClose(true)} style={styles.button} />}
-            button2={<Button title="Save" onPress={handleSave} style={styles.button} />}
+            buttons={[
+                <Button title="Cancel" variant="secondary" onPress={() => onClose(true)} style={styles.button} />,
+                <Button title="Save" onPress={handleSave} style={styles.button} />
+            ]}
         />
     );
 }

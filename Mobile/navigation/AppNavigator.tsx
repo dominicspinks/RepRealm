@@ -4,6 +4,8 @@ import RegisterScreen from '../screens/RegisterScreen';
 import MainDrawer from './MainDrawer';
 import SetWorkoutScreen from '../screens/SetWorkoutScreen';
 import SetRoutineScreen from '../screens/SetRoutineScreen';
+import ActiveWorkoutScreen from '../screens/ActiveWorkoutScreen';
+import ActiveExerciseScreen from '../screens/ActiveExerciseScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +19,8 @@ export default function AppNavigator() {
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="SetWorkout" component={SetWorkoutScreen} />
             <Stack.Screen name="SetRoutine" component={SetRoutineScreen} />
+            <Stack.Screen name="ActiveWorkout" component={ActiveWorkoutScreen} />
+            <Stack.Screen name="ActiveExercise" component={ActiveExerciseScreen} />
         </Stack.Navigator>
     );
 }

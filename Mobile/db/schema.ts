@@ -218,7 +218,7 @@ export type NewWorkoutLog = typeof workoutLogsTable.$inferInsert;
 
 export type WorkoutLogExercise = typeof workoutLogExercisesTable.$inferSelect;
 export type WorkoutLogExerciseFull = WorkoutLogExercise & Omit<ExerciseFull, "id" | "createdAt" | "updatedAt" | "isDeleted">;
-export type WorkoutLogExerciseWithSets = WorkoutLogExercise & { sets?: WorkoutLogExerciseSet[] };
+export type WorkoutLogExerciseWithSets = WorkoutLogExerciseFull & { sets?: WorkoutLogExerciseSet[] };
 export type NewWorkoutLogExercise = typeof workoutLogExercisesTable.$inferInsert;
 
 export type WorkoutLogExerciseSet = typeof workoutLogExerciseSetsTable.$inferSelect;

@@ -106,8 +106,10 @@ export default function SetCategoryModal({ visible, onClose, category }: SetCate
                     </View>
                 </>
             }
-            button1={<Button variant="secondary" title="Cancel" onPress={handleClose} style={styles.button} />}
-            button2={<Button title="Save" onPress={handleSave} style={styles.button} />}
+            buttons={[
+                <Button variant="secondary" title="Cancel" onPress={handleClose} style={styles.button} />,
+                <Button title="Save" onPress={handleSave} style={styles.button} />
+            ]}
             modals={
                 <>
                     <SelectColourModal

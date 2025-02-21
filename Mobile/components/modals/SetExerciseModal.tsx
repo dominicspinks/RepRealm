@@ -279,8 +279,10 @@ export default function SetExerciseModal({ visible, onClose, exercise, activeCat
                     </View>
                 </>
             }
-            button1={<Button title="Cancel" variant="secondary" onPress={handleClose} style={styles.button} />}
-            button2={<Button title="Save" onPress={handleSave} style={styles.button} />}
+            buttons={[
+                <Button title="Cancel" variant="secondary" onPress={handleClose} style={styles.button} />,
+                <Button title="Save" onPress={handleSave} style={styles.button} />
+            ]}
         />
     );
 }

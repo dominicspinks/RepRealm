@@ -13,6 +13,10 @@ export const theme = {
         danger: '#FF0000',
         border: '#DDDDDD',
         borderStrong: '#AAAAAA',
+        errorBackground: '#FDEDED',
+        warning: '#FFD700',
+        success: '#00FF00',
+        highlight: '#D4D6DD',
     },
     fonts: {
         regular: 'System',

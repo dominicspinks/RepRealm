@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Routine, Workout, WorkoutWithExercises } from '../db/schema';
+import { Routine, Workout } from '../db/schema';
 
 interface SetWorkoutScreenProps {
     workout: Workout;
@@ -7,6 +7,14 @@ interface SetWorkoutScreenProps {
 
 interface SetRoutineScreenProps {
     routine: Routine;
+}
+
+interface ActiveWorkoutScreenProps {
+    workoutLogId: string;
+}
+
+interface ActiveExerciseScreenProps {
+    workoutLogExerciseId: string;
 }
 
 export type RootStackParamList = {
@@ -17,6 +25,9 @@ export type RootStackParamList = {
     SetWorkout: SetWorkoutScreenProps;
     RoutineList: undefined;
     SetRoutine: SetRoutineScreenProps;
+    WorkoutLogs: undefined;
+    ActiveWorkout: ActiveWorkoutScreenProps;
+    ActiveExercise: ActiveExerciseScreenProps;
 };
 
 export type AuthScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;

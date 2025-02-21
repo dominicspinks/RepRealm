@@ -129,3 +129,10 @@ export async function deleteWorkoutFromRoutine(routineId: string, workoutId: str
             eq(routineWorkoutsTable.workoutId, workoutId))
         );
 }
+
+// **Get all routines**
+export async function getRoutines(): Promise<Routine[]> {
+    return await db
+        .select()
+        .from(routinesTable);
+}
