@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Alert, StyleSheet } from "react-native";
 import { isExerciseNameUnique, addExercise, updateExercise } from "../../services/exercisesService";
 import { getMeasurements, getUnits } from "../../services/measurementsService";
-import { Category, Exercise, Measurement, MeasurementUnit } from "../../db/schema";
+import { Category, Exercise, ExerciseFull, Measurement, MeasurementUnit } from "../../db/schema";
 import Button from "../../components/buttons/Button";
 import DropdownFieldInput from "../forms/DropdownFieldInput";
 import TextFieldInput from "../forms/TextFieldInput";
@@ -11,15 +11,27 @@ import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
 import { getCategories } from "../../services/categoriesService";
+import { scaleMeasurementReal } from "../../utilities/formatHelpers";
 
 interface SetExerciseModalProps {
     visible: boolean;
     onClose: () => void;
-    exercise?: Exercise | null;
+    exercise?: ExerciseFull | null;
     activeCategoryId?: string | null;
 }
 
 export default function SetExerciseModal({ visible, onClose, exercise, activeCategoryId }: SetExerciseModalProps) {
+    // Determine decimal places from the weight measurement (if any)
+    const primaryIsWeight = exercise?.primaryMeasurementName?.toLowerCase() === "weight";
+    const secondaryIsWeight = exercise?.secondaryMeasurementName?.toLowerCase() === "weight";
+
+    const weightDecimalPlaces = (primaryIsWeight
+        ? exercise?.primaryMeasurementUnitDecimalPlaces
+        : secondaryIsWeight
+            ? exercise?.secondaryMeasurementUnitDecimalPlaces
+            : 0) ?? 0;
+
+
     const [name, setName] = useState(exercise?.name || "");
     const [category, setCategory] = useState<string | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -28,7 +40,11 @@ export default function SetExerciseModal({ visible, onClose, exercise, activeCat
     const [type2, setType2] = useState<string | null>(exercise?.secondaryMeasurementId || null);
     const [type2Unit, setType2Unit] = useState<string | null>(exercise?.secondaryMeasurementUnitId || null);
     const [rest, setRest] = useState<string>(exercise?.rest ? String(exercise.rest) : "");
-    const [weightIncrement, setWeightIncrement] = useState<string>(exercise?.weightIncrement ? String(exercise.weightIncrement / 1000) : "");
+    const [weightIncrement, setWeightIncrement] = useState<string>(
+        exercise?.weightIncrement
+            ? scaleMeasurementReal(exercise.weightIncrement, weightDecimalPlaces).toFixed(weightDecimalPlaces)
+            : ""
+    );
 
     const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [units, setUnits] = useState<MeasurementUnit[]>([]);
@@ -270,11 +286,12 @@ export default function SetExerciseModal({ visible, onClose, exercise, activeCat
                         {/* Weight Increment Input */}
                         <TextFieldInput
                             label="Weight Increment"
-                            placeholder="eg 2.5"
+                            placeholder="default 2.5"
                             value={weightIncrement}
                             setValue={setWeightIncrement}
                             keyboardType="numeric"
                             style={{ width: "48%" }}
+                            disabled={!primaryIsWeight && !secondaryIsWeight}
                         />
                     </View>
                 </>

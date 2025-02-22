@@ -8,9 +8,10 @@ interface TextInputProps {
     label?: string;
     style?: ViewStyle | TextStyle;
     keyboardType?: "default" | "numeric"
+    disabled?: boolean
 }
 
-export default function TextFieldInput({ keyboardType, setValue, placeholder, label, value, style }: TextInputProps) {
+export default function TextFieldInput({ keyboardType, setValue, placeholder, label, value, style, disabled = false }: TextInputProps) {
     return (
         <View style={style}>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -20,6 +21,7 @@ export default function TextFieldInput({ keyboardType, setValue, placeholder, la
                 keyboardType={keyboardType ?? "default"}
                 value={value}
                 onChangeText={setValue}
+                editable={!disabled}
             />
         </View>
     )

@@ -44,7 +44,7 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
             {
                 id: undefined,
                 workoutExerciseId: lastSet?.workoutExerciseId || "",
-                measurement1Id: lastSet?.measurement1Id || exercise?.primaryMeasurementId || "",
+                measurement1Id: lastSet?.measurement1Id || exercise?.primaryMeasurementId,
                 measurement1Value: lastSet?.measurement1Value || null,
                 measurement2Id: lastSet?.measurement2Id || exercise?.secondaryMeasurementId || null,
                 measurement2Value: lastSet?.measurement2Value || null,
@@ -65,13 +65,12 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
     }
 
     // Update measurement value
-    function updateMeasurement(index: number, field: "measurement1Value" | "measurement2Value", value: string | null) {
+    function updateMeasurement(index: number, field: "measurement1Value" | "measurement2Value", value: number | null) {
         const newSets = [...sets];
-        if (value === null || value === "") {
+        if (value === null) {
             newSets[index][field] = null;
         } else {
-            const parsedValue = parseFloat(value) || 0;
-            newSets[index][field] = Math.max(0, parsedValue).toString();
+            newSets[index][field] = Math.max(0, value);
         }
         setSets(newSets);
     }

@@ -92,6 +92,7 @@ export default function FilterModal({
                 <View style={styles.filterList}>
                     {[
                         routineFilter && {
+                            key: "routine-filter",
                             component: (
                                 <RoutineFilterSection
                                     selectedValue={tempSelectedRoutine}
@@ -102,6 +103,7 @@ export default function FilterModal({
                             position: routineFilter.position ?? 0,
                         },
                         categoryFilter && {
+                            key: "category-filter",
                             component: (
                                 <CategoryFilterSection
                                     categories={categories}
@@ -112,7 +114,7 @@ export default function FilterModal({
                             position: categoryFilter.position ?? 0,
                         },
                     ]
-                        .filter((item): item is { component: JSX.Element; position: number } => Boolean(item))
+                        .filter((item): item is { key: string; component: JSX.Element; position: number } => Boolean(item))
                         .sort((a, b) => a.position - b.position)
                         .map((item) => item.component)
                     }

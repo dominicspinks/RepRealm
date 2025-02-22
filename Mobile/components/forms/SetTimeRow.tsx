@@ -3,8 +3,8 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 
 interface SetTimeRowProps {
-    value: string;
-    setTime: (time: string) => void;
+    value: number;
+    setTime: (time: number) => void;
 }
 
 export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
@@ -14,7 +14,7 @@ export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
 
     // Convert milliseconds to hh:mm:ss when component mounts or value changes
     useEffect(() => {
-        const totalMilliseconds = parseInt(value) || 0;
+        const totalMilliseconds = value || 0;
         const h = Math.floor(totalMilliseconds / 3600000);
         const m = Math.floor((totalMilliseconds % 3600000) / 60000);
         const s = Math.floor((totalMilliseconds % 60000) / 1000);
@@ -35,7 +35,7 @@ export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
         setSeconds(newSeconds);
 
         const totalMilliseconds = (h * 3600000) + (m * 60000) + (s * 1000);
-        setTime(totalMilliseconds.toString());
+        setTime(totalMilliseconds);
     }
 
     return (

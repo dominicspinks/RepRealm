@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { db } from "./database";
-import { categoriesTable, coloursTable, exercisesTable, measurementsTable, measurementUnitsTable } from "./schema";
+import { categoriesTable, coloursTable, exercisesTable, measurementsTable, measurementUnitsTable, workoutExerciseSetsTable } from "./schema";
 
 const defaultColours = [
     { id: "0194ee8c-5209-721e-8460-49b0ee60fb79", hex: "#FF5733" },
@@ -552,7 +552,7 @@ export async function initialiseDatabase() {
             },
         });
 
-    console.log('exercises: ', await db.select().from(exercisesTable));
+    console.log('exercises: ', await db.select().from(workoutExerciseSetsTable));
 
     console.log("Database initialisation complete...");
 }

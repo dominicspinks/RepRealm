@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import SetMeasurementRow from "./SetMeasurementRow";
 import SetTimeRow from "./SetTimeRow";
+import { scaleMeasurementInt, scaleMeasurementReal } from "../../utilities/formatHelpers";
 
 interface SetMeasurementContainerProps {
     index: number;
@@ -8,8 +9,8 @@ interface SetMeasurementContainerProps {
     measurementName: string | null;
     measurementUnitName: string | null;
     measurementUnitDecimalPlaces: number | null;
-    value: string | null;
-    updateMeasurement: (index: number, field: "measurement1Value" | "measurement2Value", value: string) => void;
+    value: number | null;
+    updateMeasurement: (index: number, field: "measurement1Value" | "measurement2Value", value: number | null) => void;
     weightIncrement?: number | null;
 }
 
@@ -26,22 +27,17 @@ export default function SetMeasurementContainer({
     if (!measurementName) return null;
 
     const isTimeMeasurement = measurementName.toLowerCase() === "time";
+    const isWeightMeasurement = measurementName.toLowerCase() === "weight";
     const fieldKey = measurementType === "primary" ? "measurement1Value" : "measurement2Value";
 
     function decrement() {
-        let decrementValue = 1;
-        if (measurementName?.toLowerCase() === "weight" && weightIncrement) {
-            decrementValue = weightIncrement / 1000;
-        }
-        updateMeasurement(index, fieldKey, (Number(value) - decrementValue).toString());
+        let decrementValue = scaleMeasurementInt(weightIncrement ?? (isWeightMeasurement ? 2.5 : 1), measurementUnitDecimalPlaces);
+        updateMeasurement(index, fieldKey, (Number(value) - decrementValue));
     }
 
     function increment() {
-        let incrementValue = 1;
-        if (measurementName?.toLowerCase() === "weight" && weightIncrement) {
-            incrementValue = weightIncrement / 1000;
-        }
-        updateMeasurement(index, fieldKey, (Number(value) + incrementValue).toString());
+        let incrementValue = scaleMeasurementInt(weightIncrement ?? (isWeightMeasurement ? 2.5 : 1), measurementUnitDecimalPlaces);
+        updateMeasurement(index, fieldKey, (Number(value) + incrementValue));
     }
 
     return (
@@ -51,13 +47,13 @@ export default function SetMeasurementContainer({
             </Text>
             {isTimeMeasurement ? (
                 <SetTimeRow
-                    value={value || "0"}
+                    value={value || 0}
                     setTime={(val) => updateMeasurement(index, fieldKey, val)} />
             ) : (
                 <SetMeasurementRow
-                    value={value || ""}
+                    value={value}
                     decrementMeasurement={decrement}
-                    setMeasurement={(val) => updateMeasurement(index, fieldKey, val ?? "")}
+                    setMeasurement={(val) => updateMeasurement(index, fieldKey, val)}
                     incrementMeasurement={increment}
                     decimalPlaces={measurementUnitDecimalPlaces ?? 0}
                 />

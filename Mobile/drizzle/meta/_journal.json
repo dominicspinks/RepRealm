@@ -1,34 +1,13 @@
 {
-    "version": "7",
-    "dialect": "sqlite",
-    "entries": [
-        {
-            "idx": 0,
-            "version": "6",
-            "when": 1739777726667,
-            "tag": "0000_watery_gabe_jones",
-            "breakpoints": true
-        },
-        {
-            "idx": 1,
-            "version": "6",
-            "when": 1739936605765,
-            "tag": "0001_tearful_elektra",
-            "breakpoints": true
-        },
-        {
-            "idx": 2,
-            "version": "6",
-            "when": 1739939497962,
-            "tag": "0002_add-order-to-workoutexercises",
-            "breakpoints": true
-        },
-        {
-            "idx": 3,
-            "version": "6",
-            "when": 1739940046853,
-            "tag": "0003_set-workoutexercise-order-null",
-            "breakpoints": true
-        }
-    ]
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1740112796806,
+      "tag": "0000_solid_green_goblin",
+      "breakpoints": true
+    }
+  ]
 }

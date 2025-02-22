@@ -1,9 +1,8 @@
 import { eq, inArray, sql, desc } from "drizzle-orm";
 import { db } from "../db/database";
-import { workoutLogsTable, workoutLogExercisesTable, NewWorkoutLogExercise, workoutLogExerciseSetsTable, WorkoutLog, WorkoutLogWithExercises, WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, exercisesTable, categoriesTable, coloursTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, NewWorkoutLogExerciseSet } from "../db/schema";
+import { workoutLogsTable, workoutLogExercisesTable, NewWorkoutLogExercise, workoutLogExerciseSetsTable, WorkoutLog, WorkoutLogWithExercises, WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, exercisesTable, categoriesTable, coloursTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, NewWorkoutLogExerciseSet, NewWorkoutLog, WorkoutLogExercise } from "../db/schema";
 import { getWorkoutExercisesByWorkoutId } from "./workoutsService";
 import { getExerciseById } from "./exercisesService";
-import { UUIDv7Schema } from "../utilities/commonValidators";
 
 async function fetchWorkoutLogExercisesWithSets(filter: { logIds?: string[]; exerciseId?: string }) {
     return await db
@@ -266,6 +265,15 @@ export async function getWorkoutLogExerciseById(id: string): Promise<WorkoutLogE
     return processExercisesWithSets(exercisesWithSetsRaw)[0] ?? null;
 }
 
+// **Add exercise to workout log**
+export async function addWorkoutLogExercise(workoutLogExercise: NewWorkoutLogExercise): Promise<string> {
+    const rows = await db
+        .insert(workoutLogExercisesTable)
+        .values(workoutLogExercise)
+        .returning({ id: workoutLogExercisesTable.id });
+
+    return rows[0].id;
+}
 
 // **Add or update workout log set**
 export async function saveWorkoutLogSet(set: NewWorkoutLogExerciseSet) {
@@ -284,6 +292,13 @@ export async function saveWorkoutLogSet(set: NewWorkoutLogExerciseSet) {
                 completedAt: set.completedAt,
             },
         })
+}
+
+// **Delete workout log exercise by id**
+export async function deleteWorkoutLogExerciseById(id: string) {
+    await db
+        .delete(workoutLogExercisesTable)
+        .where(eq(workoutLogExercisesTable.id, id));
 }
 
 // **Delete workout log set by id**

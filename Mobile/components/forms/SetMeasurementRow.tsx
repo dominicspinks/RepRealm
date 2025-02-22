@@ -3,11 +3,12 @@ import MinusIcon from "../icons/MinusIcon";
 import PlusIcon from "../icons/PlusIcon";
 import { theme } from "../../theme";
 import { useEffect, useState } from "react";
+import { scaleMeasurementInt, scaleMeasurementReal } from "../../utilities/formatHelpers";
 
 interface SetMeasurementRowProps {
-    value: string;
+    value: number | null;
     decrementMeasurement: () => void;
-    setMeasurement: (value: string | null) => void;
+    setMeasurement: (value: number | null) => void;
     incrementMeasurement: () => void;
     decimalPlaces?: number;
 }
@@ -19,13 +20,13 @@ export default function SetMeasurementRow({
     incrementMeasurement,
     decimalPlaces = 0,
 }: SetMeasurementRowProps) {
-    const [inputValue, setInputValue] = useState<string>(value || "");
+    const [inputValue, setInputValue] = useState<string>(value !== null ? scaleMeasurementReal(value, decimalPlaces).toFixed(decimalPlaces) : "");
 
     useEffect(() => {
-        if (value === null || value === "") {
+        if (value === null) {
             setInputValue("");
         } else {
-            setInputValue(parseFloat(value).toFixed(decimalPlaces));
+            setInputValue(scaleMeasurementReal(value, decimalPlaces).toFixed(decimalPlaces));
         }
     }, [value]);
 
@@ -51,7 +52,7 @@ export default function SetMeasurementRow({
             const numericValue = parseFloat(inputValue);
             if (!isNaN(numericValue)) {
                 const formattedValue = numericValue.toFixed(decimalPlaces);
-                setMeasurement(formattedValue);
+                setMeasurement(scaleMeasurementInt(numericValue, decimalPlaces));
                 setInputValue(formattedValue);
             }
         }

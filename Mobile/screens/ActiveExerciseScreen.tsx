@@ -1,4 +1,5 @@
-import { StyleSheet, View, FlatList, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
+import React from "react";
+import { StyleSheet, View, FlatList, KeyboardAvoidingView, Platform, Keyboard, Alert } from "react-native";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import BackIcon from "../components/icons/BackIcon";
@@ -7,14 +8,13 @@ import { RootStackParamList } from "../navigation/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { getWorkoutLogExerciseById, saveWorkoutLogSet, deleteWorkoutLogSet } from "../services/workoutLogsService";
+import { getWorkoutLogExerciseById, saveWorkoutLogSet, deleteWorkoutLogSet, deleteWorkoutLogExerciseById } from "../services/workoutLogsService";
 import LoadingIndicator from "../components/LoadingIndicator";
 import ErrorMessage from "../components/ErrorMessage";
 import WorkoutTimer from "../components/WorkoutTimer";
 import SetMeasurementContainer from "../components/forms/SetMeasurementContainer";
 import ActiveExerciseSet from "../components/ActiveExerciseSet";
 import Button from "../components/buttons/Button";
-import React from "react";
 
 type ActiveExerciseScreenNavigationProp = StackNavigationProp<RootStackParamList, "ActiveExercise">;
 type ActiveExerciseScreenRouteProp = RouteProp<RootStackParamList, "ActiveExercise">;
@@ -27,8 +27,8 @@ export default function ActiveExerciseScreen() {
     const [workoutLogExercise, setWorkoutLogExercise] = useState<WorkoutLogExerciseWithSets | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedSet, setSelectedSet] = useState<WorkoutLogExerciseSet | null>(null);
-    const [measurement1Value, setMeasurement1Value] = useState<string>("");
-    const [measurement2Value, setMeasurement2Value] = useState<string>("");
+    const [measurement1Value, setMeasurement1Value] = useState<number | null>(null);
+    const [measurement2Value, setMeasurement2Value] = useState<number | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState(false);
 
     useEffect(() => {
@@ -56,7 +56,10 @@ export default function ActiveExerciseScreen() {
         setLoading(false);
     }
 
-    function handleBackButton() {
+    async function handleBackButton() {
+        if (workoutLogExercise?.sets?.length === 0) {
+            await deleteWorkoutLogExerciseById(workoutLogExercise.id);
+        }
         navigation.goBack();
     }
 
@@ -66,8 +69,8 @@ export default function ActiveExerciseScreen() {
             return;
         }
         setSelectedSet(set);
-        setMeasurement1Value(set.measurement1Value ?? "");
-        setMeasurement2Value(set.measurement2Value ?? "");
+        setMeasurement1Value(set.measurement1Value ?? 0);
+        setMeasurement2Value(set.measurement2Value);
     }
 
     async function handleDeleteSet() {
@@ -81,8 +84,8 @@ export default function ActiveExerciseScreen() {
     async function handleSaveSet() {
         if (!workoutLogExercise) return;
 
-        const isPrimaryRepsInvalid = workoutLogExercise.primaryMeasurementName === "Reps" && (!measurement1Value || measurement1Value === "0");
-        const isSecondaryRepsInvalid = workoutLogExercise.secondaryMeasurementName === "Reps" && (!measurement2Value || measurement2Value === "0");
+        const isPrimaryRepsInvalid = workoutLogExercise.primaryMeasurementName === "Reps" && (!measurement1Value || measurement1Value === 0);
+        const isSecondaryRepsInvalid = workoutLogExercise.secondaryMeasurementName === "Reps" && (!measurement2Value || measurement2Value === 0);
 
         if (isPrimaryRepsInvalid || isSecondaryRepsInvalid) {
             return;
@@ -92,9 +95,9 @@ export default function ActiveExerciseScreen() {
             id: selectedSet?.id ?? undefined,
             workoutLogExerciseId,
             measurement1Id: workoutLogExercise.primaryMeasurementId,
-            measurement1Value: measurement1Value?.trim() ? measurement1Value : "0",
+            measurement1Value: measurement1Value ?? 0,
             measurement2Id: workoutLogExercise.secondaryMeasurementId ?? null,
-            measurement2Value: workoutLogExercise.secondaryMeasurementId ? measurement2Value?.trim() ? measurement2Value : "0" : null,
+            measurement2Value: measurement2Value ?? null,
             isComplete: selectedSet?.isComplete ?? false,
             completedAt: selectedSet?.completedAt ?? null,
         });
@@ -165,8 +168,18 @@ export default function ActiveExerciseScreen() {
                                 renderItem={({ item, index }) => (
                                     <ActiveExerciseSet
                                         setNumber={index + 1}
-                                        measurement1Value={item.measurement1Value}
-                                        measurement2Value={item.measurement2Value}
+                                        measurement1={{
+                                            value: item.measurement1Value,
+                                            type: workoutLogExercise.primaryMeasurementName,
+                                            unit: workoutLogExercise.primaryMeasurementUnitName,
+                                            unitDecimalPlaces: workoutLogExercise.primaryMeasurementUnitDecimalPlaces
+                                        }}
+                                        measurement2={item.measurement2Value ? {
+                                            value: item.measurement2Value,
+                                            type: workoutLogExercise.secondaryMeasurementName,
+                                            unit: workoutLogExercise.secondaryMeasurementUnitName,
+                                            unitDecimalPlaces: workoutLogExercise.secondaryMeasurementUnitDecimalPlaces
+                                        } : undefined}
                                         completed={item.isComplete ?? false}
                                         onComplete={() => handleCompleteSet(item)}
                                         active={item.id === selectedSet?.id}

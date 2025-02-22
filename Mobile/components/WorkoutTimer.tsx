@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useWorkoutTimerStore } from "../store/timerStore";
 import { theme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
-import { formatTimeNumber } from "../utilities/formatHelpers";
+import { formatTime } from "../utilities/formatHelpers";
 
 
 export default function WorkoutTimer() {
@@ -26,7 +26,7 @@ export default function WorkoutTimer() {
             {/* Workout Timer */}
             <View style={styles.timerRow}>
                 <Text style={styles.timerLabel}>Workout</Text>
-                <Text style={styles.timerValue}>{formatTimeNumber(workoutStartTime)}</Text>
+                <Text style={styles.timerValue}>{formatTime(workoutStartTime)}</Text>
                 {isWorkoutActive && (
                     <TouchableOpacity onPress={endWorkout}>
                         <Ionicons name="stop-circle-outline" size={24} color={theme.colors.danger} />
@@ -37,7 +37,7 @@ export default function WorkoutTimer() {
             {/* Set Timer */}
             <View style={styles.timerRow}>
                 <Text style={styles.timerLabel}>Set</Text>
-                <Text style={styles.timerValue}>{formatTimeNumber(setStartTime)}</Text>
+                <Text style={styles.timerValue}>{formatTime(setStartTime)}</Text>
                 {isSetActive && (
                     <TouchableOpacity onPress={endSet}>
                         <Ionicons name="checkmark-circle-outline" size={24} color={theme.colors.success} />
@@ -48,7 +48,7 @@ export default function WorkoutTimer() {
             {/* Rest Timer */}
             <View style={styles.timerRow}>
                 <Text style={styles.timerLabel}>Rest</Text>
-                <Text style={styles.timerValue}>{formatTimeNumber(restStartTime)}</Text>
+                <Text style={styles.timerValue}>{formatTime(restStartTime)}</Text>
                 <TouchableOpacity onPress={isRestActive ? endRest : startRest}>
                     <Ionicons
                         name={isRestActive ? "pause-circle-outline" : "play-circle-outline"}

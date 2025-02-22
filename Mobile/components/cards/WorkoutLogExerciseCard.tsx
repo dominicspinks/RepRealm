@@ -26,8 +26,10 @@ export default function ActiveWorkoutExerciseCard({ exercise, onSelect }: Active
                         <ActiveWorkoutExerciseSet set={item} exercise={{
                             primaryMeasurementName: exercise.primaryMeasurementName,
                             primaryMeasurementUnitName: exercise.primaryMeasurementUnitName,
+                            primaryMeasurementUnitDecimalPlaces: exercise.primaryMeasurementUnitDecimalPlaces,
                             secondaryMeasurementName: exercise.secondaryMeasurementName,
-                            secondaryMeasurementUnitName: exercise.secondaryMeasurementUnitName
+                            secondaryMeasurementUnitName: exercise.secondaryMeasurementUnitName,
+                            secondaryMeasurementUnitDecimalPlaces: exercise.secondaryMeasurementUnitDecimalPlaces
                         }} />
                     )}
                     style={{ flex: 1 }}

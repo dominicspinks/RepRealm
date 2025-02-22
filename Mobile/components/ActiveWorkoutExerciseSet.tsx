@@ -7,8 +7,10 @@ interface ActiveWorkoutExerciseProps {
     exercise: {
         primaryMeasurementName: string;
         primaryMeasurementUnitName: string | null;
+        primaryMeasurementUnitDecimalPlaces: number | null;
         secondaryMeasurementName: string | null;
         secondaryMeasurementUnitName: string | null;
+        secondaryMeasurementUnitDecimalPlaces: number | null;
     };
 }
 
@@ -16,8 +18,8 @@ export default function ActiveWorkoutExercise({ set, exercise }: ActiveWorkoutEx
     return (
         <View style={styles.row}>
             <View style={{ flex: 1 }} />
-            <Text>{formatSetValue(set.measurement1Value, exercise.primaryMeasurementName, exercise.primaryMeasurementUnitName)}</Text>
-            <Text>{set.measurement2Id && formatSetValue(set.measurement2Value, exercise.secondaryMeasurementName, exercise.secondaryMeasurementUnitName)}</Text>
+            <Text>{formatSetValue(set.measurement1Value, exercise.primaryMeasurementName, exercise.primaryMeasurementUnitName, exercise.primaryMeasurementUnitDecimalPlaces)}</Text>
+            <Text>{set.measurement2Id && formatSetValue(set.measurement2Value, exercise.secondaryMeasurementName, exercise.secondaryMeasurementUnitName, exercise.secondaryMeasurementUnitDecimalPlaces)}</Text>
         </View>
     )
 }

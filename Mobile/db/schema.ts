@@ -89,9 +89,9 @@ export const workoutExerciseSetsTable = sqliteTable("workout_exercise_sets", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     workoutExerciseId: text("workout_exercise_id").notNull().references(() => workoutExercisesTable.id, { onDelete: "cascade" }),
     measurement1Id: text("measurement_1_id").notNull().references(() => measurementsTable.id, { onDelete: "no action" }),
-    measurement1Value: text("measurement_1_value"),
+    measurement1Value: integer("measurement_1_value"),
     measurement2Id: text("measurement_2_id").references(() => measurementsTable.id, { onDelete: "set null" }),
-    measurement2Value: text("measurement_2_value"),
+    measurement2Value: integer("measurement_2_value"),
 });
 
 // **Workout Logs Table**
@@ -116,9 +116,9 @@ export const workoutLogExerciseSetsTable = sqliteTable("workout_log_exercise_set
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     workoutLogExerciseId: text("workout_log_exercise_id").notNull().references(() => workoutLogExercisesTable.id, { onDelete: "cascade" }),
     measurement1Id: text("measurement_1_type_id").notNull().references(() => measurementsTable.id, { onDelete: "no action" }),
-    measurement1Value: text("measurement_1_value"),
+    measurement1Value: integer("measurement_1_value"),
     measurement2Id: text("measurement_2_type_id").references(() => measurementsTable.id, { onDelete: "set null" }),
-    measurement2Value: text("measurement_2_value"),
+    measurement2Value: integer("measurement_2_value"),
     isComplete: integer("is_complete", { mode: "boolean" }).default(false),
     completedAt: integer("completed_at", { mode: "timestamp" }),
 });

@@ -1,11 +1,22 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Platform } from "react-native";
 import Checkbox from "./forms/Checkbox";
 import { theme } from "../theme";
+import { formatSetValue } from "../utilities/formatHelpers";
 
 interface ActiveExerciseSetProps {
     setNumber: number;
-    measurement1Value: string | null;
-    measurement2Value: string | null;
+    measurement1: {
+        value: number | null;
+        type: string;
+        unit: string | null;
+        unitDecimalPlaces: number | null;
+    }
+    measurement2?: {
+        value: number | null;
+        type: string | null;
+        unit: string | null;
+        unitDecimalPlaces: number | null;
+    } | undefined;
     completed: boolean;
     active: boolean;
     onComplete: () => void;
@@ -14,8 +25,8 @@ interface ActiveExerciseSetProps {
 
 export default function ActiveExerciseSet({
     setNumber,
-    measurement1Value,
-    measurement2Value,
+    measurement1,
+    measurement2,
     completed,
     active,
     onComplete,
@@ -29,13 +40,18 @@ export default function ActiveExerciseSet({
             <Text style={styles.setNumber}>{setNumber}</Text>
 
             <View style={styles.measurementsContainer}>
-                <Text style={styles.measurement}>
-                    {measurement1Value ?? "-"}
-                </Text>
-                {measurement2Value && (
-                    <Text style={styles.measurement}>
-                        {measurement2Value}
+                <View style={styles.measurementWrapper}>
+                    <Text style={styles.measurementValue}>
+                        {formatSetValue(measurement1.value, measurement1.type, measurement1.unit, measurement1.unitDecimalPlaces)}
                     </Text>
+                </View>
+
+                {measurement2 && (
+                    <View style={styles.measurementWrapper}>
+                        <Text style={styles.measurementValue}>
+                            {formatSetValue(measurement2.value, measurement2.type, measurement2.unit, measurement2.unitDecimalPlaces)}
+                        </Text>
+                    </View>
                 )}
             </View>
 
@@ -70,8 +86,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
     },
-    measurement: {
+    measurementWrapper: {
+        flexDirection: "row",
+        alignItems: "center",
+        minWidth: 80,
+        justifyContent: "flex-end",
+    },
+    measurementValue: {
         fontSize: 14,
-        marginHorizontal: 8,
+        textAlign: "right",
+    },
+    measurementUnit: {
+        fontSize: 14,
+        marginLeft: 4,
+        textAlign: "right",
     },
 });
