@@ -1,0 +1,19 @@
+node_modules
+.env
+
+# Ignore OS & editor-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore test & build artifacts
+coverage
+*.cache
+.vscode
+.idea
+.npm
+dist
+build
+
+# Ignore Docker-related files that shouldn’t be copied
+.dockerignore
+Dockerfile
