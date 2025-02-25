@@ -131,11 +131,8 @@ export default function ActiveWorkoutScreen() {
                             )}
                             ListEmptyComponent={<EmptyListNotice text="No exercises found." />}
                         />
-
-
                     )
                 )}
-
             </View>
 
             {/* Timer Bar - Always Visible */}

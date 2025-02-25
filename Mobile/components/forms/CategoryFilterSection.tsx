@@ -16,7 +16,7 @@ export default function CategoryFilterSection({ categories, toggleCategory, temp
     const [isExpanded, setIsExpanded] = useState(expanded);
 
     return (
-        <View>
+        <View key={"categoryFilter"}>
             <FilterTypeHeader label="Categories" isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
 
             {isExpanded && (

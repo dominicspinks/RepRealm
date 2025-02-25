@@ -1,6 +1,6 @@
 import { eq, inArray, sql, desc } from "drizzle-orm";
 import { db } from "../db/database";
-import { workoutLogsTable, workoutLogExercisesTable, NewWorkoutLogExercise, workoutLogExerciseSetsTable, WorkoutLog, WorkoutLogWithExercises, WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, exercisesTable, categoriesTable, coloursTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, NewWorkoutLogExerciseSet, NewWorkoutLog, WorkoutLogExercise } from "../db/schema";
+import { workoutLogsTable, workoutLogExercisesTable, NewWorkoutLogExercise, workoutLogExerciseSetsTable, WorkoutLog, WorkoutLogWithExercises, WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, exercisesTable, categoriesTable, coloursTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, NewWorkoutLogExerciseSet } from "../db/schema";
 import { getWorkoutExercisesByWorkoutId } from "./workoutsService";
 import { getExerciseById } from "./exercisesService";
 

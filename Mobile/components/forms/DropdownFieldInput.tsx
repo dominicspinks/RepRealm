@@ -11,6 +11,7 @@ interface DropdownFieldInputProps<T> {
     placeholder: string;
     label?: string;
     style?: ViewStyle | TextStyle;
+    disabled?: boolean;
 }
 
 export default function DropdownFieldInput<T>({
@@ -21,7 +22,8 @@ export default function DropdownFieldInput<T>({
     valueField,
     placeholder,
     label,
-    style
+    style,
+    disabled = false
 }: DropdownFieldInputProps<T>) {
     return (
         <View style={[styles.dropdownContainer, style]}>
@@ -31,6 +33,7 @@ export default function DropdownFieldInput<T>({
                     selectedValue={selectedValue ?? ""}
                     onValueChange={setValue}
                     style={styles.picker}
+                    enabled={!disabled}
                 >
                     <Picker.Item label={placeholder} value={null} />
                     {items.map((item) => (
