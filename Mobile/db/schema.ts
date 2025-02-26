@@ -98,9 +98,9 @@ export const workoutExerciseSetsTable = sqliteTable("workout_exercise_sets", {
 export const workoutLogsTable = sqliteTable("workout_logs", {
     id: text("id").primaryKey().$default(() => UUIDv7Schema.parse(undefined)),
     workoutId: text("workout_id").references(() => workoutsTable.id, { onDelete: "set null" }),
-    duration: integer("duration"),
     createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
     startedAt: integer("started_at", { mode: "timestamp" }),
+    stoppedAt: integer("stopped_at", { mode: "timestamp" }),
 });
 
 // **Workout Log Exercises Table**

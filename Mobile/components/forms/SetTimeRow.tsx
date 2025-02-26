@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { theme } from "../../theme";
+import { splitTimeComponents } from "../../utilities/formatHelpers";
 
 interface SetTimeRowProps {
     value: number;
@@ -8,32 +9,37 @@ interface SetTimeRowProps {
 }
 
 export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
-    const [hours, setHours] = useState("");
-    const [minutes, setMinutes] = useState("");
-    const [seconds, setSeconds] = useState("");
+    const [inputHours, setInputHours] = useState("");
+    const [inputMinutes, setInputMinutes] = useState("");
+    const [inputSeconds, setInputSeconds] = useState("");
 
-    // Convert milliseconds to hh:mm:ss when component mounts or value changes
     useEffect(() => {
-        const totalMilliseconds = value || 0;
-        const h = Math.floor(totalMilliseconds / 3600000);
-        const m = Math.floor((totalMilliseconds % 3600000) / 60000);
-        const s = Math.floor((totalMilliseconds % 60000) / 1000);
-
-        setHours(h > 0 ? h.toString() : "");
-        setMinutes(m > 0 || h > 0 ? m.toString() : "");
-        setSeconds(s > 0 || m > 0 || h > 0 ? s.toString() : "");
+        const { hours, minutes, seconds } = splitTimeComponents(value);
+        setInputHours(hours > 0 ? hours.toString() : "");
+        setInputMinutes(minutes.toString().padStart(2, "0"));
+        setInputSeconds(seconds.toString().padStart(2, "0"));
     }, [value]);
 
-    // Update state and convert to milliseconds
-    function updateTime(newHours: string, newMinutes: string, newSeconds: string) {
-        const h = newHours === "" ? 0 : Math.max(0, parseInt(newHours) || 0);
-        const m = newMinutes === "" ? 0 : Math.min(Math.max(parseInt(newMinutes) || 0, 0), 59);
-        const s = newSeconds === "" ? 0 : Math.min(Math.max(parseInt(newSeconds) || 0, 0), 59);
+    // Handle raw input without applying formatting immediately
+    function handleChange(setInput: (val: string) => void) {
+        return (text: string) => {
+            if (text === "" || /^[0-9]{0,2}$/.test(text)) {
+                setInput(text);
+            }
+        };
+    }
 
-        setHours(newHours);
-        setMinutes(newMinutes);
-        setSeconds(newSeconds);
+    // Apply formatting when user exits input field
+    function handleBlur() {
+        const h = inputHours === "" ? 0 : Math.max(0, parseInt(inputHours) || 0);
+        const m = inputMinutes === "" ? 0 : Math.min(Math.max(parseInt(inputMinutes) || 0), 59);
+        const s = inputSeconds === "" ? 0 : Math.min(Math.max(parseInt(inputSeconds) || 0), 59);
 
+        setInputHours(h > 0 ? h.toString() : "");
+        setInputMinutes(m.toString().padStart(2, "0"));
+        setInputSeconds(s.toString().padStart(2, "0"));
+
+        // Convert to milliseconds
         const totalMilliseconds = (h * 3600000) + (m * 60000) + (s * 1000);
         setTime(totalMilliseconds);
     }
@@ -45,9 +51,11 @@ export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
                 keyboardType="numeric"
                 placeholder="hh"
                 maxLength={2}
-                value={hours}
-                onFocus={() => setHours(hours || "")}
-                onChangeText={(val) => updateTime(val, minutes, seconds)}
+                value={inputHours}
+                onFocus={() => setInputHours(inputHours || "")}
+                onChangeText={handleChange(setInputHours)}
+                onBlur={handleBlur}
+                selectTextOnFocus={true}
             />
             <Text style={styles.separator}>:</Text>
             <TextInput
@@ -55,9 +63,11 @@ export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
                 keyboardType="numeric"
                 placeholder="mm"
                 maxLength={2}
-                value={minutes}
-                onFocus={() => setMinutes(minutes || "")}
-                onChangeText={(val) => updateTime(hours, val, seconds)}
+                value={inputMinutes}
+                onFocus={() => setInputMinutes(inputMinutes || "")}
+                onChangeText={handleChange(setInputMinutes)}
+                onBlur={handleBlur}
+                selectTextOnFocus={true}
             />
             <Text style={styles.separator}>:</Text>
             <TextInput
@@ -65,9 +75,11 @@ export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
                 keyboardType="numeric"
                 placeholder="ss"
                 maxLength={2}
-                value={seconds}
-                onFocus={() => setSeconds(seconds || "")}
-                onChangeText={(val) => updateTime(hours, minutes, val)}
+                value={inputSeconds}
+                onFocus={() => setInputSeconds(inputSeconds || "")}
+                onChangeText={handleChange(setInputSeconds)}
+                onBlur={handleBlur}
+                selectTextOnFocus={true}
             />
         </View>
     );
@@ -88,6 +100,7 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.inputBorder,
         borderRadius: 5,
         color: theme.colors.text,
+        backgroundColor: "white",
     },
     separator: {
         fontSize: 18,

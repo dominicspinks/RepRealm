@@ -3,86 +3,131 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useWorkoutTimerStore } from "../store/timerStore";
 import { theme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
-import { formatTime } from "../utilities/formatHelpers";
-
+import { formatElapsedTime, formatTime } from "../utilities/formatHelpers";
 
 export default function WorkoutTimer() {
     const {
-        workoutStartTime, restStartTime, setStartTime,
-        isWorkoutActive, isRestActive, isSetActive,
-        startWorkout, endWorkout, startSet, endSet, startRest, endRest
+        workoutStartTime, workoutEndTime, startWorkout, endWorkout,
+        restTimeRemaining, isRestActive, startRest, endRest,
+        stopwatchTime, isStopwatchRunning, startStopwatch, pauseStopwatch, resetStopwatch,
+        isNegativeStopwatch, leadTime
     } = useWorkoutTimerStore();
 
-    const [_, setUpdate] = useState(0); // Forces re-render every second
+    const [_, setUpdate] = useState(0);
 
     /** Re-render the component every second */
     useEffect(() => {
-        const interval = setInterval(() => setUpdate((prev) => prev + 1), 1000);
+        const interval = setInterval(() => setUpdate(Date.now()), 1000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={styles.timerContainer}>
             {/* Workout Timer */}
-            <View style={styles.timerRow}>
-                <Text style={styles.timerLabel}>Workout</Text>
-                <Text style={styles.timerValue}>{formatTime(workoutStartTime)}</Text>
-                {isWorkoutActive && (
-                    <TouchableOpacity onPress={endWorkout}>
-                        <Ionicons name="stop-circle-outline" size={24} color={theme.colors.danger} />
-                    </TouchableOpacity>
-                )}
-            </View>
-
-            {/* Set Timer */}
-            <View style={styles.timerRow}>
-                <Text style={styles.timerLabel}>Set</Text>
-                <Text style={styles.timerValue}>{formatTime(setStartTime)}</Text>
-                {isSetActive && (
-                    <TouchableOpacity onPress={endSet}>
-                        <Ionicons name="checkmark-circle-outline" size={24} color={theme.colors.success} />
-                    </TouchableOpacity>
-                )}
-            </View>
-
-            {/* Rest Timer */}
-            <View style={styles.timerRow}>
-                <Text style={styles.timerLabel}>Rest</Text>
-                <Text style={styles.timerValue}>{formatTime(restStartTime)}</Text>
-                <TouchableOpacity onPress={isRestActive ? endRest : startRest}>
-                    <Ionicons
-                        name={isRestActive ? "pause-circle-outline" : "play-circle-outline"}
-                        size={24}
-                        color={isRestActive ? theme.colors.warning : theme.colors.primary}
-                    />
+            <View style={styles.timerBoxContainer}>
+                <TouchableOpacity style={styles.timerBox} onPress={() => console.log("Open Workout Timer Modal")}>
+                    <Text style={styles.timerLabel}>WORKOUT</Text>
+                    <Text style={styles.timerValue}>{workoutEndTime && workoutStartTime ? formatTime(workoutEndTime - workoutStartTime) : formatElapsedTime(workoutStartTime)}</Text>
                 </TouchableOpacity>
+                <View style={styles.timerButtonContainer}>
+                    <TouchableOpacity style={styles.timerButton} onPress={workoutStartTime && !workoutEndTime ? endWorkout : startWorkout}>
+                        <Ionicons
+                            name={workoutStartTime && !workoutEndTime ? "stop" : "play"}
+                            size={30}
+                            color={theme.colors.primary}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* Vertical Border */}
+            <View style={styles.verticalBorder} />
+
+            {/* Rest Timer (Centered) */}
+            <View style={styles.restTimerContainer}>
+                <TouchableOpacity style={styles.timerBox} onPress={() => console.log("Open Rest Timer Modal")}>
+                    <Text style={styles.timerLabel}>REST</Text>
+                    <Text style={styles.timerValue}>{restTimeRemaining}</Text>
+                </TouchableOpacity>
+            </View>
+
+            {/* Vertical Border */}
+            <View style={styles.verticalBorder} />
+
+            {/* Stopwatch Timer */}
+            <View style={styles.timerBoxContainer}>
+                <TouchableOpacity style={styles.timerBox} onPress={() => console.log("Open Stopwatch Modal")}>
+                    <Text style={styles.timerLabel}>STOPWATCH</Text>
+                    <Text style={styles.timerValue}>
+                        {isNegativeStopwatch ? "-" : ""}{formatTime(stopwatchTime)}
+                    </Text>
+                </TouchableOpacity>
+                <View style={styles.timerButtonContainer}>
+                    <TouchableOpacity style={styles.timerButton} onPress={isStopwatchRunning ? pauseStopwatch : startStopwatch}>
+                        <Ionicons
+                            name={isStopwatchRunning ? "pause" : "play"}
+                            size={30}
+                            color={theme.colors.primary}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.timerButton} onPress={resetStopwatch}>
+                        <Text style={styles.timerLabel}>RESET</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: theme.colors.background,
-        padding: 10,
-        borderRadius: 10,
-        width: "100%",
-        alignSelf: "center",
-    },
-    timerRow: {
+    timerContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: 10,
+        backgroundColor: theme.colors.background,
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.border,
+        paddingVertical: 2,
+    },
+    timerBoxContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        flex: 3,
+        justifyContent: "center",
+    },
+    restTimerContainer: {
+        flex: 2,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    timerBox: {
+        alignItems: "center",
     },
     timerLabel: {
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: "bold",
         color: theme.colors.text,
     },
     timerValue: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: "bold",
         color: theme.colors.primary,
+    },
+    timerButtonContainer: {
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: 10,
+    },
+    timerButton: {
+        alignItems: "center",
+        justifyContent: "center",
+        height: 30,
+        width: 50,
+    },
+    verticalBorder: {
+        width: 1,
+        height: "60%",
+        backgroundColor: theme.colors.border,
     },
 });

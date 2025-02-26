@@ -55,16 +55,30 @@ export function scaleMeasurementInt(value: number, decimalPlaces: number | null)
 }
 
 /**
- * Formats time into HH:MM:SS
+ * Converts milliseconds into hours, minutes, and seconds
  * @param milliseconds - Length of time in milliseconds
+ * @returns Object with { hours, minutes, seconds }
  */
-export function formatTime(milliseconds: number | null): string {
-    if (!milliseconds) return "--:--";
+export function splitTimeComponents(milliseconds: number | null): { hours: number; minutes: number; seconds: number } {
+    if (!milliseconds) return { hours: 0, minutes: 0, seconds: 0 };
 
     const elapsed = Math.floor(milliseconds / 1000); // Convert ms to seconds
     const hours = Math.floor(elapsed / 3600);
     const minutes = Math.floor((elapsed % 3600) / 60);
     const seconds = elapsed % 60;
+
+    return { hours, minutes, seconds };
+}
+
+/**
+ * Formats time into HH:MM:SS string
+ * @param milliseconds - Length of time in milliseconds
+ * @returns Formatted string
+ */
+export function formatTime(milliseconds: number | null): string {
+    if (!milliseconds) return "--:--";
+
+    const { hours, minutes, seconds } = splitTimeComponents(milliseconds);
 
     return `${hours > 0 ? `${hours}:` : ""}${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }

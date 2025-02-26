@@ -15,6 +15,8 @@ import WorkoutTimer from "../components/WorkoutTimer";
 import SetMeasurementContainer from "../components/forms/SetMeasurementContainer";
 import ActiveExerciseSet from "../components/ActiveExerciseSet";
 import Button from "../components/buttons/Button";
+import { useWorkoutTimerStore } from "../store/timerStore";
+import { useNotificationSounds } from "../utilities/notificationHelper";
 
 type ActiveExerciseScreenNavigationProp = StackNavigationProp<RootStackParamList, "ActiveExercise">;
 type ActiveExerciseScreenRouteProp = RouteProp<RootStackParamList, "ActiveExercise">;
@@ -30,6 +32,7 @@ export default function ActiveExerciseScreen() {
     const [measurement1Value, setMeasurement1Value] = useState<number | null>(null);
     const [measurement2Value, setMeasurement2Value] = useState<number | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const { playerLongBeep } = useNotificationSounds();
 
     useEffect(() => {
         fetchWorkoutLogExercise();
@@ -106,6 +109,8 @@ export default function ActiveExerciseScreen() {
     }
 
     async function handleCompleteSet(set: WorkoutLogExerciseSet) {
+        const { startRest } = useWorkoutTimerStore.getState();
+
         await saveWorkoutLogSet({
             ...set,
             isComplete: !set.isComplete,
@@ -113,6 +118,8 @@ export default function ActiveExerciseScreen() {
         });
 
         fetchWorkoutLogExercise();
+
+        if (!set.isComplete) startRest(workoutLogExercise?.rest ?? 10, playerLongBeep);
     }
 
     return (

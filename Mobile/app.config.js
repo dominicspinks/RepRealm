@@ -29,7 +29,8 @@ export default {
             favicon: "./assets/favicon.png"
         },
         plugins: [
-            "expo-sqlite"
+            "expo-sqlite",
+            ["expo-audio"]
         ],
         extra: {
             API_URL: process.env.API_URL,
