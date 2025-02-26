@@ -76,7 +76,7 @@ export function splitTimeComponents(milliseconds: number | null): { hours: numbe
  * @returns Formatted string
  */
 export function formatTime(milliseconds: number | null): string {
-    if (!milliseconds) return "--:--";
+    if (milliseconds === null) return "--:--";
 
     const { hours, minutes, seconds } = splitTimeComponents(milliseconds);
 

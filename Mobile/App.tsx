@@ -9,10 +9,14 @@ import AppNavigator from './navigation/AppNavigator';
 
 import { initialiseDatabase } from "./db/initialise";
 import { useDatabaseMigrations } from './db/database';
+import { useNotificationSounds } from './utilities/notificationHelper';
+import { useWorkoutTimerStore } from './store/timerStore';
 
 export default function App() {
     const { success, error } = useDatabaseMigrations();
     const [initialised, setInitialised] = useState(false);
+    const { playerLongBeep } = useNotificationSounds();
+    const { setPlayer } = useWorkoutTimerStore();
 
     useEffect(() => {
         if (!success) return;
@@ -22,6 +26,13 @@ export default function App() {
             setInitialised(true);
         })();
     }, [success]);
+
+    // Initialise the audio player
+    useEffect(() => {
+        if (playerLongBeep) {
+            setPlayer(playerLongBeep);
+        }
+    }, [playerLongBeep, setPlayer]);
 
     if (error) {
         return (

@@ -25,22 +25,29 @@ export default function WorkoutLogCard({
         setExpanded(prev => !prev);
     }
 
+    console.log(workoutLog)
     return (
         <TouchableOpacity
             style={styles.card}
             onPress={handlePress}>
-            {/* Workout Header */}
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
-                    <Text style={styles.workoutName}>{
-                        workoutLog?.startedAt
-                            ? formatDate(workoutLog.startedAt)
-                            : workoutLog?.createdAt
-                                ? formatDate(workoutLog.createdAt)
-                                : ""
-                    }</Text>
+                    <View style={styles.dateDurationRow}>
+                        <Text style={styles.workoutName}>
+                            {workoutLog?.startedAt
+                                ? formatDate(workoutLog.startedAt)
+                                : workoutLog?.createdAt
+                                    ? formatDate(workoutLog.createdAt)
+                                    : ""}
+                        </Text>
 
-                    {/* Categories (Collapsed State) */}
+                        {workoutLog?.startedAt && workoutLog?.stoppedAt && (
+                            <Text style={styles.workoutDuration}>
+                                {Math.round((Number(workoutLog.stoppedAt) - Number(workoutLog.startedAt)) / 60000)} min
+                            </Text>
+                        )}
+                    </View>
+
                     <View style={styles.categoryContainer}>
                         {[...new Map(workoutLog.exercises.map(exercise => [exercise.categoryId, {
                             id: exercise.categoryId,
@@ -54,16 +61,13 @@ export default function WorkoutLogCard({
                     </View>
                 </View>
 
-                {/* Expand/Collapse Icon (Hidden if collapsible is false) */}
                 <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={theme.colors.text} />
             </View>
 
-            {/* Expanded View: Exercises */}
             {expanded && (
                 <View style={styles.exerciseContainer}>
                     {workoutLog.exercises.map((exercise) => (
                         <View key={exercise.id} style={styles.exerciseCard}>
-                            {/* Category Colour Bar */}
                             <View style={[styles.categoryBar, { backgroundColor: exercise.categoryColour }]} />
 
                             <WorkoutLogExercise exercise={exercise} />
@@ -72,7 +76,6 @@ export default function WorkoutLogCard({
                 </View>
             )}
 
-            {/* Action Buttons (Visible only when expanded) */}
             {expanded && (
                 <View style={styles.buttonRow}>
                     <EditIcon action={() => onEdit(workoutLog.id)} />
@@ -112,10 +115,21 @@ const styles = StyleSheet.create({
         gap: 5,
         flex: 1
     },
+    dateDurationRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+    },
     workoutName: {
         fontSize: 18,
         fontWeight: "bold",
         color: theme.colors.text,
+    },
+    workoutDuration: {
+        fontSize: 14,
+        fontWeight: "normal",
+        color: theme.colors.mutedText,
     },
     categoryContainer: {
         flexDirection: "row",

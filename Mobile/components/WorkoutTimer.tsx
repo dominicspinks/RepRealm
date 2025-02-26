@@ -4,13 +4,21 @@ import { useWorkoutTimerStore } from "../store/timerStore";
 import { theme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
 import { formatElapsedTime, formatTime } from "../utilities/formatHelpers";
+import { WorkoutLog } from "../db/schema";
 
-export default function WorkoutTimer() {
+interface WorkoutTimerProps {
+    workoutLog: {
+        id: string;
+        startedAt: Date | null;
+        stoppedAt: Date | null;
+    };
+}
+
+export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
     const {
         workoutStartTime, workoutEndTime, startWorkout, endWorkout,
-        restTimeRemaining, isRestActive, startRest, endRest,
-        stopwatchTime, isStopwatchRunning, startStopwatch, pauseStopwatch, resetStopwatch,
-        isNegativeStopwatch, leadTime
+        restTimeRemaining, initialiseTimerStore: initialiseTimerStore,
+        stopwatchTime, isStopwatchRunning, startStopwatch, pauseStopwatch, resetStopwatch
     } = useWorkoutTimerStore();
 
     const [_, setUpdate] = useState(0);
@@ -21,6 +29,14 @@ export default function WorkoutTimer() {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        initialiseTimerStore(
+            workoutLog.id,
+            workoutLog.startedAt ? new Date(workoutLog.startedAt).getTime() : null,
+            workoutLog.stoppedAt ? new Date(workoutLog.stoppedAt).getTime() : null
+        );
+    }, [workoutLog]);
+
     return (
         <View style={styles.timerContainer}>
             {/* Workout Timer */}
@@ -30,7 +46,7 @@ export default function WorkoutTimer() {
                     <Text style={styles.timerValue}>{workoutEndTime && workoutStartTime ? formatTime(workoutEndTime - workoutStartTime) : formatElapsedTime(workoutStartTime)}</Text>
                 </TouchableOpacity>
                 <View style={styles.timerButtonContainer}>
-                    <TouchableOpacity style={styles.timerButton} onPress={workoutStartTime && !workoutEndTime ? endWorkout : startWorkout}>
+                    <TouchableOpacity style={styles.timerButton} onPress={workoutStartTime && !workoutEndTime ? () => endWorkout(workoutLog.id) : () => startWorkout(workoutLog.id)}>
                         <Ionicons
                             name={workoutStartTime && !workoutEndTime ? "stop" : "play"}
                             size={30}
@@ -59,7 +75,7 @@ export default function WorkoutTimer() {
                 <TouchableOpacity style={styles.timerBox} onPress={() => console.log("Open Stopwatch Modal")}>
                     <Text style={styles.timerLabel}>STOPWATCH</Text>
                     <Text style={styles.timerValue}>
-                        {isNegativeStopwatch ? "-" : ""}{formatTime(stopwatchTime)}
+                        {formatTime(stopwatchTime ?? 0)}
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.timerButtonContainer}>
@@ -127,7 +143,7 @@ const styles = StyleSheet.create({
     },
     verticalBorder: {
         width: 1,
-        height: "60%",
+        height: "100%",
         backgroundColor: theme.colors.border,
     },
 });

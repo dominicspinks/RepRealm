@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import ScreenHeaderTitle from '../components/headers/ScreenHeaderTitle';
 import NavMenuIcon from '../components/icons/NavMenuIcon';
@@ -7,7 +7,7 @@ import PlusIcon from '../components/icons/PlusIcon';
 import StartWorkoutModal from '../components/modals/StartWorkoutModal';
 import SelectWorkoutModal from '../components/modals/SelectWorkoutModal';
 import { WorkoutLogWithExercises, WorkoutWithExercises } from '../db/schema';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
 import { createWorkoutLog, deleteWorkoutLogById, getWorkoutLogsWithExercises } from '../services/workoutLogsService';
@@ -25,6 +25,12 @@ export default function WorkoutLogsScreen() {
     useEffect(() => {
         loadWorkoutLogs();
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            loadWorkoutLogs();
+        }, [])
+    );
 
     async function loadWorkoutLogs() {
         const logs = await getWorkoutLogsWithExercises();

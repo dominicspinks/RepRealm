@@ -136,7 +136,11 @@ export default function ActiveWorkoutScreen() {
             </View>
 
             {/* Timer Bar - Always Visible */}
-            <WorkoutTimer />
+            <WorkoutTimer workoutLog={{
+                id: workoutLogId,
+                startedAt: workoutLog?.startedAt ?? null,
+                stoppedAt: workoutLog?.stoppedAt ?? null
+            }} />
 
             {/* Select Category Modal */}
             <SelectCategoryModal

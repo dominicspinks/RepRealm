@@ -2,49 +2,77 @@ import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { playBeep } from "../utilities/notificationHelper";
 import { AudioPlayer } from "expo-audio";
+import { updateWorkoutLogById } from "../services/workoutLogsService";
 
 interface TimerState {
+    workoutLogId: string | null;
+    initialiseTimerStore: (workoutLogId: string, startTime: number | null, endTime: number | null) => void;
+
     // Workout Timer
     workoutStartTime: number | null;
     workoutEndTime: number | null;
     isWorkoutActive: boolean;
-    startWorkout: () => void;
-    endWorkout: () => void;
+    startWorkout: (workoutLogId: string) => void;
+    endWorkout: (workoutLogId: string) => void;
 
     // Rest Timer
     restTimeRemaining: number;
     isRestActive: boolean;
-    startRest: (duration: number, playerLongBeep: AudioPlayer | null) => void;
+    startRest: (duration: number) => void;
     endRest: () => void;
     restInterval: NodeJS.Timeout | null;
+    playerLongBeep: AudioPlayer | null;
 
     // Stopwatch
     stopwatchTime: number;
     isStopwatchRunning: boolean;
-    isNegativeStopwatch: boolean;
-    leadTime: number;
+    stopwatchInterval: NodeJS.Timeout | null;
     startStopwatch: () => void;
     pauseStopwatch: () => void;
     resetStopwatch: () => void;
 
     // Persistent storage loading
     loadStoredTimers: () => Promise<void>;
+    setPlayer: (player: AudioPlayer) => void;
 }
 
 export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
+    workoutLogId: null,
+
+    initialiseTimerStore: (workoutLogId: string, startTime: number | null = null, endTime: number | null = null) => {
+        const { workoutLogId: currentWorkoutId, workoutStartTime, workoutEndTime } = get();
+        console.log("🔄 Initialising timer store for workout:", workoutLogId, currentWorkoutId, startTime, endTime);
+        if (currentWorkoutId !== workoutLogId || workoutStartTime !== startTime || workoutEndTime !== endTime) {
+            set({
+                workoutLogId,
+                workoutStartTime: startTime,
+                workoutEndTime: endTime,
+                isWorkoutActive: !!startTime && !endTime,
+                restTimeRemaining: 0,
+                isRestActive: false,
+                stopwatchTime: 0,
+                isStopwatchRunning: false,
+            });
+            console.log("🔄 Switched to new workout, resetting timers.");
+        }
+    },
+
     // Workout Timer
     workoutStartTime: null,
     workoutEndTime: null,
     isWorkoutActive: false,
+    playerLongBeep: null,
 
-    startWorkout: async () => {
-        const { workoutStartTime } = get();
+    setPlayer: (player: AudioPlayer) => set({ playerLongBeep: player }),
+
+    startWorkout: async (workoutLogId: string) => {
+        const { workoutStartTime, workoutLogId: currentWorkoutId } = get();
         const currentTime = workoutStartTime ?? Date.now();
         set({ workoutStartTime: currentTime, workoutEndTime: null, isWorkoutActive: true });
-        await AsyncStorage.setItem("workoutStartTime", currentTime.toString());
+        await updateWorkoutLogById(workoutLogId, { startedAt: new Date(currentTime), stoppedAt: null });
     },
 
-    endWorkout: async () => {
+    endWorkout: async (workoutLogId: string) => {
         set({
             workoutEndTime: Date.now(),
             isWorkoutActive: false,
@@ -54,6 +82,7 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
             isStopwatchRunning: false,
         });
         await AsyncStorage.multiRemove(["workoutStartTime", "restTimeRemaining", "stopwatchTime"]);
+        await updateWorkoutLogById(workoutLogId, { stoppedAt: new Date() });
     },
 
     // Rest Timer
@@ -61,10 +90,9 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
     isRestActive: false,
     restInterval: null,
 
-    startRest: async (duration: number, playerLongBeep: AudioPlayer | null) => {
-        const { restInterval } = get();
+    startRest: async (duration: number) => {
+        const { restInterval, playerLongBeep } = get();
 
-        // If a rest timer is already running, clear it before starting a new one
         if (restInterval) {
             clearInterval(restInterval);
         }
@@ -102,34 +130,44 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
     // Stopwatch
     stopwatchTime: 0,
     isStopwatchRunning: false,
-    isNegativeStopwatch: false,
-    leadTime: 0,
+    stopwatchInterval: null,
 
     startStopwatch: async () => {
+        const { stopwatchInterval } = get();
+
+        if (stopwatchInterval) {
+            clearInterval(stopwatchInterval);
+        }
+
         set({ isStopwatchRunning: true });
 
-        const tickStopwatch = setInterval(() => {
-            if (!get().isStopwatchRunning) {
-                clearInterval(tickStopwatch);
-                return;
-            }
-
+        const interval = setInterval(() => {
             set((state) => {
-                const newTime = state.stopwatchTime + (state.isNegativeStopwatch ? -1 : 1);
-                if (newTime === 0 || newTime === state.leadTime) {
-                    console.log("🔔 Stopwatch Beep!");
+                if (!state.isStopwatchRunning) {
+                    clearInterval(get().stopwatchInterval!);
+                    return state;
                 }
-                return { stopwatchTime: newTime };
+                return { stopwatchTime: state.stopwatchTime + 1000 };
             });
         }, 1000);
+
+        set({ stopwatchInterval: interval });
     },
 
     pauseStopwatch: async () => {
-        set({ isStopwatchRunning: false });
+        const { stopwatchInterval } = get();
+        if (stopwatchInterval) {
+            clearInterval(stopwatchInterval);
+        }
+        set({ isStopwatchRunning: false, stopwatchInterval: null });
     },
 
     resetStopwatch: async () => {
-        set({ stopwatchTime: get().leadTime, isNegativeStopwatch: get().leadTime < 0 });
+        const { stopwatchInterval } = get();
+        if (stopwatchInterval) {
+            clearInterval(stopwatchInterval);
+        }
+        set({ stopwatchTime: 0, isStopwatchRunning: false, stopwatchInterval: null });
     },
 
     // Load Stored Timers
@@ -139,11 +177,11 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
         const stopwatchTime = await AsyncStorage.getItem("stopwatchTime");
 
         set({
-            workoutStartTime: workoutStartTime ? parseInt(workoutStartTime, 10) : null,
+            workoutStartTime: workoutStartTime ? parseInt(workoutStartTime) : null,
             isWorkoutActive: !!workoutStartTime,
-            restTimeRemaining: restTimeRemaining ? parseInt(restTimeRemaining, 10) : 0,
+            restTimeRemaining: restTimeRemaining ? parseInt(restTimeRemaining) : 0,
             isRestActive: !!restTimeRemaining,
-            stopwatchTime: stopwatchTime ? parseInt(stopwatchTime, 10) : 0,
+            stopwatchTime: stopwatchTime ? parseInt(stopwatchTime) : 0,
             isStopwatchRunning: false,
         });
     },

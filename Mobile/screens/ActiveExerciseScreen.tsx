@@ -3,12 +3,12 @@ import { StyleSheet, View, FlatList, KeyboardAvoidingView, Platform, Keyboard, A
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import BackIcon from "../components/icons/BackIcon";
-import { WorkoutLogExerciseWithSets, WorkoutLogExerciseSet } from "../db/schema";
+import { WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, WorkoutLog } from "../db/schema";
 import { RootStackParamList } from "../navigation/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { getWorkoutLogExerciseById, saveWorkoutLogSet, deleteWorkoutLogSet, deleteWorkoutLogExerciseById } from "../services/workoutLogsService";
+import { getWorkoutLogExerciseById, saveWorkoutLogSet, deleteWorkoutLogSet, deleteWorkoutLogExerciseById, getWorkoutLogById } from "../services/workoutLogsService";
 import LoadingIndicator from "../components/LoadingIndicator";
 import ErrorMessage from "../components/ErrorMessage";
 import WorkoutTimer from "../components/WorkoutTimer";
@@ -26,13 +26,13 @@ export default function ActiveExerciseScreen() {
     const route = useRoute<ActiveExerciseScreenRouteProp>();
     const workoutLogExerciseId = route.params.workoutLogExerciseId;
 
+    const [workoutLog, setWorkoutLog] = useState<WorkoutLog | null>(null);
     const [workoutLogExercise, setWorkoutLogExercise] = useState<WorkoutLogExerciseWithSets | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedSet, setSelectedSet] = useState<WorkoutLogExerciseSet | null>(null);
     const [measurement1Value, setMeasurement1Value] = useState<number | null>(null);
     const [measurement2Value, setMeasurement2Value] = useState<number | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState(false);
-    const { playerLongBeep } = useNotificationSounds();
 
     useEffect(() => {
         fetchWorkoutLogExercise();
@@ -54,7 +54,9 @@ export default function ActiveExerciseScreen() {
 
     async function fetchWorkoutLogExercise() {
         setLoading(true);
+        if (!workoutLogExerciseId) return;
         const exercise = await getWorkoutLogExerciseById(workoutLogExerciseId);
+        if (exercise) setWorkoutLog(await getWorkoutLogById(exercise?.workoutLogId));
         setWorkoutLogExercise(exercise);
         setLoading(false);
     }
@@ -119,7 +121,7 @@ export default function ActiveExerciseScreen() {
 
         fetchWorkoutLogExercise();
 
-        if (!set.isComplete) startRest(workoutLogExercise?.rest ?? 10, playerLongBeep);
+        if (!set.isComplete) startRest(workoutLogExercise?.rest ?? 10);
     }
 
     return (
@@ -200,7 +202,11 @@ export default function ActiveExerciseScreen() {
             </View>
 
             {/* Timer Bar */}
-            {!keyboardVisible && <WorkoutTimer />}
+            {!keyboardVisible && workoutLogExercise?.workoutLogId && <WorkoutTimer workoutLog={{
+                id: workoutLogExercise.workoutLogId,
+                startedAt: workoutLog?.startedAt ?? null,
+                stoppedAt: workoutLog?.stoppedAt ?? null
+            }} />}
         </KeyboardAvoidingView>
     );
 }

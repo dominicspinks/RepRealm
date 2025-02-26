@@ -1,6 +1,6 @@
 import { eq, inArray, sql, desc } from "drizzle-orm";
 import { db } from "../db/database";
-import { workoutLogsTable, workoutLogExercisesTable, NewWorkoutLogExercise, workoutLogExerciseSetsTable, WorkoutLog, WorkoutLogWithExercises, WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, exercisesTable, categoriesTable, coloursTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, NewWorkoutLogExerciseSet } from "../db/schema";
+import { workoutLogsTable, workoutLogExercisesTable, NewWorkoutLogExercise, workoutLogExerciseSetsTable, WorkoutLog, WorkoutLogWithExercises, WorkoutLogExerciseWithSets, WorkoutLogExerciseSet, exercisesTable, categoriesTable, coloursTable, primaryMeasurementAlias, primaryUnitAlias, secondaryMeasurementAlias, secondaryUnitAlias, NewWorkoutLogExerciseSet, NewWorkoutLog } from "../db/schema";
 import { getWorkoutExercisesByWorkoutId } from "./workoutsService";
 import { getExerciseById } from "./exercisesService";
 
@@ -113,9 +113,9 @@ export async function createWorkoutLog(workoutId: string | null = null): Promise
             .returning({
                 id: workoutLogsTable.id,
                 workoutId: workoutLogsTable.workoutId,
-                duration: workoutLogsTable.duration,
                 createdAt: workoutLogsTable.createdAt,
                 startedAt: workoutLogsTable.startedAt,
+                stoppedAt: workoutLogsTable.stoppedAt
             });
 
         const newLog = workoutLogInsert[0];
@@ -306,4 +306,12 @@ export async function deleteWorkoutLogSet(setId: string) {
     await db
         .delete(workoutLogExerciseSetsTable)
         .where(eq(workoutLogExerciseSetsTable.id, setId));
+}
+
+// **Update workout log by id**
+export async function updateWorkoutLogById(id: string, updates: Partial<WorkoutLog>) {
+    await db
+        .update(workoutLogsTable)
+        .set(updates)
+        .where(eq(workoutLogsTable.id, id));
 }
