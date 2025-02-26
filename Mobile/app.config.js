@@ -4,7 +4,7 @@ export default {
     expo: {
         name: "RepRealm",
         slug: "RepRealm",
-        version: "1.0.0",
+        version: "0.1.0",
         orientation: "portrait",
         userInterfaceStyle: "light",
         icon: "./assets/icon.png",
@@ -34,6 +34,10 @@ export default {
         ],
         extra: {
             API_URL: process.env.API_URL,
-        }
-    }
+            eas: {
+                projectId: "457210e6-da4b-48c1-a70b-eda19d0b8252"
+            }
+        },
+        owner: "dominicsp"
+    },
 };
