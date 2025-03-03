@@ -12,8 +12,14 @@ import { deleteExercise, getExercisesFull } from "../services/exercisesService";
 import { Category, ExerciseFull } from "../db/schema";
 import ExerciseCard from "../components/cards/ExerciseCard";
 import EmptyListNotice from "../components/EmptyListNotice";
+import LoadingIndicator from "../components/LoadingIndicator";
+import { useColourTheme } from "../contexts/ThemeContext";
+import { ThemeColors } from "../theme";
 
 export default function ExerciseListScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [categories, setCategories] = useState<Category[]>([]);
     const [exercises, setExercises] = useState<ExerciseFull[]>([]);
     const [filteredExercises, setFilteredExercises] = useState<ExerciseFull[]>([]);
@@ -23,10 +29,14 @@ export default function ExerciseListScreen() {
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [selectedExercise, setSelectedExercise] = useState<ExerciseFull | null>(null);
 
+    const [loading, setLoading] = useState(true);
+
     // **Fetch categories & exercises on load**
     useEffect(() => {
+        setLoading(true);
         fetchExercises();
         fetchCategories();
+        setLoading(false);
     }, [modalVisible]);
 
     async function fetchCategories() {
@@ -97,7 +107,6 @@ export default function ExerciseListScreen() {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* Header */}
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Exercises" />}
@@ -109,41 +118,39 @@ export default function ExerciseListScreen() {
                 }
             />
 
-            {/* Exercise List */}
-            <FlatList
-                data={filteredExercises}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <ExerciseCard
-                        item={item}
-                        onEdit={openEditExercise}
-                        onDelete={() => handleDeleteExercise(item.id)}
-                    />
-                )}
-                ListEmptyComponent={<EmptyListNotice text="No exercises found" />}
-            />
+            {loading && <LoadingIndicator />}
 
-            {/* Set Exercise Modal */}
+            {!loading &&
+                <FlatList
+                    data={filteredExercises}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <ExerciseCard
+                            item={item}
+                            onEdit={openEditExercise}
+                            onDelete={() => handleDeleteExercise(item.id)}
+                        />
+                    )}
+                    ListEmptyComponent={<EmptyListNotice text="No exercises found" />}
+                />}
+
             <SetExerciseModal
                 visible={modalVisible}
                 onClose={closeModal}
                 exercise={selectedExercise}
             />
 
-            {/* Filter Modal */}
             <FilterModal
                 visible={filterModalVisible}
                 onClose={closeFilterModal}
-                categories={categories}
-                selectedCategories={selectedCategories}
-                setSelectedCategories={setSelectedCategories}
+                categoryFilter={{ selected: selectedCategories, setSelected: setSelectedCategories }}
             />
         </View>
     );
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     icons: {
         flexDirection: "row",
         gap: 15,

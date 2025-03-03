@@ -12,6 +12,8 @@ import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
 import { getCategories } from "../../services/categoriesService";
 import { scaleMeasurementReal } from "../../utilities/formatHelpers";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface SetExerciseModalProps {
     visible: boolean;
@@ -21,6 +23,9 @@ interface SetExerciseModalProps {
 }
 
 export default function SetExerciseModal({ visible, onClose, exercise, activeCategoryId }: SetExerciseModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     // Determine decimal places from the weight measurement (if any)
     const primaryIsWeight = exercise?.primaryMeasurementName?.toLowerCase() === "weight";
     const secondaryIsWeight = exercise?.secondaryMeasurementName?.toLowerCase() === "weight";
@@ -305,7 +310,7 @@ export default function SetExerciseModal({ visible, onClose, exercise, activeCat
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     rowContainer: {
         flexDirection: "row",
         alignItems: "center",

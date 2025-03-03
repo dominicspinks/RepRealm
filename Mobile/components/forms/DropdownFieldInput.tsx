@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface DropdownFieldInputProps<T> {
     selectedValue: string | null;
@@ -25,6 +26,9 @@ export default function DropdownFieldInput<T>({
     style,
     disabled = false
 }: DropdownFieldInputProps<T>) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={[styles.dropdownContainer, style]}>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -49,7 +53,7 @@ export default function DropdownFieldInput<T>({
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     dropdownContainer: {
         marginBottom: theme.spacing.medium,
         width: "100%"
@@ -58,15 +62,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "bold",
         marginBottom: 5,
-        color: theme.colors.text,
+        color: colors.text,
     },
     dropdown: {
         borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         borderRadius: 5,
         paddingHorizontal: 10,
         paddingVertical: 0,
-        backgroundColor: theme.colors.inputBackground,
+        backgroundColor: colors.inputBackground,
     },
     picker: {
         height: 55,

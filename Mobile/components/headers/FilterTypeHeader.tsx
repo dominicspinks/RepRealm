@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface FilterTypeHeaderProps {
     label: string;
@@ -9,6 +10,9 @@ interface FilterTypeHeaderProps {
 }
 
 export default function FilterTypeHeader({ label, isExpanded, onClick }: FilterTypeHeaderProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <TouchableOpacity style={styles.headerContainer} onPress={onClick}>
             <Text style={styles.label}>{label}</Text>
@@ -21,14 +25,14 @@ export default function FilterTypeHeader({ label, isExpanded, onClick }: FilterT
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     headerContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: theme.colors.primary,
+        backgroundColor: colors.primary,
     },
     label: {
         color: 'white',

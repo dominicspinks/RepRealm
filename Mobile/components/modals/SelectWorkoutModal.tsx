@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { WorkoutWithExercises } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
@@ -14,6 +14,7 @@ import ModalContainer from "./ModalContainer";
 import React from "react";
 import { getRoutineWorkoutsByRoutineId } from "../../services/routinesService";
 import EmptyListNotice from "../EmptyListNotice";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SelectWorkoutModalProps {
     visible: boolean;
@@ -23,6 +24,8 @@ interface SelectWorkoutModalProps {
 }
 
 export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, excludeWorkouts = [] }: SelectWorkoutModalProps) {
+    const { colors } = useColourTheme();
+
     const [workouts, setWorkouts] = useState<WorkoutWithExercises[]>([]);
     const [filteredWorkouts, setFilteredWorkouts] = useState<WorkoutWithExercises[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -126,12 +129,3 @@ export default function SelectWorkoutModal({ visible, onClose, onSelectWorkout, 
         />
     );
 }
-
-// **Styles**
-const styles = StyleSheet.create({
-    emptyText: {
-        textAlign: "center",
-        marginTop: theme.spacing.large,
-        color: theme.colors.mutedText,
-    },
-});

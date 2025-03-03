@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { TextInput, View, TouchableOpacity, StyleSheet, Text, ViewStyle, TextStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../../theme';
+import { theme, ThemeColors } from '../../theme';
+import { useColourTheme } from '../../contexts/ThemeContext';
 
 interface InputProps {
     placeholder: string;
@@ -13,6 +14,9 @@ interface InputProps {
 }
 
 export default function Input({ placeholder, value, onChangeText, secureTextEntry, label, style }: InputProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     return (
@@ -41,7 +45,7 @@ export default function Input({ placeholder, value, onChangeText, secureTextEntr
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     inputContainer: {
         flexDirection: 'column',
         alignItems: 'flex-start',
@@ -50,10 +54,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: theme.colors.inputBackground,
+        backgroundColor: colors.inputBackground,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         marginBottom: theme.spacing.medium,
         padding: theme.spacing.small,
     },
@@ -67,6 +71,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         marginBottom: 5,
-        color: theme.colors.text,
+        color: colors.text,
     },
 });

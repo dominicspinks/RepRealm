@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import "reflect-metadata";
 import 'react-native-gesture-handler';
@@ -11,6 +10,9 @@ import { initialiseDatabase } from "./db/initialise";
 import { useDatabaseMigrations } from './db/database';
 import { useNotificationSounds } from './utilities/notificationHelper';
 import { useWorkoutTimerStore } from './store/timerStore';
+import { ColourThemeProvider } from './contexts/ThemeContext';
+import LoadingIndicator from './components/LoadingIndicator';
+import ErrorMessage from './components/ErrorMessage';
 
 export default function App() {
     const { success, error } = useDatabaseMigrations();
@@ -36,25 +38,23 @@ export default function App() {
 
     if (error) {
         return (
-            <View>
-                <Text>Migration error: {error.message}</Text>
-            </View>
+            <ErrorMessage message={`Migration error: ${error.message}`} />
         );
     }
 
     if (!success || !initialised) {
         return (
-            <View>
-                <Text>Setting up database...</Text>
-            </View>
+            <LoadingIndicator />
         );
     }
 
     return (
-        <MenuProvider>
+        <ColourThemeProvider>
             <NavigationContainer>
-                <AppNavigator />
+                <MenuProvider>
+                    <AppNavigator />
+                </MenuProvider >
             </NavigationContainer>
-        </MenuProvider>
+        </ColourThemeProvider>
     );
 }

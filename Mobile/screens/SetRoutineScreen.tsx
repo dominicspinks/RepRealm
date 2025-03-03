@@ -12,14 +12,18 @@ import BackIcon from "../components/icons/BackIcon";
 import CloseIcon from "../components/icons/CloseIcon";
 import EditIcon from "../components/icons/EditIcon";
 import PlusIcon from "../components/icons/PlusIcon";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
 import SelectWorkoutModal from "../components/modals/SelectWorkoutModal";
 import WorkoutCard from "../components/cards/WorkoutCard";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 type SetRoutineScreenNavigationProp = StackNavigationProp<RootStackParamList, "SetRoutine">;
 type SetRoutineScreenRouteProp = RouteProp<RootStackParamList, "SetRoutine">;
 
 export default function SetRoutineScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<SetRoutineScreenNavigationProp>();
     const route = useRoute<SetRoutineScreenRouteProp>();
     const routine = route.params.routine;
@@ -147,7 +151,7 @@ export default function SetRoutineScreen() {
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     titleContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -157,10 +161,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         borderBottomWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         padding: 2,
         minWidth: 120,
-        color: theme.colors.text,
+        color: colors.text,
     },
     editIcons: {
         flexDirection: "row",

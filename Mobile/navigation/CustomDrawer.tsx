@@ -4,9 +4,13 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import { useAuthStore } from '../store/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { AuthScreenNavigationProp } from './types';
-import { theme } from '../theme';
+import { theme, ThemeColors } from '../theme';
+import { useColourTheme } from '../contexts/ThemeContext';
 
 export default function CustomDrawer(props: any) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const { user, logout } = useAuthStore();
     const navigation = useNavigation<AuthScreenNavigationProp>();
 
@@ -53,34 +57,34 @@ export default function CustomDrawer(props: any) {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     userInfo: {
         padding: 20,
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.inputBorder,
+        borderBottomColor: colors.inputBorder,
         marginVertical: 10,
     },
     email: {
         fontSize: 14,
-        color: theme.colors.text,
+        color: colors.text,
         marginTop: 5,
     },
     guest: {
         fontSize: 16,
         fontStyle: 'italic',
-        color: theme.colors.text,
+        color: colors.text,
     },
     footer: {
         padding: 20,
         borderTopWidth: 1,
-        borderTopColor: theme.colors.inputBorder,
+        borderTopColor: colors.inputBorder,
     },
     authButton: {
         paddingVertical: 10,
         alignItems: 'center',
     },
     authText: {
-        color: theme.colors.primary,
+        color: colors.primary,
         fontSize: 16,
         fontWeight: 'bold',
     },

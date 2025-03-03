@@ -2,6 +2,8 @@ import { View, Text, StyleSheet } from "react-native";
 import SetMeasurementRow from "./SetMeasurementRow";
 import SetTimeRow from "./SetTimeRow";
 import { scaleMeasurementInt, scaleMeasurementReal } from "../../utilities/formatHelpers";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface SetMeasurementContainerProps {
     index: number;
@@ -24,6 +26,9 @@ export default function SetMeasurementContainer({
     updateMeasurement,
     weightIncrement,
 }: SetMeasurementContainerProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     if (!measurementName) return null;
 
     const isTimeMeasurement = measurementName.toLowerCase() === "time";
@@ -62,7 +67,7 @@ export default function SetMeasurementContainer({
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     measurementContainer: {
         marginTop: 10,
         flexDirection: "column",

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { ExerciseFull } from "../../db/schema";
 import { getExercisesFull } from "../../services/exercisesService";
 import ModalHeader from "../headers/ModalHeader";
@@ -12,6 +12,7 @@ import React from "react";
 import ModalSearchField from "../forms/ModalSearchField";
 import SetExerciseModal from "./SetExerciseModal";
 import EmptyListNotice from "../EmptyListNotice";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SelectExerciseModalProps {
     visible: boolean;
@@ -21,6 +22,9 @@ interface SelectExerciseModalProps {
 }
 
 export default function SelectExerciseModal({ visible, onClose, category, onSelectExercise }: SelectExerciseModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [exercises, setExercises] = useState<ExerciseFull[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
@@ -96,15 +100,15 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     exerciseItem: {
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.inputBorder,
+        borderBottomColor: colors.inputBorder,
         paddingHorizontal: theme.spacing.medium,
     },
     exerciseText: {
         fontSize: 16,
-        color: theme.colors.text,
+        color: colors.text,
     },
 });

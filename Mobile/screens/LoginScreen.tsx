@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Image } from 'react-native';
 import StyledContainer from '../components/StyledContainer';
 import Button from '../components/buttons/Button';
-import { theme } from '../theme';
+import { theme, ThemeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { AuthScreenNavigationProp } from '../navigation/types';
 import Input from '../components/forms/Input';
 import { AuthService } from '../services/authService';
+import { useColourTheme } from '../contexts/ThemeContext';
 
 export default function LoginScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [isModalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -109,7 +113,7 @@ export default function LoginScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     error: {
         color: 'red',
         marginBottom: theme.spacing.medium,
@@ -129,25 +133,25 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontFamily: theme.fonts.bold,
-        color: theme.colors.text,
+        color: colors.text,
         marginBottom: theme.spacing.large,
     },
     signUpText: {
         marginTop: theme.spacing.large,
-        color: theme.colors.text,
+        color: colors.text,
     },
     link: {
-        color: theme.colors.primary,
+        color: colors.primary,
         fontWeight: 'bold',
     },
     divider: {
         height: 1,
         width: '100%',
-        backgroundColor: theme.colors.inputBorder,
+        backgroundColor: colors.inputBorder,
         marginVertical: theme.spacing.large,
     },
     guestText: {
-        color: theme.colors.primary,
+        color: colors.primary,
         fontWeight: 'bold',
         marginTop: theme.spacing.small,
     },

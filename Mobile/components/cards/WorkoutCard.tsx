@@ -2,11 +2,12 @@ import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { WorkoutWithExercises } from "../../db/schema";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
 import ExerciseWithSets from "../ExerciseWithSets";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface WorkoutCardProps {
     workout: WorkoutWithExercises;
@@ -31,6 +32,8 @@ export default function WorkoutCard({
     deletable = true,
     variant = "default"
 }: WorkoutCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
     const [expanded, setExpanded] = useState(!collapsible);
 
     function handlePress() {
@@ -67,7 +70,7 @@ export default function WorkoutCard({
 
                 {/* Expand/Collapse Icon (Hidden if collapsible is false) */}
                 {collapsible && (
-                    <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={theme.colors.text} />
+                    <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={colors.text} />
                 )}
             </View>
 
@@ -101,7 +104,7 @@ export default function WorkoutCard({
 
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         backgroundColor: "white",
         padding: 15,
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         marginVertical: 0,
         paddingBottom: 0,
-        borderBottomColor: theme.colors.borderStrong,
+        borderBottomColor: colors.borderStrong,
         borderBottomWidth: 1
     },
     headerContainer: {
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
     workoutName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
     },
     categoryContainer: {
         flexDirection: "row",

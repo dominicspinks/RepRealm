@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TextInput, TextStyle, ViewStyle } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface TextInputProps {
     setValue: (value: string) => void;
@@ -12,6 +13,9 @@ interface TextInputProps {
 }
 
 export default function TextFieldInput({ keyboardType, setValue, placeholder, label, value, style, disabled = false }: TextInputProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={style}>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -27,12 +31,12 @@ export default function TextFieldInput({ keyboardType, setValue, placeholder, la
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: "bold",
         marginBottom: 5,
-        color: theme.colors.text,
+        color: colors.text,
     },
     input: {
         borderBottomWidth: 1,

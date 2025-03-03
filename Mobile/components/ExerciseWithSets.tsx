@@ -1,7 +1,8 @@
 import { View, Text, FlatList, StyleProp, ViewStyle, TextStyle, StyleSheet } from "react-native";
 import { WorkoutExerciseWithSets, WorkoutExerciseSet } from "../db/schema";
 import { formatSet } from "../utilities/formatHelpers";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 interface ExerciseWithSetsProps {
     exercise: WorkoutExerciseWithSets;
@@ -11,6 +12,9 @@ interface ExerciseWithSetsProps {
 }
 
 export default function ExerciseWithSets({ exercise, containerStyle, nameStyle, setTextStyle }: ExerciseWithSetsProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={[styles.container, containerStyle]}>
             {/* Exercise Name */}
@@ -31,7 +35,7 @@ export default function ExerciseWithSets({ exercise, containerStyle, nameStyle, 
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
@@ -39,11 +43,11 @@ const styles = StyleSheet.create({
     exerciseName: {
         fontSize: 16,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
         marginBottom: theme.spacing.small,
     },
     setText: {
         fontSize: 14,
-        color: theme.colors.mutedText,
+        color: colors.mutedText,
     },
 });

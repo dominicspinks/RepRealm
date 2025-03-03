@@ -1,9 +1,10 @@
 import { View, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
 import { WorkoutExerciseWithSets } from "../../db/schema";
 import ExerciseWithSets from "../ExerciseWithSets";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface WorkoutExerciseCardProps {
     item: WorkoutExerciseWithSets;
@@ -12,6 +13,9 @@ interface WorkoutExerciseCardProps {
 }
 
 export default function WorkoutExerciseCard({ item, onEdit, onDelete }: WorkoutExerciseCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={styles.card}>
             {/* Category Colour Indicator */}
@@ -38,10 +42,10 @@ export default function WorkoutExerciseCard({ item, onEdit, onDelete }: WorkoutE
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         flexDirection: "column",
-        backgroundColor: theme.colors.cardBackground,
+        backgroundColor: colors.cardBackground,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
         marginHorizontal: theme.spacing.medium,

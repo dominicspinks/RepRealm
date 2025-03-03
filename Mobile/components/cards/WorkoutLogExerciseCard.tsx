@@ -1,7 +1,8 @@
 import { View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { WorkoutLogExerciseSet, WorkoutLogExerciseWithSets } from "../../db/schema";
 import ActiveWorkoutExerciseSet from "../ActiveWorkoutExerciseSet";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface ActiveWorkoutExerciseCardProps {
     exercise: WorkoutLogExerciseWithSets;
@@ -9,6 +10,9 @@ interface ActiveWorkoutExerciseCardProps {
 }
 
 export default function ActiveWorkoutExerciseCard({ exercise, onSelect }: ActiveWorkoutExerciseCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <TouchableOpacity style={styles.card} onPress={() => onSelect(exercise)}>
             {/* Category Colour Indicator */}
@@ -41,10 +45,10 @@ export default function ActiveWorkoutExerciseCard({ exercise, onSelect }: Active
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         flexDirection: "column",
-        backgroundColor: theme.colors.cardBackground,
+        backgroundColor: colors.cardBackground,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
         marginHorizontal: theme.spacing.medium,
@@ -63,11 +67,11 @@ const styles = StyleSheet.create({
     exerciseName: {
         fontSize: 16,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
         marginBottom: theme.spacing.small,
     },
     setText: {
         fontSize: 14,
-        color: theme.colors.mutedText,
+        color: colors.mutedText,
     },
 });

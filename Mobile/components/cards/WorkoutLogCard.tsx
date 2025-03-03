@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { WorkoutLogWithExercises } from "../../db/schema";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
 import { formatDate } from "../../utilities/formatHelpers";
 import WorkoutLogExercise from "../WorkoutLogExercise";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface WorkoutLogCardProps {
     workoutLog: WorkoutLogWithExercises;
@@ -19,6 +20,8 @@ export default function WorkoutLogCard({
     onEdit,
     onDelete,
 }: WorkoutLogCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
     const [expanded, setExpanded] = useState(false);
 
     function handlePress() {
@@ -61,7 +64,7 @@ export default function WorkoutLogCard({
                     </View>
                 </View>
 
-                <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={theme.colors.text} />
+                <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={colors.text} />
             </View>
 
             {expanded && (
@@ -89,7 +92,7 @@ export default function WorkoutLogCard({
 
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         backgroundColor: "white",
         padding: 15,
@@ -124,12 +127,12 @@ const styles = StyleSheet.create({
     workoutName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
     },
     workoutDuration: {
         fontSize: 14,
         fontWeight: "normal",
-        color: theme.colors.mutedText,
+        color: colors.mutedText,
     },
     categoryContainer: {
         flexDirection: "row",

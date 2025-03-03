@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, FlatList, TouchableOpacity, StyleSheet, Text } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { Category } from "../../db/schema";
 import { Ionicons } from "@expo/vector-icons";
 import FilterTypeHeader from "../headers/FilterTypeHeader";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface CategoryFilterSectionProps {
     categories: Category[];
@@ -13,6 +14,9 @@ interface CategoryFilterSectionProps {
 }
 
 export default function CategoryFilterSection({ categories, toggleCategory, tempSelected, expanded = true }: CategoryFilterSectionProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [isExpanded, setIsExpanded] = useState(expanded);
 
     return (
@@ -28,7 +32,7 @@ export default function CategoryFilterSection({ categories, toggleCategory, temp
                             <Ionicons
                                 name={tempSelected.includes(item.id) ? "checkbox" : "square-outline"}
                                 size={24}
-                                color={theme.colors.primary}
+                                color={colors.primary}
                             />
                             <Text style={styles.categoryText}>{item.name}</Text>
                         </TouchableOpacity>
@@ -40,7 +44,7 @@ export default function CategoryFilterSection({ categories, toggleCategory, temp
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     categoryList: {
         paddingHorizontal: 20,
     },

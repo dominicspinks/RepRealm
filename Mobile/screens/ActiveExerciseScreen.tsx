@@ -16,12 +16,16 @@ import SetMeasurementContainer from "../components/forms/SetMeasurementContainer
 import ActiveExerciseSet from "../components/ActiveExerciseSet";
 import Button from "../components/buttons/Button";
 import { useWorkoutTimerStore } from "../store/timerStore";
-import { useNotificationSounds } from "../utilities/notificationHelper";
+import { useColourTheme } from "../contexts/ThemeContext";
+import { ThemeColors } from "../theme";
 
 type ActiveExerciseScreenNavigationProp = StackNavigationProp<RootStackParamList, "ActiveExercise">;
 type ActiveExerciseScreenRouteProp = RouteProp<RootStackParamList, "ActiveExercise">;
 
 export default function ActiveExerciseScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<ActiveExerciseScreenNavigationProp>();
     const route = useRoute<ActiveExerciseScreenRouteProp>();
     const workoutLogExerciseId = route.params.workoutLogExerciseId;
@@ -211,7 +215,7 @@ export default function ActiveExerciseScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
         flex: 1,
     },

@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 
-import { theme } from "../../theme";
-import { RoutineWithFullWorkouts, RoutineWithWorkouts, WorkoutWithExercises } from "../../db/schema";
+import { theme, ThemeColors } from "../../theme";
+import { RoutineWithFullWorkouts } from "../../db/schema";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
-import ExerciseWithSets from "../ExerciseWithSets";
 import { FlatList } from "react-native-gesture-handler";
 import WorkoutCard from "./WorkoutCard";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface RoutineCardProps {
     routine: RoutineWithFullWorkouts;
@@ -17,6 +16,8 @@ interface RoutineCardProps {
 }
 
 export default function RoutineCard({ routine, onEdit, onDelete }: RoutineCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
     const [expanded, setExpanded] = useState(false);
 
     function toggleExpand() {
@@ -48,7 +49,7 @@ export default function RoutineCard({ routine, onEdit, onDelete }: RoutineCardPr
 
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         backgroundColor: "white",
         paddingVertical: 15,
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingBottom: 5,
         borderBottomWidth: 1,
-        borderColor: theme.colors.borderStrong,
+        borderColor: colors.borderStrong,
     },
     header: {
         flexDirection: "column",
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     routineName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
     },
     categoryContainer: {
         flexDirection: "row",
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: theme.spacing.small,
         borderBottomWidth: 1,
-        borderColor: theme.colors.border,
+        borderColor: colors.border,
     },
     categoryBar: {
         width: 5,

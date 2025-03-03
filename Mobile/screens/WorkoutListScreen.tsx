@@ -9,15 +9,19 @@ import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import { RootStackParamList } from "../navigation/types";
 import { createWorkout, deleteWorkoutById, getWorkoutsWithExercises } from "../services/workoutsService";
 import { WorkoutWithExercises } from "../db/schema";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
 import { useCallback, useState } from "react";
 import WorkoutCard from "../components/cards/WorkoutCard";
 import EmptyListNotice from "../components/EmptyListNotice";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 // **Define navigation type**
 type WorkoutListScreenNavigationProp = StackNavigationProp<RootStackParamList, "WorkoutList">;
 
 export default function WorkoutListScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<WorkoutListScreenNavigationProp>();
     const [workouts, setWorkouts] = useState<WorkoutWithExercises[]>([]);
 
@@ -80,10 +84,10 @@ export default function WorkoutListScreen() {
 
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     emptyText: {
         textAlign: "center",
         marginTop: theme.spacing.large,
-        color: theme.colors.mutedText,
+        color: colors.mutedText,
     },
 });

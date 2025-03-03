@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { splitTimeComponents } from "../../utilities/formatHelpers";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SetTimeRowProps {
     value: number;
@@ -9,6 +10,9 @@ interface SetTimeRowProps {
 }
 
 export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [inputHours, setInputHours] = useState("");
     const [inputMinutes, setInputMinutes] = useState("");
     const [inputSeconds, setInputSeconds] = useState("");
@@ -86,7 +90,7 @@ export default function SetTimeRow({ value, setTime }: SetTimeRowProps) {
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     timeRow: {
         flexDirection: "row",
         alignItems: "center",
@@ -97,15 +101,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 24,
         borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         borderRadius: 5,
-        color: theme.colors.text,
+        color: colors.text,
         backgroundColor: "white",
     },
     separator: {
         fontSize: 18,
         fontWeight: "bold",
         marginHorizontal: 5,
-        color: theme.colors.text,
+        color: colors.text,
     },
 });

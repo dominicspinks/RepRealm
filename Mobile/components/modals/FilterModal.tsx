@@ -10,6 +10,8 @@ import { getCategories } from "../../services/categoriesService";
 import CategoryFilterSection from "../forms/CategoryFilterSection";
 import RoutineFilterSection from "../forms/RoutineFilterSection";
 import { getRoutines } from "../../services/routinesService";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface FilterProps<T> {
     selected: T;                        // Selected value(s)
@@ -30,6 +32,9 @@ export default function FilterModal({
     categoryFilter = null,
     routineFilter
 }: FilterModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [tempSelectedCategory, setTempSelectedCategory] = useState<string[]>(categoryFilter?.selected ?? []);
     const [tempSelectedRoutine, setTempSelectedRoutine] = useState<string | null>(routineFilter?.selected ?? null);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -90,6 +95,7 @@ export default function FilterModal({
                 <View style={styles.filterList}>
                     {[
                         routineFilter && {
+                            key: "routineFilter",
                             component: (
                                 <RoutineFilterSection
                                     selectedValue={tempSelectedRoutine}
@@ -100,6 +106,7 @@ export default function FilterModal({
                             position: routineFilter.position ?? 0,
                         },
                         categoryFilter && {
+                            key: "categoryFilter",
                             component: (
                                 <CategoryFilterSection
                                     categories={categories}
@@ -110,7 +117,7 @@ export default function FilterModal({
                             position: categoryFilter.position ?? 0,
                         },
                     ]
-                        .filter((item): item is { component: JSX.Element; position: number } => Boolean(item))
+                        .filter((item): item is { key: string; component: JSX.Element; position: number } => Boolean(item))
                         .sort((a, b) => a.position - b.position)
                         .map((item) => item.component)
                     }
@@ -126,7 +133,7 @@ export default function FilterModal({
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     filterList: {
         flexDirection: "column",
         gap: 10,

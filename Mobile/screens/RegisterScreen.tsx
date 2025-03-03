@@ -3,12 +3,16 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import StyledContainer from '../components/StyledContainer';
 import Button from '../components/buttons/Button';
 import Input from '../components/forms/Input';
-import { theme } from '../theme';
+import { theme, ThemeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { AuthScreenNavigationProp } from '../navigation/types';
 import { AuthService } from '../services/authService';
+import { useColourTheme } from '../contexts/ThemeContext';
 
 export default function RegisterScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<AuthScreenNavigationProp>();
 
     const [name, setName] = useState('');
@@ -69,20 +73,20 @@ export default function RegisterScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     title: {
         fontSize: 24,
         fontFamily: theme.fonts.bold,
-        color: theme.colors.text,
+        color: colors.text,
         marginBottom: theme.spacing.small,
     },
     subtitle: {
         fontSize: 16,
-        color: theme.colors.mutedText,
+        color: colors.mutedText,
         marginBottom: theme.spacing.large,
     },
     error: {
-        color: theme.colors.error,
+        color: colors.error,
         marginBottom: theme.spacing.medium,
         textAlign: 'center',
     },
@@ -92,11 +96,11 @@ const styles = StyleSheet.create({
     },
     loginText: {
         marginTop: theme.spacing.large,
-        color: theme.colors.text,
+        color: colors.text,
         textAlign: 'center',
     },
     link: {
-        color: theme.colors.primary,
+        color: colors.primary,
         fontWeight: 'bold',
     },
 });

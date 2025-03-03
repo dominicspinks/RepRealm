@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { ExerciseFull, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, Workout, WorkoutExerciseWithSets } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
@@ -11,6 +11,7 @@ import Button from "../buttons/Button";
 import SetMeasurementContainer from "../forms/SetMeasurementContainer";
 import ModalContainer from "./ModalContainer";
 import React from "react";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SetWorkoutExerciseModalProps {
     visible: boolean;
@@ -22,6 +23,9 @@ interface SetWorkoutExerciseModalProps {
 }
 
 export default function SetWorkoutExerciseModal({ visible, workout, exercise, workoutExercise, onClose, onSave }: SetWorkoutExerciseModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [error, setError] = useState("");
 
     const [sets, setSets] = useState<NewWorkoutExerciseSet[]>(workoutExercise?.sets?.length ? workoutExercise.sets : [
@@ -172,12 +176,12 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
 const screenHeight = Dimensions.get("window").height;
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     setContainer: {
         marginBottom: 15,
         paddingBottom: 10,
         borderTopWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         alignItems: "center",
     },
     setRow: {
@@ -187,12 +191,12 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: theme.spacing.medium,
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.inputBorder,
+        borderBottomColor: colors.inputBorder,
     },
     setLabel: {
         fontSize: 16,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
     },
     error: {
         color: "red",

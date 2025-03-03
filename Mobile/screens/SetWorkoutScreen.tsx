@@ -6,7 +6,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import BackIcon from "../components/icons/BackIcon";
 import { RootStackParamList } from "../navigation/types";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
 import CloseIcon from "../components/icons/CloseIcon";
 import AcceptIcon from "../components/icons/AcceptIcon";
 import EditIcon from "../components/icons/EditIcon";
@@ -19,11 +19,15 @@ import SetWorkoutExerciseModal from "../components/modals/SetWorkoutExerciseModa
 import { addWorkoutExercise, deleteWorkoutById, deleteWorkoutExerciseById, getWorkoutExercisesByWorkoutId, updateWorkoutExercise, updateWorkoutNameById } from "../services/workoutsService";
 import WorkoutExerciseCard from "../components/cards/WorkoutExerciseCard";
 import { getExerciseById } from "../services/exercisesService";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 type SetWorkoutScreenNavigationProp = StackNavigationProp<RootStackParamList, "SetWorkout">;
 type SetWorkoutScreenRouteProp = RouteProp<RootStackParamList, "SetWorkout">;
 
 export default function SetWorkoutScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<SetWorkoutScreenNavigationProp>();
     const route = useRoute<SetWorkoutScreenRouteProp>();
     const workout = route.params.workout;
@@ -215,7 +219,7 @@ export default function SetWorkoutScreen() {
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     titleContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -225,10 +229,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         borderBottomWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         padding: 2,
         minWidth: 120,
-        color: theme.colors.text,
+        color: colors.text,
     },
     editIcons: {
         flexDirection: "row",

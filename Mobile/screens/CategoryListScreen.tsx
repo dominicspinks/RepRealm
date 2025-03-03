@@ -9,15 +9,19 @@ import { deleteCategory, getCategories } from "../services/categoriesService";
 import { CategoryWithColour } from "../db/schema";
 import CategoryCard from "../components/cards/CategoryCard";
 import EmptyListNotice from "../components/EmptyListNotice";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 export default function CategoryListScreen() {
     const [categories, setCategories] = useState<CategoryWithColour[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<CategoryWithColour | null>(null);
+    const [loading, setLoading] = useState(true);
 
     // **Fetch categories when screen loads**
     useEffect(() => {
+        setLoading(true);
         fetchCategories();
+        setLoading(false);
     }, [modalVisible]);
 
     async function fetchCategories() {
@@ -63,28 +67,27 @@ export default function CategoryListScreen() {
 
     return (
         <View style={{ flex: 1 }} >
-            {/* Header */}
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Categories" />}
                 rightElement={<PlusIcon action={openAddCategory} />}
             />
+            {loading && <LoadingIndicator />}
 
-            {/* Category List */}
-            <FlatList
-                data={categories}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <CategoryCard
-                        item={item}
-                        onEdit={openEditCategory}
-                        onDelete={handleDeleteCategory}
-                    />
-                )}
-                ListEmptyComponent={<EmptyListNotice text="No categories found" />}
-            />
+            {!loading &&
+                <FlatList
+                    data={categories}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <CategoryCard
+                            item={item}
+                            onEdit={openEditCategory}
+                            onDelete={handleDeleteCategory}
+                        />
+                    )}
+                    ListEmptyComponent={<EmptyListNotice text="No categories found" />}
+                />}
 
-            {/* Set Category Modal */}
             <SetCategoryModal
                 visible={modalVisible}
                 onClose={closeModal}
@@ -93,7 +96,3 @@ export default function CategoryListScreen() {
         </View>
     );
 }
-
-// **Styles**
-const styles = StyleSheet.create({
-});

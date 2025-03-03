@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, TouchableOpacity, Platform } from "react-native";
 import Checkbox from "./forms/Checkbox";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
 import { formatSetValue } from "../utilities/formatHelpers";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 interface ActiveExerciseSetProps {
     setNumber: number;
@@ -32,6 +33,9 @@ export default function ActiveExerciseSet({
     onComplete,
     onSelect,
 }: ActiveExerciseSetProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <TouchableOpacity
             onPress={() => onSelect(setNumber)}
@@ -60,7 +64,7 @@ export default function ActiveExerciseSet({
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     active: {
-        backgroundColor: theme.colors.highlight,
+        backgroundColor: colors.highlight,
     },
     completed: {
         opacity: 0.5,

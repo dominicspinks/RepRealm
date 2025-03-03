@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { ExerciseFull } from "../../db/schema";
 import MenuList from "../MenuList";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface ExerciseCardProps {
     item: ExerciseFull;
@@ -10,6 +11,8 @@ interface ExerciseCardProps {
 }
 
 export default function ExerciseCard({ item, onEdit, onDelete }: ExerciseCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
     return (
         <View style={styles.exerciseCard}>
             {/* Category Colour Indicator */}
@@ -28,11 +31,11 @@ export default function ExerciseCard({ item, onEdit, onDelete }: ExerciseCardPro
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     exerciseCard: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: theme.colors.cardBackground,
+        backgroundColor: colors.cardBackground,
         padding: 0,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
         margin: theme.spacing.small,
     },
 });

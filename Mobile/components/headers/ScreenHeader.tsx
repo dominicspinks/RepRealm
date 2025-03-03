@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
+import { useColourTheme } from '../../contexts/ThemeContext';
+import { ThemeColors } from '../../theme';
 
 interface ScreenHeaderProps {
     leftElement?: React.ReactNode;
@@ -8,6 +10,9 @@ interface ScreenHeaderProps {
 }
 
 export default function ScreenHeader({ leftElement, centreElement, rightElement }: ScreenHeaderProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={styles.container}>
             {/* Space for the Status Bar / Notch */}
@@ -23,9 +28,9 @@ export default function ScreenHeader({ leftElement, centreElement, rightElement 
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
-        backgroundColor: '#FFF',
+        backgroundColor: colors.headerBackground,
         borderBottomWidth: 1,
         borderBottomColor: '#DDD',
     },

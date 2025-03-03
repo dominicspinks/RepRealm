@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Alert, StyleSheet, Text, FlatList } from "react-native";
+import { View, Alert, StyleSheet, FlatList } from "react-native";
 import ScreenHeader from "../components/headers/ScreenHeader";
 import ScreenHeaderTitle from "../components/headers/ScreenHeaderTitle";
 import BackIcon from "../components/icons/BackIcon";
@@ -17,11 +17,16 @@ import WorkoutLogExerciseCard from "../components/cards/WorkoutLogExerciseCard";
 import EmptyListNotice from "../components/EmptyListNotice";
 import SelectCategoryModal from "../components/modals/SelectCategoryModal";
 import SelectExerciseModal from "../components/modals/SelectExerciseModal";
+import { useColourTheme } from "../contexts/ThemeContext";
+import { ThemeColors } from "../theme";
 
 type ActiveWorkoutScreenNavigationProp = StackNavigationProp<RootStackParamList, "ActiveWorkout">;
 type ActiveWorkoutScreenRouteProp = RouteProp<RootStackParamList, "ActiveWorkout">;
 
 export default function ActiveWorkoutScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<ActiveWorkoutScreenNavigationProp>();
     const route = useRoute<ActiveWorkoutScreenRouteProp>();
     const workoutLogId = route.params.workoutLogId;
@@ -160,7 +165,7 @@ export default function ActiveWorkoutScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
         flex: 1
     },

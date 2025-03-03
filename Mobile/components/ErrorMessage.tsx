@@ -1,33 +1,37 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 interface ErrorMessageProps {
     message: string;
 }
 
 export default function ErrorMessage({ message }: ErrorMessageProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={styles.container}>
-            <Ionicons name="warning-outline" size={24} color={theme.colors.error} />
+            <Ionicons name="warning-outline" size={24} color={colors.error} />
             <Text style={styles.text}>{message}</Text>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         padding: 10,
-        backgroundColor: theme.colors.errorBackground || "#FDEDED",
+        backgroundColor: colors.errorBackground || "#FDEDED",
         borderRadius: 8,
         margin: 10,
     },
     text: {
-        color: theme.colors.error || "#D8000C",
+        color: colors.error || "#D8000C",
         fontSize: 16,
         marginLeft: 8,
     },

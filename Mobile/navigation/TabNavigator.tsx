@@ -5,11 +5,12 @@ import RoutineListScreen from '../screens/RoutineListScreen';
 import CategoryListScreen from '../screens/CategoryListScreen';
 import ExerciseListScreen from '../screens/ExerciseListScreen';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../theme';
+import { useColourTheme } from '../contexts/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({ onTabChange }: { onTabChange: (tab: string) => void }) {
+    const { colors } = useColourTheme();
 
     type TabIconList = {
         [key: string]: {
@@ -52,7 +53,7 @@ export default function TabNavigator({ onTabChange }: { onTabChange: (tab: strin
                     // You can return any component that you like here!
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: theme.colors.primary,
+                tabBarActiveTintColor: colors.primary,
                 tabBarInactiveTintColor: 'gray',
                 headerShown: false,
             })}

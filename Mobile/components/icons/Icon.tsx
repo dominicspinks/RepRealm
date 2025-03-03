@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 type IconProps = {
     icon: keyof typeof Ionicons.glyphMap,
@@ -11,20 +12,25 @@ type IconProps = {
     style?: ViewStyle | TextStyle | null
 }
 
-export default function Icon({ icon, action, clickable = true, size = 24, color = theme.colors.text, style }: IconProps) {
+export default function Icon({ icon, action, clickable = true, size = 24, color, style }: IconProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
+    const iconColor = color ?? colors.text;
+
     return (
         clickable ?
             (
                 <TouchableOpacity onPress={action}>
-                    <Ionicons name={icon} size={size} color={color} style={[styles.icon, style]} />
+                    <Ionicons name={icon} size={size} color={iconColor} style={[styles.icon, style]} />
                 </TouchableOpacity>
             ) : (
-                <Ionicons name={icon} size={size} color={color} style={[styles.icon, style]} />
+                <Ionicons name={icon} size={size} color={iconColor} style={[styles.icon, style]} />
             )
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     icon: {
         padding: 2
     }

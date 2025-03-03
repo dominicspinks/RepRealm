@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { ExerciseFull, WorkoutLogExerciseSet } from "../db/schema";
 import { formatSetValue } from "../utilities/formatHelpers";
+import { useColourTheme } from "../contexts/ThemeContext";
+import { ThemeColors } from "../theme";
 
 interface ActiveWorkoutExerciseProps {
     set: WorkoutLogExerciseSet;
@@ -15,6 +17,9 @@ interface ActiveWorkoutExerciseProps {
 }
 
 export default function ActiveWorkoutExercise({ set, exercise }: ActiveWorkoutExerciseProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={styles.row}>
             <View style={{ flex: 1 }} />
@@ -24,7 +29,7 @@ export default function ActiveWorkoutExercise({ set, exercise }: ActiveWorkoutEx
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     row: {
         flexDirection: "row",
         alignItems: "center",

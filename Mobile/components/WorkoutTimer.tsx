@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useWorkoutTimerStore } from "../store/timerStore";
-import { theme } from "../theme";
+import { theme, ThemeColors } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
 import { formatElapsedTime, formatTime } from "../utilities/formatHelpers";
 import { WorkoutLog } from "../db/schema";
+import { useColourTheme } from "../contexts/ThemeContext";
 
 interface WorkoutTimerProps {
     workoutLog: {
@@ -15,6 +16,9 @@ interface WorkoutTimerProps {
 }
 
 export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const {
         workoutStartTime, workoutEndTime, startWorkout, endWorkout,
         restTimeRemaining, initialiseTimerStore: initialiseTimerStore,
@@ -50,7 +54,7 @@ export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
                         <Ionicons
                             name={workoutStartTime && !workoutEndTime ? "stop" : "play"}
                             size={30}
-                            color={theme.colors.primary}
+                            color={colors.primary}
                         />
                     </TouchableOpacity>
                 </View>
@@ -83,7 +87,7 @@ export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
                         <Ionicons
                             name={isStopwatchRunning ? "pause" : "play"}
                             size={30}
-                            color={theme.colors.primary}
+                            color={colors.primary}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerButton} onPress={resetStopwatch}>
@@ -95,14 +99,14 @@ export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     timerContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: theme.colors.background,
+        backgroundColor: colors.background,
         borderTopWidth: 1,
-        borderTopColor: theme.colors.border,
+        borderTopColor: colors.border,
         paddingVertical: 2,
     },
     timerBoxContainer: {
@@ -122,12 +126,12 @@ const styles = StyleSheet.create({
     timerLabel: {
         fontSize: 12,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
     },
     timerValue: {
         fontSize: 22,
         fontWeight: "bold",
-        color: theme.colors.primary,
+        color: colors.primary,
     },
     timerButtonContainer: {
         flexDirection: "column",
@@ -144,6 +148,6 @@ const styles = StyleSheet.create({
     verticalBorder: {
         width: 1,
         height: "100%",
-        backgroundColor: theme.colors.border,
+        backgroundColor: colors.border,
     },
 });

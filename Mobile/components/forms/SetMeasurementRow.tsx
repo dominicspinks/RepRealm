@@ -1,9 +1,10 @@
 import { View, TextInput, StyleSheet } from "react-native";
 import MinusIcon from "../icons/MinusIcon";
 import PlusIcon from "../icons/PlusIcon";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { useEffect, useState } from "react";
 import { scaleMeasurementInt, scaleMeasurementReal } from "../../utilities/formatHelpers";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SetMeasurementRowProps {
     value: number | null;
@@ -20,6 +21,9 @@ export default function SetMeasurementRow({
     incrementMeasurement,
     decimalPlaces = 0,
 }: SetMeasurementRowProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [inputValue, setInputValue] = useState<string>(value !== null ? scaleMeasurementReal(value, decimalPlaces).toFixed(decimalPlaces) : "");
 
     useEffect(() => {
@@ -76,7 +80,7 @@ export default function SetMeasurementRow({
 
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     measurementRow: {
         flexDirection: "row",
         alignItems: "center",
@@ -86,11 +90,11 @@ const styles = StyleSheet.create({
     },
     adjustButton: {
         fontSize: 40,
-        color: theme.colors.primary,
+        color: colors.primary,
     },
     input: {
         borderWidth: 1,
-        borderColor: theme.colors.inputBorder,
+        borderColor: colors.inputBorder,
         width: 100,
         height: 60,
         textAlign: "center",

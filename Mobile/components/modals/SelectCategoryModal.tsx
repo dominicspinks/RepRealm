@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { CategoryWithColour } from "../../db/schema";
 import { getCategories } from "../../services/categoriesService";
 import ModalHeader from "../headers/ModalHeader";
@@ -11,6 +11,7 @@ import ModalContainer from "./ModalContainer";
 import ModalSearchField from "../forms/ModalSearchField";
 import SetCategoryModal from "./SetCategoryModal";
 import EmptyListNotice from "../EmptyListNotice";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SelectCategoryModalProps {
     visible: boolean;
@@ -19,6 +20,9 @@ interface SelectCategoryModalProps {
 }
 
 export default function SelectCategoryModal({ visible, onClose, onSelectCategory }: SelectCategoryModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [categories, setCategories] = useState<CategoryWithColour[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [categoryModalVisible, setCategoryModalVisible] = useState(false);
@@ -93,13 +97,13 @@ export default function SelectCategoryModal({ visible, onClose, onSelectCategory
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     categoryItem: {
         flexDirection: "row",
         alignItems: "center",
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.inputBorder,
+        borderBottomColor: colors.inputBorder,
         paddingHorizontal: theme.spacing.medium,
     },
     colourIndicator: {
@@ -110,6 +114,6 @@ const styles = StyleSheet.create({
     },
     categoryText: {
         fontSize: 16,
-        color: theme.colors.text,
+        color: colors.text,
     },
 });

@@ -1,5 +1,7 @@
 import React from "react";
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface ModalContainerProps {
     visible: boolean;
@@ -24,6 +26,9 @@ export default function ModalContainer({
     fullWidthContent = false,
     modals,
 }: ModalContainerProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <Modal visible={visible} transparent animationType="fade" >
             <TouchableWithoutFeedback onPress={onClose} >
@@ -70,10 +75,10 @@ export default function ModalContainer({
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backgroundColor: colors.overlay,
         justifyContent: "center",
         alignItems: "center",
     },

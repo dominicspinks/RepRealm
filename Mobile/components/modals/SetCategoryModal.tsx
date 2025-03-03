@@ -10,6 +10,8 @@ import ModalHeader from "../headers/ModalHeader";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
 import React from "react";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface SetCategoryModalProps {
     visible: boolean;
@@ -18,6 +20,9 @@ interface SetCategoryModalProps {
 }
 
 export default function SetCategoryModal({ visible, onClose, category }: SetCategoryModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [name, setName] = useState(category?.name || "");
     const [colour, setColour] = useState(category?.colourId || null);
     const [colours, setColours] = useState<Colour[]>([]);
@@ -126,7 +131,7 @@ export default function SetCategoryModal({ visible, onClose, category }: SetCate
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     inputContainer: {
         flexDirection: "row",
         alignItems: "center",

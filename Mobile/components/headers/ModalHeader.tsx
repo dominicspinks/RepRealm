@@ -1,5 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface ModalHeaderProps {
     leftElement?: React.ReactNode;
@@ -8,6 +10,9 @@ interface ModalHeaderProps {
 }
 
 export default function ModalHeader({ leftElement, centreElement, rightElement }: ModalHeaderProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         < View style={styles.header} >
             <View style={styles.left}>{leftElement}</View>
@@ -17,7 +22,7 @@ export default function ModalHeader({ leftElement, centreElement, rightElement }
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",

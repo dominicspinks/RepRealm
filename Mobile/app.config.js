@@ -6,7 +6,7 @@ export default {
         slug: "RepRealm",
         version: "0.1.0",
         orientation: "portrait",
-        userInterfaceStyle: "light",
+        userInterfaceStyle: "dark",
         icon: "./assets/icon.png",
         newArchEnabled: true,
         splash: {
@@ -16,14 +16,16 @@ export default {
         },
         ios: {
             supportsTablet: true,
-            bundleIdentifier: "com.anonymous.RepRealm"
+            bundleIdentifier: "com.anonymous.RepRealm",
+            userInterfaceStyle: "dark"
         },
         android: {
             adaptiveIcon: {
                 foregroundImage: "./assets/adaptive-icon.png",
                 backgroundColor: "#ffffff"
             },
-            package: "com.anonymous.RepRealm"
+            package: "com.anonymous.RepRealm",
+            userInterfaceStyle: "dark"
         },
         web: {
             favicon: "./assets/favicon.png"

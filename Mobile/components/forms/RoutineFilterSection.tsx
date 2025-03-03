@@ -3,6 +3,8 @@ import DropdownFieldInput from "./DropdownFieldInput"
 import { Routine } from "../../db/schema";
 import { useState } from "react";
 import FilterTypeHeader from "../headers/FilterTypeHeader";
+import { useColourTheme } from "../../contexts/ThemeContext";
+import { ThemeColors } from "../../theme";
 
 interface RoutineFilterSectionProps {
     selectedValue: string | null;
@@ -12,6 +14,9 @@ interface RoutineFilterSectionProps {
 }
 
 export default function RoutineFilterSection({ selectedValue, setValue, routines, expanded = true }: RoutineFilterSectionProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [isExpanded, setIsExpanded] = useState(expanded);
 
     return (
@@ -33,7 +38,7 @@ export default function RoutineFilterSection({ selectedValue, setValue, routines
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     routine: {
         paddingHorizontal: 20,
         paddingVertical: 10,

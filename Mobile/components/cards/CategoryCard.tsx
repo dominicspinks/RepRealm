@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
-import { theme } from "../../theme";
+import { View, Text, StyleSheet, useColorScheme } from "react-native";
+import { theme, ThemeColors } from "../../theme";
 import { CategoryWithColour } from "../../db/schema";
 import MenuList from "../MenuList";
+import { useColourTheme } from "../../contexts/ThemeContext";
+
 
 interface CategoryCardProps {
     item: CategoryWithColour;
@@ -10,6 +12,9 @@ interface CategoryCardProps {
 }
 
 export default function CategoryCard({ item, onEdit, onDelete }: CategoryCardProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <View style={styles.categoryCard}>
             <View style={[styles.colourEdge, { backgroundColor: item.colourHex }]} />
@@ -25,11 +30,11 @@ export default function CategoryCard({ item, onEdit, onDelete }: CategoryCardPro
 }
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     categoryCard: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: theme.colors.cardBackground,
+        backgroundColor: colors.cardBackground,
         padding: 0,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
@@ -47,7 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: "bold",
-        color: theme.colors.text,
+        color: colors.text,
         margin: theme.spacing.small,
     },
 });

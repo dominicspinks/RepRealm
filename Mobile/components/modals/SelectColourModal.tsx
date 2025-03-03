@@ -1,11 +1,12 @@
 import { View, TouchableOpacity, StyleSheet, FlatList } from "react-native";
-import { theme } from "../../theme";
+import { theme, ThemeColors } from "../../theme";
 import { Colour } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
 import BackIcon from "../icons/BackIcon";
 import ModalHeaderTitle from "../headers/ModalHeaderTitle";
 import ModalContainer from "./ModalContainer";
 import React from "react";
+import { useColourTheme } from "../../contexts/ThemeContext";
 
 interface SelectColourModalProps {
     visible: boolean;
@@ -16,6 +17,9 @@ interface SelectColourModalProps {
 }
 
 export default function SelectColourModal({ visible, onClose, onSelectColour, selectedColourId, colours }: SelectColourModalProps) {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     return (
         <ModalContainer
             visible={visible}
@@ -54,7 +58,7 @@ export default function SelectColourModal({ visible, onClose, onSelectColour, se
 
 
 // **Styles**
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
     gridContainer: {
         alignItems: "center",
     },
@@ -70,6 +74,6 @@ const styles = StyleSheet.create({
         width: 12,
         height: 12,
         borderRadius: 6,
-        backgroundColor: theme.colors.cardBackground,
+        backgroundColor: colors.cardBackground,
     },
 });
