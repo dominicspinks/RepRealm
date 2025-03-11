@@ -41,7 +41,7 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
 
     initialiseTimerStore: (workoutLogId: string, startTime: number | null = null, endTime: number | null = null) => {
         const { workoutLogId: currentWorkoutId, workoutStartTime, workoutEndTime } = get();
-        console.log("🔄 Initialising timer store for workout:", workoutLogId, currentWorkoutId, startTime, endTime);
+        // console.log("Initialising timer store for workout:", workoutLogId, currentWorkoutId, startTime, endTime);
         if (currentWorkoutId !== workoutLogId || workoutStartTime !== startTime || workoutEndTime !== endTime) {
             set({
                 workoutLogId,
@@ -53,7 +53,6 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
                 stopwatchTime: 0,
                 isStopwatchRunning: false,
             });
-            console.log("🔄 Switched to new workout, resetting timers.");
         }
     },
 
@@ -127,7 +126,6 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
         await AsyncStorage.removeItem("restTimeRemaining");
     },
 
-    // Stopwatch
     stopwatchTime: 0,
     isStopwatchRunning: false,
     stopwatchInterval: null,
@@ -170,7 +168,6 @@ export const useWorkoutTimerStore = create<TimerState>((set, get) => ({
         set({ stopwatchTime: 0, isStopwatchRunning: false, stopwatchInterval: null });
     },
 
-    // Load Stored Timers
     loadStoredTimers: async () => {
         const workoutStartTime = await AsyncStorage.getItem("workoutStartTime");
         const restTimeRemaining = await AsyncStorage.getItem("restTimeRemaining");

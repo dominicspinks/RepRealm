@@ -32,6 +32,7 @@ export default function SelectExerciseModal({ visible, onClose, category, onSele
     // Fetch exercises when modal opens
     useEffect(() => {
         if (visible) fetchExercises();
+        setSearchQuery("");
     }, [visible, category]);
 
     async function fetchExercises() {
@@ -104,11 +105,11 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     exerciseItem: {
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,
-        borderBottomColor: colors.inputBorder,
+        borderBottomColor: colors.border.input,
         paddingHorizontal: theme.spacing.medium,
     },
     exerciseText: {
         fontSize: 16,
-        color: colors.text,
+        color: colors.text.primary,
     },
 });

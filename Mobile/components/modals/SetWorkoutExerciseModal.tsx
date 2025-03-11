@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { theme, ThemeColors } from "../../theme";
 import { ExerciseFull, NewWorkoutExerciseSet, NewWorkoutExerciseWithSets, Workout, WorkoutExerciseWithSets } from "../../db/schema";
 import ModalHeader from "../headers/ModalHeader";
@@ -173,15 +173,13 @@ export default function SetWorkoutExerciseModal({ visible, workout, exercise, wo
     );
 }
 
-const screenHeight = Dimensions.get("window").height;
-
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     setContainer: {
         marginBottom: 15,
         paddingBottom: 10,
         borderTopWidth: 1,
-        borderColor: colors.inputBorder,
+        borderColor: colors.border.input,
         alignItems: "center",
     },
     setRow: {
@@ -191,15 +189,15 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         width: "100%",
         padding: theme.spacing.medium,
         borderBottomWidth: 1,
-        borderBottomColor: colors.inputBorder,
+        borderBottomColor: colors.border.input,
     },
     setLabel: {
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
     },
     error: {
-        color: "red",
+        color: colors.text.error,
         textAlign: "center",
         marginTop: 10,
     },

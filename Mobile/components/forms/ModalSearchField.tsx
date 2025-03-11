@@ -19,6 +19,7 @@ export default function ModalSearchField({ placeholder, value, handleSearch }: M
             <TextInput
                 style={styles.searchBar}
                 placeholder={placeholder}
+                placeholderTextColor={colors.text.primary}
                 value={value}
                 onChangeText={handleSearch}
             />
@@ -32,12 +33,13 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         gap: 5,
         alignItems: "center",
         justifyContent: "flex-start",
-        backgroundColor: colors.inputBackgroundDark,
+        backgroundColor: colors.background.inputModalSearch,
         padding: 10,
         borderRadius: 0,
         marginVertical: 10,
     },
     searchBar: {
         fontSize: 16,
+        color: colors.text.primary,
     },
 });

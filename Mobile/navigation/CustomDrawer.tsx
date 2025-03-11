@@ -15,7 +15,7 @@ export default function CustomDrawer(props: any) {
     const navigation = useNavigation<AuthScreenNavigationProp>();
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.panel}>
             <DrawerContentScrollView {...props}>
                 {user ? (
                     <View style={styles.userInfo}>
@@ -58,26 +58,30 @@ export default function CustomDrawer(props: any) {
 }
 
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    panel: {
+        flex: 1,
+        backgroundColor: colors.background.navigation
+    },
     userInfo: {
         padding: 20,
         borderBottomWidth: 1,
-        borderBottomColor: colors.inputBorder,
+        borderBottomColor: colors.border.input,
         marginVertical: 10,
     },
     email: {
         fontSize: 14,
-        color: colors.text,
+        color: colors.text.primary,
         marginTop: 5,
     },
     guest: {
         fontSize: 16,
         fontStyle: 'italic',
-        color: colors.text,
+        color: colors.text.primary,
     },
     footer: {
         padding: 20,
         borderTopWidth: 1,
-        borderTopColor: colors.inputBorder,
+        borderTopColor: colors.border.input,
     },
     authButton: {
         paddingVertical: 10,

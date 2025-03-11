@@ -130,7 +130,7 @@ export default function ActiveExerciseScreen() {
 
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
+            behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.page}>
             {/* Header */}
             <ScreenHeader
                 leftElement={<BackIcon action={handleBackButton} />}
@@ -216,8 +216,9 @@ export default function ActiveExerciseScreen() {
 }
 
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
-    container: {
+    page: {
         flex: 1,
+        backgroundColor: colors.background.screen,
     },
     content: {
         flex: 1,

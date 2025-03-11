@@ -8,6 +8,7 @@ import { AuthScreenNavigationProp } from '../navigation/types';
 import Input from '../components/forms/Input';
 import { AuthService } from '../services/authService';
 import { useColourTheme } from '../contexts/ThemeContext';
+import ContinueAsGuestModal from '../components/modals/ContinueAsGuestModal';
 
 export default function LoginScreen() {
     const { colors } = useColourTheme();
@@ -56,14 +57,12 @@ export default function LoginScreen() {
 
             <Text style={styles.title}>Welcome!</Text>
 
-            {/* Email Input */}
             <Input
                 placeholder="Email address"
                 value={email}
                 onChangeText={setEmail}
             />
 
-            {/* Password Input */}
             <Input
                 placeholder="Password"
                 value={password}
@@ -71,44 +70,26 @@ export default function LoginScreen() {
                 secureTextEntry={true}
             />
 
-            {/* Login Button */}
             <Button title="Login" onPress={handleLogin} style={styles.loginButton} />
 
-            {/* Error Message */}
             {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
 
-            {/* Sign Up */}
             <TouchableOpacity onPress={handleRegister}>
                 <Text style={styles.signUpText}>Not a member? <Text style={styles.link}>Register now</Text></Text>
             </TouchableOpacity>
 
-            {/* Divider */}
             <View style={styles.divider} />
 
-            {/* Continue as Guest Button */}
             <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Text style={styles.guestText}>Continue as Guest</Text>
             </TouchableOpacity>
 
-            {/* Guest Confirmation Modal */}
-            <Modal visible={isModalVisible} transparent animationType="fade">
-                <View style={styles.overlay}>
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Continue as Guest</Text>
-                            <Text style={styles.modalMessage}>
-                                Are you sure you want to continue as a guest? You won’t be able to sync workouts or access other users’ workouts.
-                            </Text>
-
-                            {/* Buttons */}
-                            <View style={styles.buttonRow}>
-                                <Button variant="secondary" title="Login" onPress={() => setModalVisible(false)} style={styles.modalButton} />
-                                <Button title="Continue" onPress={handleContinueAsGuest} style={styles.modalButton} />
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            {/* Modals */}
+            <ContinueAsGuestModal
+                visible={isModalVisible}
+                onClose={() => setModalVisible(false)}
+                onContinue={handleContinueAsGuest}
+            />
         </StyledContainer>
     );
 }
@@ -125,20 +106,21 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         alignItems: 'center',
     },
     logo: {
-        width: 150,
-        height: 150,
+        width: 200,
+        height: 200,
+        borderRadius: 100,
         marginBottom: theme.spacing.large,
         resizeMode: 'contain',
     },
     title: {
         fontSize: 24,
         fontFamily: theme.fonts.bold,
-        color: colors.text,
+        color: colors.text.primary,
         marginBottom: theme.spacing.large,
     },
     signUpText: {
         marginTop: theme.spacing.large,
-        color: colors.text,
+        color: colors.text.primary,
     },
     link: {
         color: colors.primary,
@@ -147,47 +129,13 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     divider: {
         height: 1,
         width: '100%',
-        backgroundColor: colors.inputBorder,
+        backgroundColor: colors.border.input,
         marginVertical: theme.spacing.large,
     },
     guestText: {
         color: colors.primary,
         fontWeight: 'bold',
         marginTop: theme.spacing.small,
-    },
-    modalContainer: {
-        backgroundColor: 'white',
-        padding: 5,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-        alignSelf: 'center',
-    },
-    modalContent: {
-        width: '100%',
-        backgroundColor: '#FFF',
-        padding: theme.spacing.large,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: theme.spacing.medium,
-    },
-    modalMessage: {
-        textAlign: 'center',
-        marginBottom: theme.spacing.medium,
-    },
-    buttonRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    modalButton: {
-        flex: 1,
-        marginHorizontal: 5,
     },
     loginButton: {
         width: '100%',

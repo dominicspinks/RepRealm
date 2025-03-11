@@ -8,6 +8,8 @@ import EditIcon from "../icons/EditIcon";
 import { formatDate } from "../../utilities/formatHelpers";
 import WorkoutLogExercise from "../WorkoutLogExercise";
 import { useColourTheme } from "../../contexts/ThemeContext";
+import CategoryBubble from "../CategoryBubble";
+import CategoryBubbleList from "../CategoryBubbleList";
 
 interface WorkoutLogCardProps {
     workoutLog: WorkoutLogWithExercises;
@@ -28,7 +30,6 @@ export default function WorkoutLogCard({
         setExpanded(prev => !prev);
     }
 
-    console.log(workoutLog)
     return (
         <TouchableOpacity
             style={styles.card}
@@ -51,20 +52,14 @@ export default function WorkoutLogCard({
                         )}
                     </View>
 
-                    <View style={styles.categoryContainer}>
-                        {[...new Map(workoutLog.exercises.map(exercise => [exercise.categoryId, {
-                            id: exercise.categoryId,
-                            name: exercise.categoryName,
-                            colour: exercise.categoryColour
-                        }])).values()].map((category) => (
-                            <View key={category.id} style={[styles.categoryBadge, { backgroundColor: category.colour }]}>
-                                <Text style={styles.categoryText}>{category.name}</Text>
-                            </View>
-                        ))}
-                    </View>
+                    <CategoryBubbleList categories={[...new Map(workoutLog.exercises.map(exercise => [exercise.categoryId, {
+                        id: exercise.categoryId,
+                        name: exercise.categoryName,
+                        colour: exercise.categoryColour
+                    }])).values()]} />
                 </View>
 
-                <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={colors.text} />
+                <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={colors.text.primary} />
             </View>
 
             {expanded && (
@@ -94,13 +89,13 @@ export default function WorkoutLogCard({
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
-        backgroundColor: "white",
+        backgroundColor: colors.background.card,
         padding: 15,
         marginVertical: 4,
         marginHorizontal: 16,
         borderRadius: 10,
         elevation: 3,
-        shadowColor: "#000",
+        shadowColor: colors.cardShadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -127,30 +122,12 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     workoutName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
     },
     workoutDuration: {
         fontSize: 14,
         fontWeight: "normal",
-        color: colors.mutedText,
-    },
-    categoryContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: 10,
-        marginBottom: 10,
-    },
-    categoryBadge: {
-        paddingHorizontal: 12,
-        height: 24,
-        borderRadius: 12,
-        flexDirection: "row",
-        alignItems: "center",
-    },
-    categoryText: {
-        color: "white",
-        fontWeight: "bold",
-        fontSize: 12,
+        color: colors.text.muted,
     },
     exerciseContainer: {
         marginTop: 10,

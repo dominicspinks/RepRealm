@@ -7,7 +7,7 @@ import migrations from "../drizzle/migrations";
 const expo = SQLite.openDatabaseSync("db.db");
 
 // Create Drizzle ORM instance
-export const db = drizzle(expo, { logger: true });
+export const db = drizzle(expo, { logger: false });
 
 // Run migrations
 export function useDatabaseMigrations() {

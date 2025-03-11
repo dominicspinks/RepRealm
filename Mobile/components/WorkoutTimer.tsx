@@ -54,7 +54,7 @@ export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
                         <Ionicons
                             name={workoutStartTime && !workoutEndTime ? "stop" : "play"}
                             size={30}
-                            color={colors.primary}
+                            color={colors.text.primary}
                         />
                     </TouchableOpacity>
                 </View>
@@ -87,7 +87,7 @@ export default function WorkoutTimer({ workoutLog }: WorkoutTimerProps) {
                         <Ionicons
                             name={isStopwatchRunning ? "pause" : "play"}
                             size={30}
-                            color={colors.primary}
+                            color={colors.text.primary}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerButton} onPress={resetStopwatch}>
@@ -104,9 +104,9 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: colors.background,
+        backgroundColor: colors.background.timer,
         borderTopWidth: 1,
-        borderTopColor: colors.border,
+        borderTopColor: colors.border.primary,
         paddingVertical: 2,
     },
     timerBoxContainer: {
@@ -126,12 +126,12 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     timerLabel: {
         fontSize: 12,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
     },
     timerValue: {
         fontSize: 22,
         fontWeight: "bold",
-        color: colors.primary,
+        color: colors.text.primary,
     },
     timerButtonContainer: {
         flexDirection: "column",
@@ -148,6 +148,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     verticalBorder: {
         width: 1,
         height: "100%",
-        backgroundColor: colors.border,
+        backgroundColor: colors.border.primary,
     },
 });

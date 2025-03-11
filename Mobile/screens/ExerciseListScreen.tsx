@@ -106,7 +106,7 @@ export default function ExerciseListScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.page}>
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Exercises" />}
@@ -151,6 +151,10 @@ export default function ExerciseListScreen() {
 
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
     icons: {
         flexDirection: "row",
         gap: 15,

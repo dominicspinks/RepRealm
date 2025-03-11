@@ -62,15 +62,15 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         fontSize: 14,
         fontWeight: "bold",
         marginBottom: 5,
-        color: colors.text,
+        color: colors.text.primary,
     },
     dropdown: {
         borderWidth: 1,
-        borderColor: colors.inputBorder,
+        borderColor: colors.border.input,
         borderRadius: 5,
         paddingHorizontal: 10,
         paddingVertical: 0,
-        backgroundColor: colors.inputBackground,
+        backgroundColor: colors.background.inputField,
     },
     picker: {
         height: 55,

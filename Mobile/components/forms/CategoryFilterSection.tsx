@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, FlatList, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import { theme, ThemeColors } from "../../theme";
 import { Category } from "../../db/schema";
-import { Ionicons } from "@expo/vector-icons";
 import FilterTypeHeader from "../headers/FilterTypeHeader";
 import { useColourTheme } from "../../contexts/ThemeContext";
+import Checkbox from "./Checkbox";
 
 interface CategoryFilterSectionProps {
     categories: Category[];
@@ -20,7 +20,7 @@ export default function CategoryFilterSection({ categories, toggleCategory, temp
     const [isExpanded, setIsExpanded] = useState(expanded);
 
     return (
-        <View key={"categoryFilter"}>
+        <View>
             <FilterTypeHeader label="Categories" isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
 
             {isExpanded && (
@@ -28,14 +28,7 @@ export default function CategoryFilterSection({ categories, toggleCategory, temp
                     data={categories}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <TouchableOpacity style={styles.categoryItem} onPress={() => toggleCategory(item.id)}>
-                            <Ionicons
-                                name={tempSelected.includes(item.id) ? "checkbox" : "square-outline"}
-                                size={24}
-                                color={colors.primary}
-                            />
-                            <Text style={styles.categoryText}>{item.name}</Text>
-                        </TouchableOpacity>
+                        <Checkbox checked={tempSelected.includes(item.id)} onPress={() => toggleCategory(item.id)} text={item.name} />
                     )}
                     style={styles.categoryList}
                 />
@@ -47,6 +40,7 @@ export default function CategoryFilterSection({ categories, toggleCategory, temp
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     categoryList: {
         paddingHorizontal: 20,
+        maxHeight: 300
     },
     categoryItem: {
         flexDirection: "row",
@@ -56,5 +50,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     categoryText: {
         fontSize: 16,
         marginLeft: 10,
+        color: colors.text.primary,
     },
 });

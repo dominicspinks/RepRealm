@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useColourTheme } from '../../contexts/ThemeContext';
 import { ThemeColors } from '../../theme';
 
@@ -15,29 +15,18 @@ export default function ScreenHeader({ leftElement, centreElement, rightElement 
 
     return (
         <View style={styles.container}>
-            {/* Space for the Status Bar / Notch */}
-            <View style={styles.statusBarSpacing} />
-
-            {/* Header Content */}
-            <View style={styles.header}>
-                <View style={styles.left}>{leftElement}</View>
-                <View style={styles.centre}>{centreElement}</View>
-                <View style={styles.right}>{rightElement}</View>
-            </View>
+            <View style={styles.left}>{leftElement}</View>
+            <View style={styles.centre}>{centreElement}</View>
+            <View style={styles.right}>{rightElement}</View>
         </View>
     );
 }
 
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
-        backgroundColor: colors.headerBackground,
+        backgroundColor: colors.background.screenHeader,
         borderBottomWidth: 1,
-        borderBottomColor: '#DDD',
-    },
-    statusBarSpacing: {
-        height: StatusBar.currentHeight || 20,
-    },
-    header: {
+        borderBottomColor: colors.border.primary,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

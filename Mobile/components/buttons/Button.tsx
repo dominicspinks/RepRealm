@@ -36,20 +36,20 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         justifyContent: 'center',
     },
     primaryButton: {
-        backgroundColor: colors.primary,
+        backgroundColor: colors.background.buttonPrimary,
     },
     secondaryButton: {
-        backgroundColor: 'white',
+        backgroundColor: colors.background.buttonSecondary,
         borderWidth: 2,
         borderColor: colors.primary,
     },
     primaryText: {
-        color: 'white',
+        color: colors.text.buttonPrimary,
         fontSize: 16,
         fontWeight: 'bold',
     },
     secondaryText: {
-        color: colors.primary,
+        color: colors.text.buttonSecondary,
         fontSize: 16,
         fontWeight: 'bold',
     },

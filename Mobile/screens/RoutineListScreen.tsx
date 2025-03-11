@@ -1,4 +1,4 @@
-import { FlatList, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
@@ -12,10 +12,15 @@ import { getWorkoutsWithExercises } from "../services/workoutsService";
 import { createRoutine, deleteRoutineById, getRoutinesWithWorkouts } from "../services/routinesService";
 import RoutineCard from "../components/cards/RoutineCard";
 import EmptyListNotice from "../components/EmptyListNotice";
+import { useColourTheme } from "../contexts/ThemeContext";
+import { ThemeColors } from "../theme";
 
 type RoutineListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RoutineList'>;
 
 export default function RoutineListScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<RoutineListScreenNavigationProp>();
     const [routines, setRoutines] = useState<RoutineWithFullWorkouts[]>([]);
 
@@ -46,7 +51,7 @@ export default function RoutineListScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.page}>
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Routines" />}
@@ -67,3 +72,11 @@ export default function RoutineListScreen() {
         </View>
     )
 }
+
+// **Styles**
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
+});

@@ -95,9 +95,9 @@ export default function FilterModal({
                 <View style={styles.filterList}>
                     {[
                         routineFilter && {
-                            key: "routineFilter",
                             component: (
                                 <RoutineFilterSection
+                                    key="routineFilter"
                                     selectedValue={tempSelectedRoutine}
                                     setValue={setTempSelectedRoutine}
                                     routines={routines}
@@ -106,9 +106,9 @@ export default function FilterModal({
                             position: routineFilter.position ?? 0,
                         },
                         categoryFilter && {
-                            key: "categoryFilter",
                             component: (
                                 <CategoryFilterSection
+                                    key="categoryFilter"
                                     categories={categories}
                                     toggleCategory={toggleCategory}
                                     tempSelected={tempSelectedCategory}

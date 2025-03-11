@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Alert, FlatList } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-
 import ScreenHeader from "../components/headers/ScreenHeader";
 import BackIcon from "../components/icons/BackIcon";
 import { RootStackParamList } from "../navigation/types";
@@ -153,7 +152,7 @@ export default function SetWorkoutScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.page}>
             {/* Header */}
             <ScreenHeader
                 leftElement={<BackIcon action={handleBackButton} />}
@@ -220,6 +219,10 @@ export default function SetWorkoutScreen() {
 
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
     titleContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -229,10 +232,10 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         borderBottomWidth: 1,
-        borderColor: colors.inputBorder,
+        borderColor: colors.border.input,
         padding: 2,
         minWidth: 120,
-        color: colors.text,
+        color: colors.text.primary,
     },
     editIcons: {
         flexDirection: "row",

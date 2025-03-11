@@ -23,8 +23,8 @@ export default function ActiveWorkoutExercise({ set, exercise }: ActiveWorkoutEx
     return (
         <View style={styles.row}>
             <View style={{ flex: 1 }} />
-            <Text>{formatSetValue(set.measurement1Value, exercise.primaryMeasurementName, exercise.primaryMeasurementUnitName, exercise.primaryMeasurementUnitDecimalPlaces)}</Text>
-            <Text>{set.measurement2Id && formatSetValue(set.measurement2Value, exercise.secondaryMeasurementName, exercise.secondaryMeasurementUnitName, exercise.secondaryMeasurementUnitDecimalPlaces)}</Text>
+            <Text style={styles.setText}>{formatSetValue(set.measurement1Value, exercise.primaryMeasurementName, exercise.primaryMeasurementUnitName, exercise.primaryMeasurementUnitDecimalPlaces)}</Text>
+            <Text style={styles.setText}>{set.measurement2Id && formatSetValue(set.measurement2Value, exercise.secondaryMeasurementName, exercise.secondaryMeasurementUnitName, exercise.secondaryMeasurementUnitDecimalPlaces)}</Text>
         </View>
     )
 }
@@ -35,5 +35,8 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         gap: 20,
+    },
+    setText: {
+        color: colors.text.primary,
     }
 })

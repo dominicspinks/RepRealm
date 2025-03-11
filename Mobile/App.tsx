@@ -10,15 +10,17 @@ import { initialiseDatabase } from "./db/initialise";
 import { useDatabaseMigrations } from './db/database';
 import { useNotificationSounds } from './utilities/notificationHelper';
 import { useWorkoutTimerStore } from './store/timerStore';
-import { ColourThemeProvider } from './contexts/ThemeContext';
+import { ColourThemeProvider, useColourTheme } from './contexts/ThemeContext';
 import LoadingIndicator from './components/LoadingIndicator';
 import ErrorMessage from './components/ErrorMessage';
+import { SafeAreaView, StatusBar } from 'react-native';
 
 export default function App() {
     const { success, error } = useDatabaseMigrations();
     const [initialised, setInitialised] = useState(false);
     const { playerLongBeep } = useNotificationSounds();
     const { setPlayer } = useWorkoutTimerStore();
+    const { colors } = useColourTheme();
 
     useEffect(() => {
         if (!success) return;
@@ -51,6 +53,8 @@ export default function App() {
     return (
         <ColourThemeProvider>
             <NavigationContainer>
+                <SafeAreaView style={{ backgroundColor: colors.statusBar }} />
+                <StatusBar barStyle="light-content" backgroundColor={colors.statusBar} />
                 <MenuProvider>
                     <AppNavigator />
                 </MenuProvider >

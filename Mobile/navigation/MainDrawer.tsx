@@ -6,10 +6,17 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../navigation/types";
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useColourTheme } from '../contexts/ThemeContext';
+import { ThemeColors } from '../theme';
+import { StyleSheet } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
 export default function MainDrawer() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const { user, isGuest } = useAuthStore();
     const navigation = useNavigation<DrawerNavigationProp<RootStackParamList>>();
     const [checkingAuth, setCheckingAuth] = useState(true);
@@ -34,7 +41,11 @@ export default function MainDrawer() {
     return (
         <Drawer.Navigator
             initialRouteName="Workout Logs"
-            screenOptions={{ headerShown: false }}
+            screenOptions={{
+                headerShown: false,
+                drawerLabelStyle: { color: colors.text.secondary },
+                drawerActiveBackgroundColor: colors.primary + '40',
+            }}
             drawerContent={(props) => <CustomDrawer {...props} />}
         >
             <Drawer.Screen name="Workout Logs" component={WorkoutLogsScreen} />
@@ -42,3 +53,7 @@ export default function MainDrawer() {
         </Drawer.Navigator>
     );
 }
+
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+
+})

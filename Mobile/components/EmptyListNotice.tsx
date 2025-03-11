@@ -19,7 +19,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     text: {
         textAlign: "center",
         marginTop: theme.spacing.large,
-        color: colors.mutedText,
+        color: colors.text.muted,
     },
 
 })

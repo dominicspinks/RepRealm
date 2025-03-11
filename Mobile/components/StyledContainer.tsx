@@ -17,7 +17,7 @@ export default function StyledContainer({ children }: Props) {
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: colors.background.screen,
         padding: theme.spacing.medium,
         alignItems: 'center',
         justifyContent: 'center',

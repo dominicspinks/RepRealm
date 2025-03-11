@@ -44,11 +44,11 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     exerciseName: {
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
         marginBottom: theme.spacing.small,
     },
     setText: {
         fontSize: 14,
-        color: colors.mutedText,
+        color: colors.text.muted,
     },
 });

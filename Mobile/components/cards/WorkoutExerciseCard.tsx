@@ -45,7 +45,7 @@ export default function WorkoutExerciseCard({ item, onEdit, onDelete }: WorkoutE
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         flexDirection: "column",
-        backgroundColor: colors.cardBackground,
+        backgroundColor: colors.background.card,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
         marginHorizontal: theme.spacing.medium,

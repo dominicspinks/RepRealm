@@ -497,13 +497,13 @@ const defaultExercises = [
 
 // Function to check and insert initial data
 export async function initialiseDatabase() {
-    // **Delete all existing records first**
+    // **Delete all existing records first (for debugging purposes only)**
     // await db.delete(coloursTable);
     // await db.delete(measurementsTable);
     // await db.delete(measurementUnitsTable);
 
     // Insert default colours
-    console.log("Populating colours table with default data...");
+    // console.log("Populating colours table with default data...");
     await db.insert(coloursTable)
         .values(defaultColours)
         .onConflictDoUpdate({
@@ -511,7 +511,7 @@ export async function initialiseDatabase() {
             set: { hex: coloursTable.hex },
         });
 
-    console.log("Populating measurements table with default data...");
+    // console.log("Populating measurements table with default data...");
     await db.insert(measurementsTable)
         .values(defaultMeasurements)
         .onConflictDoUpdate({
@@ -526,7 +526,7 @@ export async function initialiseDatabase() {
             set: { measurementId: measurementUnitsTable.measurementId, unit: measurementUnitsTable.unit, decimalPlaces: measurementUnitsTable.decimalPlaces },
         });
 
-    console.log("Populating categories table with default data...");
+    // console.log("Populating categories table with default data...");
     await db.insert(categoriesTable)
         .values(defaultCategories)
         .onConflictDoUpdate({
@@ -535,7 +535,7 @@ export async function initialiseDatabase() {
         });
 
 
-    console.log("Populating exercises table with default data...");
+    // console.log("Populating exercises table with default data...");
     await db.insert(exercisesTable)
         .values(defaultExercises)
         .onConflictDoUpdate({
@@ -551,8 +551,6 @@ export async function initialiseDatabase() {
                 rest: exercisesTable.rest,
             },
         });
-
-    console.log('exercises: ', await db.select().from(workoutExerciseSetsTable));
 
     console.log("Database initialisation complete...");
 }

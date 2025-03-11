@@ -20,7 +20,7 @@ export default function RoutineFilterSection({ selectedValue, setValue, routines
     const [isExpanded, setIsExpanded] = useState(expanded);
 
     return (
-        <View key="routineFilter">
+        <View>
             <FilterTypeHeader label="Routine" isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
             {isExpanded &&
                 <DropdownFieldInput

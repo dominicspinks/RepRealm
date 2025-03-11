@@ -34,7 +34,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     categoryCard: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: colors.cardBackground,
+        backgroundColor: colors.background.card,
         padding: 0,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
@@ -52,7 +52,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
         margin: theme.spacing.small,
     },
 });

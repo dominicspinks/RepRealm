@@ -30,6 +30,7 @@ export default function SelectCategoryModal({ visible, onClose, onSelectCategory
     // Fetch categories when modal opens
     useEffect(() => {
         if (visible) fetchCategories();
+        setSearchQuery("");
     }, [visible]);
 
     async function fetchCategories() {
@@ -103,7 +104,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         alignItems: "center",
         paddingVertical: theme.spacing.medium,
         borderBottomWidth: 1,
-        borderBottomColor: colors.inputBorder,
+        borderBottomColor: colors.border.input,
         paddingHorizontal: theme.spacing.medium,
     },
     colourIndicator: {
@@ -114,6 +115,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     },
     categoryText: {
         fontSize: 16,
-        color: colors.text,
+        color: colors.text.primary,
     },
 });

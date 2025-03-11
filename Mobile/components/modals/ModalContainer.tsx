@@ -41,20 +41,22 @@ export default function ModalContainer({
                             {/* Header */}
                             {header}
 
-                            {/* Conditional Scrolling */}
-                            {scrollable ? (
-                                <ScrollView
-                                    contentContainerStyle={[styles.contentContainer, fullWidthContent && styles.fullWidth]}
-                                    keyboardShouldPersistTaps="handled"
-                                    showsVerticalScrollIndicator={true}
-                                >
-                                    {content}
-                                </ScrollView>
-                            ) : (
-                                <>
-                                    {content}
-                                </>
-                            )}
+                            <View style={styles.content}>
+                                {/* Conditional Scrolling */}
+                                {scrollable ? (
+                                    <ScrollView
+                                        contentContainerStyle={[styles.contentContainer, fullWidthContent && styles.fullWidth]}
+                                        keyboardShouldPersistTaps="handled"
+                                        showsVerticalScrollIndicator={true}
+                                    >
+                                        {content}
+                                    </ScrollView>
+                                ) : (
+                                    <>
+                                        {content}
+                                    </>
+                                )}
+                            </View>
 
                             {/* Buttons */}
                             {buttons && buttons?.length > 0 ? (
@@ -83,12 +85,15 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         alignItems: "center",
     },
     modalContainer: {
-        backgroundColor: "white",
+        backgroundColor: colors.background.modal,
         paddingVertical: 20,
         width: "85%",
         borderRadius: 10,
         elevation: 5,
         maxHeight: "90%",
+    },
+    content: {
+        flexShrink: 1,
     },
     contentContainer: {
         flexGrow: 1,

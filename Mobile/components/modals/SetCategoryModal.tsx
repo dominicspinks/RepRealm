@@ -12,6 +12,7 @@ import ModalContainer from "./ModalContainer";
 import React from "react";
 import { useColourTheme } from "../../contexts/ThemeContext";
 import { ThemeColors } from "../../theme";
+import TextFieldInput from "../forms/TextFieldInput";
 
 interface SetCategoryModalProps {
     visible: boolean;
@@ -92,11 +93,12 @@ export default function SetCategoryModal({ visible, onClose, category }: SetCate
                 <>
                     <View style={styles.inputContainer}>
                         {/* Name Input */}
-                        <TextInput
+                        <TextFieldInput
                             placeholder="Category name"
                             value={name}
-                            onChangeText={setName}
-                            style={styles.input}
+                            setValue={setName}
+                            containerStyle={styles.input}
+                            inputStyle={{ marginBottom: 0 }}
                         />
 
                         {/* Colour Selection */}
@@ -141,13 +143,10 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         width: "100%",
     },
     input: {
-        borderBottomWidth: 1,
         padding: 10,
-        marginTop: 20,
         width: "80%",
     },
     colourButton: {
-        marginTop: 20,
         alignSelf: "center",
     },
     colourPreview: {

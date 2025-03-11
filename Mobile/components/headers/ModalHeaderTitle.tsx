@@ -19,6 +19,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     modalTitle: {
         fontSize: 18,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
     },
 })

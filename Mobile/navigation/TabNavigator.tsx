@@ -54,7 +54,10 @@ export default function TabNavigator({ onTabChange }: { onTabChange: (tab: strin
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
                 tabBarActiveTintColor: colors.primary,
-                tabBarInactiveTintColor: 'gray',
+                tabBarInactiveTintColor: colors.text.tabBar,
+                tabBarStyle: {
+                    backgroundColor: colors.background.tabBar
+                },
                 headerShown: false,
             })}
             screenListeners={{

@@ -71,7 +71,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 12,
         borderRadius: 6,
-        backgroundColor: "#fff",
+        backgroundColor: colors.background.card,
         marginBottom: 8,
         elevation: 2,
     },
@@ -84,6 +84,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     setNumber: {
         fontSize: 16,
         fontWeight: "bold",
+        color: colors.text.primary,
     },
     measurementsContainer: {
         flexDirection: "row",
@@ -99,10 +100,12 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     measurementValue: {
         fontSize: 14,
         textAlign: "right",
+        color: colors.text.primary,
     },
     measurementUnit: {
         fontSize: 14,
         marginLeft: 4,
         textAlign: "right",
+        color: colors.text.primary,
     },
 });

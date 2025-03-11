@@ -16,7 +16,7 @@ export default function Icon({ icon, action, clickable = true, size = 24, color,
     const { colors } = useColourTheme();
     const styles = createStyles(colors);
 
-    const iconColor = color ?? colors.text;
+    const iconColor = color ?? colors.text.primary;
 
     return (
         clickable ?

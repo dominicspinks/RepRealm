@@ -1,64 +1,118 @@
 export type ThemeColors = {
-    background: string;
-    cardBackground: string;
+    background: {
+        screen: string;
+        card: string;
+        modal: string;
+        screenHeader: string;
+        timer: string;
+        error: string;
+        inputField: string;
+        inputModalSearch: string;
+        buttonPrimary: string;
+        buttonSecondary: string;
+        tabBar: string;
+        navigation: string;
+    }
     primary: string;
-    text: string;
-    inputBackground: string;
-    inputBorder: string;
-    inputBackgroundDark: string;
-    mutedText: string;
-    error: string;
+    text: {
+        primary: string;
+        secondary: string;
+        muted: string;
+        error: string;
+        buttonPrimary: string;
+        buttonSecondary: string;
+        tabBar: string;
+    };
     overlay: string;
     danger: string;
-    border: string;
-    borderStrong: string;
-    errorBackground: string;
+    border: {
+        primary: string;
+        strong: string;
+        input: string;
+    };
     warning: string;
     success: string;
     highlight: string;
-    headerBackground: string;
+    cardShadow: string;
+    statusBar: string;
 };
 
 const colours: Record<"light" | "dark", ThemeColors> = {
     light: {
-        background: '#F8F9FE',
-        cardBackground: '#FFFFFF',
+        background: {
+            screen: '#F8F9FE',
+            card: '#FFFFFF',
+            modal: 'white',
+            screenHeader: '#FFFFFF',
+            timer: '#F85F6A',
+            error: '#FDEDED',
+            inputField: '#FFFFFF',
+            inputModalSearch: '#F2F2F2',
+            buttonPrimary: '#F85F6A',
+            buttonSecondary: 'white',
+            tabBar: 'white',
+            navigation: "#EEEEEE"
+        },
+        cardShadow: '#000000',
         primary: '#F85F6A',
-        text: '#333333',
-        inputBackground: '#FFFFFF',
-        inputBorder: '#DDDDDD',
-        inputBackgroundDark: '#F2F2F2',
-        mutedText: '#AAAAAA',
-        error: '#FF0000',
+        text: {
+            primary: '#333333',
+            secondary: '#666666',
+            error: '#FF0000',
+            muted: '#AAAAAA',
+            buttonPrimary: 'white',
+            buttonSecondary: '#F85F6A',
+            tabBar: 'gray',
+        },
         overlay: 'rgba(0, 0, 0, 0.5)',
         danger: '#FF0000',
-        border: '#DDDDDD',
-        borderStrong: '#AAAAAA',
-        errorBackground: '#FDEDED',
+        border: {
+            primary: '#DDDDDD',
+            strong: '#AAAAAA',
+            input: '#DDDDDD',
+        },
         warning: '#FFD700',
         success: '#00FF00',
         highlight: '#D4D6DD',
-        headerBackground: '#FFFFFF'
+        statusBar: 'black'
     },
     dark: {
-        background: "#121212",
-        cardBackground: "#1E1E1E",
+        background: {
+            screen: "#121212",
+            card: "#2E2E2E",
+            modal: "#1E1E1E",
+            screenHeader: "#383838",
+            timer: "#F85F6A",
+            error: "#3B1F1F",
+            inputField: '#FFFFFF',
+            inputModalSearch: '#333333',
+            buttonPrimary: '#F85F6A',
+            buttonSecondary: 'white',
+            tabBar: '#383838',
+            navigation: '#111111'
+        },
+        cardShadow: '#000000',
         primary: "#F85F6A",
-        text: "#EAEAEA",
-        inputBackground: "#1E1E1E",
-        inputBorder: "#444444",
-        inputBackgroundDark: "#252525",
-        mutedText: "#888888",
-        error: "#FF6B6B",
-        overlay: "rgba(0, 0, 0, 0.7)",
+        text: {
+            primary: "#EAEAEA",
+            secondary: "#DDDDDD",
+            error: "#FF0000",
+            muted: "#999999",
+            buttonPrimary: 'white',
+            buttonSecondary: '#F85F6A',
+            tabBar: '#EAEAEA',
+        },
+        overlay: "rgba(255, 255, 255, 0.3)",
         danger: "#FF4444",
-        border: "#333333",
-        borderStrong: "#555555",
-        errorBackground: "#3B1F1F",
+        border: {
+            primary: "#333333",
+            strong: "#555555",
+            input: "#444444",
+        },
         warning: "#FFCC00",
         success: "#4CAF50",
         highlight: "#2A2D3A",
-        headerBackground: "#1E1E1E"
+        statusBar: 'black'
     }
 }
 

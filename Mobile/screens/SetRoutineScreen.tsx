@@ -16,6 +16,7 @@ import { theme, ThemeColors } from "../theme";
 import SelectWorkoutModal from "../components/modals/SelectWorkoutModal";
 import WorkoutCard from "../components/cards/WorkoutCard";
 import { useColourTheme } from "../contexts/ThemeContext";
+import EmptyListNotice from "../components/EmptyListNotice";
 
 type SetRoutineScreenNavigationProp = StackNavigationProp<RootStackParamList, "SetRoutine">;
 type SetRoutineScreenRouteProp = RouteProp<RootStackParamList, "SetRoutine">;
@@ -103,7 +104,7 @@ export default function SetRoutineScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.page}>
             <ScreenHeader
                 leftElement={<BackIcon action={handleBackButton} />}
                 centreElement={
@@ -137,6 +138,7 @@ export default function SetRoutineScreen() {
                 renderItem={({ item }) => (
                     <WorkoutCard workout={item.workout} collapsible={false} editable={false} onDelete={() => handleDeleteWorkout(item.workout.id)} />
                 )}
+                ListEmptyComponent={() => (<EmptyListNotice text="Add a workout to this routine" />)}
             />
 
             {/* Select Workout Modal */}
@@ -152,6 +154,10 @@ export default function SetRoutineScreen() {
 
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
     titleContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -161,10 +167,10 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         borderBottomWidth: 1,
-        borderColor: colors.inputBorder,
+        borderColor: colors.border.input,
         padding: 2,
         minWidth: 120,
-        color: colors.text,
+        color: colors.text.primary,
     },
     editIcons: {
         flexDirection: "row",

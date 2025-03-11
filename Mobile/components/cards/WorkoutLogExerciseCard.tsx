@@ -48,7 +48,7 @@ export default function ActiveWorkoutExerciseCard({ exercise, onSelect }: Active
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
         flexDirection: "column",
-        backgroundColor: colors.cardBackground,
+        backgroundColor: colors.background.card,
         borderRadius: theme.cards.borderRadius,
         marginVertical: theme.spacing.small,
         marginHorizontal: theme.spacing.medium,
@@ -67,11 +67,11 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     exerciseName: {
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
         marginBottom: theme.spacing.small,
     },
     setText: {
         fontSize: 14,
-        color: colors.mutedText,
+        color: colors.text.muted,
     },
 });

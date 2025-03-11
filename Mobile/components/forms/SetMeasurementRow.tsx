@@ -94,11 +94,11 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: colors.inputBorder,
+        borderColor: colors.border.input,
         width: 100,
         height: 60,
         textAlign: "center",
         fontSize: 24,
-        backgroundColor: "white",
+        backgroundColor: colors.background.inputField,
     },
 })

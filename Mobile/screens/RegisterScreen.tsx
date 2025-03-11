@@ -77,16 +77,16 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     title: {
         fontSize: 24,
         fontFamily: theme.fonts.bold,
-        color: colors.text,
+        color: colors.text.primary,
         marginBottom: theme.spacing.small,
     },
     subtitle: {
         fontSize: 16,
-        color: colors.mutedText,
+        color: colors.text.muted,
         marginBottom: theme.spacing.large,
     },
     error: {
-        color: colors.error,
+        color: colors.text.error,
         marginBottom: theme.spacing.medium,
         textAlign: 'center',
     },
@@ -96,7 +96,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     },
     loginText: {
         marginTop: theme.spacing.large,
-        color: colors.text,
+        color: colors.text.primary,
         textAlign: 'center',
     },
     link: {

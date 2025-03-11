@@ -8,6 +8,7 @@ import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
 import ExerciseWithSets from "../ExerciseWithSets";
 import { useColourTheme } from "../../contexts/ThemeContext";
+import CategoryBubbleList from "../CategoryBubbleList";
 
 interface WorkoutCardProps {
     workout: WorkoutWithExercises;
@@ -54,23 +55,15 @@ export default function WorkoutCard({
                 <View style={styles.header}>
                     <Text style={styles.workoutName}>{workout.name}</Text>
 
-                    {/* Categories (Collapsed State) */}
-                    <View style={styles.categoryContainer}>
-                        {[...new Map(workout.exercises.map(exercise => [exercise.categoryId, {
-                            id: exercise.categoryId,
-                            name: exercise.categoryName,
-                            colour: exercise.categoryColour
-                        }])).values()].map((category) => (
-                            <View key={category.id} style={[styles.categoryBadge, { backgroundColor: category.colour }]}>
-                                <Text style={styles.categoryText}>{category.name}</Text>
-                            </View>
-                        ))}
-                    </View>
+                    <CategoryBubbleList categories={[...new Map(workout.exercises.map(exercise => [exercise.categoryId, {
+                        id: exercise.categoryId,
+                        name: exercise.categoryName,
+                        colour: exercise.categoryColour
+                    }])).values()]} />
                 </View>
 
-                {/* Expand/Collapse Icon (Hidden if collapsible is false) */}
                 {collapsible && (
-                    <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={colors.text} />
+                    <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={24} color={colors.text.primary} />
                 )}
             </View>
 
@@ -106,13 +99,13 @@ export default function WorkoutCard({
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
     card: {
-        backgroundColor: "white",
+        backgroundColor: colors.background.card,
         padding: 15,
         marginVertical: 4,
         marginHorizontal: 16,
         borderRadius: 10,
         elevation: 3,
-        shadowColor: "#000",
+        shadowColor: colors.cardShadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -127,7 +120,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         shadowOpacity: 0,
         marginVertical: 0,
         paddingBottom: 0,
-        borderBottomColor: colors.borderStrong,
+        borderBottomColor: colors.border.strong,
         borderBottomWidth: 1
     },
     headerContainer: {
@@ -144,7 +137,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     workoutName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.text.primary,
     },
     categoryContainer: {
         flexDirection: "row",
@@ -160,7 +153,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
         alignItems: "center",
     },
     categoryText: {
-        color: "white",
+        color: colors.text.primary,
         fontWeight: "bold",
         fontSize: 12,
     },

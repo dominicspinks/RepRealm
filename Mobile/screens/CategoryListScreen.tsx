@@ -10,8 +10,13 @@ import { CategoryWithColour } from "../db/schema";
 import CategoryCard from "../components/cards/CategoryCard";
 import EmptyListNotice from "../components/EmptyListNotice";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { useColourTheme } from "../contexts/ThemeContext";
+import { ThemeColors } from "../theme";
 
 export default function CategoryListScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const [categories, setCategories] = useState<CategoryWithColour[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<CategoryWithColour | null>(null);
@@ -66,7 +71,7 @@ export default function CategoryListScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }} >
+        <View style={styles.page} >
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Categories" />}
@@ -96,3 +101,11 @@ export default function CategoryListScreen() {
         </View>
     );
 }
+
+
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
+});

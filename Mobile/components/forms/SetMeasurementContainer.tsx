@@ -77,5 +77,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     measurementLabel: {
         fontSize: 14,
         fontWeight: "bold",
+        color: colors.text.primary
     },
 });

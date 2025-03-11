@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { theme, ThemeColors } from "../../theme";
 import { useColourTheme } from "../../contexts/ThemeContext";
+import CheckboxIcon from "../icons/CheckboxIcon";
 
 interface CheckboxProps {
     checked: boolean;
@@ -16,11 +16,7 @@ export default function Checkbox({ checked, onPress, text = null, style }: Check
 
     return (
         <TouchableOpacity onPress={onPress} style={[styles.container, style]} >
-            <Ionicons
-                name={checked ? "checkbox" : "square-outline"}
-                size={24}
-                color={colors.primary}
-            />
+            <CheckboxIcon checked={checked} />
             {text && <Text style={styles.text}>{text}</Text>}
         </TouchableOpacity>
     );
@@ -35,5 +31,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     text: {
         fontSize: 16,
         marginLeft: 10,
+        color: colors.text.primary,
     },
 });

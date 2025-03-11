@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import ScreenHeaderTitle from '../components/headers/ScreenHeaderTitle';
 import NavMenuIcon from '../components/icons/NavMenuIcon';
 import ScreenHeader from '../components/headers/ScreenHeader';
@@ -12,10 +12,16 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
 import { createWorkoutLog, deleteWorkoutLogById, getWorkoutLogsWithExercises } from '../services/workoutLogsService';
 import WorkoutLogCard from '../components/cards/WorkoutLogCard';
+import EmptyListNotice from '../components/EmptyListNotice';
+import { useColourTheme } from '../contexts/ThemeContext';
+import { ThemeColors } from '../theme';
 
 type WorkoutLogsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'WorkoutLogs'>;
 
 export default function WorkoutLogsScreen() {
+    const { colors } = useColourTheme();
+    const styles = createStyles(colors);
+
     const navigation = useNavigation<WorkoutLogsScreenNavigationProp>();
     const [startWorkoutModalOpen, setStartWorkoutModalOpen] = React.useState(false);
 
@@ -61,7 +67,7 @@ export default function WorkoutLogsScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.page}>
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Workout Logs" />}
@@ -79,6 +85,7 @@ export default function WorkoutLogsScreen() {
                         onDelete={handleDeleteWorkout}
                     />
                 )}
+                ListEmptyComponent={() => (<EmptyListNotice text="No workout logs found" />)}
             />
 
             {/* Modals */}
@@ -98,3 +105,11 @@ export default function WorkoutLogsScreen() {
         </View>
     );
 }
+
+
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
+});

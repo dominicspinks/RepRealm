@@ -10,8 +10,6 @@ import ActiveExerciseScreen from '../screens/ActiveExerciseScreen';
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
-
-
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Main" component={MainDrawer} />

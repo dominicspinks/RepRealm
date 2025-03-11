@@ -285,7 +285,7 @@ export default function SetExerciseModal({ visible, onClose, exercise, activeCat
                             value={rest}
                             setValue={setRest}
                             keyboardType="numeric"
-                            style={{ width: "48%" }}
+                            containerStyle={{ width: "48%" }}
                         />
 
                         {/* Weight Increment Input */}
@@ -295,7 +295,7 @@ export default function SetExerciseModal({ visible, onClose, exercise, activeCat
                             value={weightIncrement}
                             setValue={setWeightIncrement}
                             keyboardType="numeric"
-                            style={{ width: "48%" }}
+                            containerStyle={{ width: "48%" }}
                             disabled={!primaryIsWeight && !secondaryIsWeight}
                         />
                     </View>

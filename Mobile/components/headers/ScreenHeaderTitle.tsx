@@ -15,6 +15,6 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: colors.text,
+        color: colors.text.primary,
     },
 });

@@ -104,7 +104,7 @@ export default function ActiveWorkoutScreen() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.page}>
             {/* Header */}
             <ScreenHeader
                 leftElement={<BackIcon action={handleBackButton} />}
@@ -166,8 +166,9 @@ export default function ActiveWorkoutScreen() {
 }
 
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
-    container: {
-        flex: 1
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
     },
     content: {
         flex: 1

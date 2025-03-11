@@ -1,7 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-
 import NavMenuIcon from "../components/icons/NavMenuIcon";
 import PlusIcon from "../components/icons/PlusIcon";
 import ScreenHeader from "../components/headers/ScreenHeader";
@@ -57,15 +56,13 @@ export default function WorkoutListScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            {/* Header */}
+        <View style={styles.page}>
             <ScreenHeader
                 leftElement={<NavMenuIcon />}
                 centreElement={<ScreenHeaderTitle title="Workouts" />}
                 rightElement={<PlusIcon action={openSetWorkoutScreen} />}
             />
 
-            {/* Workout List */}
             <FlatList
                 data={workouts}
                 keyExtractor={(item) => item.id}
@@ -85,9 +82,13 @@ export default function WorkoutListScreen() {
 
 // **Styles**
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: colors.background.screen,
+    },
     emptyText: {
         textAlign: "center",
         marginTop: theme.spacing.large,
-        color: colors.mutedText,
+        color: colors.text.muted,
     },
 });
