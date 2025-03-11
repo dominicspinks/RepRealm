@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../navigation/types";
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useColourTheme } from '../contexts/ThemeContext';
 import { ThemeColors } from '../theme';
 import { StyleSheet } from 'react-native';

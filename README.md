@@ -20,7 +20,7 @@ RepRealm is a **workout tracking app** that allows users to **create and log wor
 ## 🚀 Download & Install
 
 You can **download the latest version** of RepRealm here:
-🔗 **[Download RepRealm APK](https://expo.dev/accounts/dominicsp/projects/RepRealm/builds/39db731d-6c12-40aa-b595-48a7f8cc48e2)**
+🔗 **[Download RepRealm APK](https://expo.dev/accounts/dominicsp/projects/RepRealm/builds/133aaffc-4420-4a56-bcdf-c5643e49e27f)**
 
 ### **📱 How to Install (Android)**
 1. Click the **Download APK** button above.
